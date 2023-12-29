@@ -15,5 +15,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and member_pw = #{password}
 	 	and member_del = 'n'
 	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="joinMembership" parameterType="map">
+		insert into member_info(
+			member_id
+		    ,member_pw
+		    ,member_name
+		    ,member_phone
+		    ,member_email
+		    ,member_addr1
+			,member_addr2
+			,member_addr3
+		) values (
+			#{member_id}
+		    ,#{member_pw}
+		    ,#{member_name}
+		    ,#{member_phone}
+		    ,#{member_email}
+		    ,#{member_addr1}
+		    ,#{member_addr2}
+		    ,#{member_addr3}
+		)
+	
+	</insert>
 
 </mapper>

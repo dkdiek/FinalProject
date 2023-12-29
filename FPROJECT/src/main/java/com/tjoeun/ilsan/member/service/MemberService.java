@@ -1,7 +1,10 @@
 package com.tjoeun.ilsan.member.service;
 
+import java.util.Map;
+
 public interface MemberService {
 	
-    boolean checkLogin(String username, String password);
+    public boolean checkLogin(String id, String password);
+	public int joinMembership(Map map) throws Exception;
 
 }

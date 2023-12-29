@@ -6,17 +6,14 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 	<head>
+	    <script src="/cdn/js/jquery-3.7.1.min.js"></script>
 		<!-- 수정된 부트스트랩 CSS 파일 경로 -->
 		<script src="/cdn/js/bootstrap/color-modes.js"></script>
 		<script src="/cdn/js/bootstrap/bootstrap.bundle.min.js"></script>
-		<link rel="canonical"
-			href="https://getbootstrap.kr/docs/5.3/examples/album/">
-		<link rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-		<link rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+		<link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 		<link href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-		
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="새로마켓에서 모든 것이 새로워진다!">
@@ -26,85 +23,94 @@
 		
 		
 		<style>
-		.bd-placeholder-img {
-			font-size: 1.125rem;
-			text-anchor: middle;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			user-select: none;
-		}
-		
-		@media ( min-width : 768px) {
-
-			.bd-placeholder-img-lg {
-				font-size: 3.5rem;
+			.bd-placeholder-img {
+				font-size: 1.125rem;
+				text-anchor: middle;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				user-select: none;
 			}
-		}
-		
-		.b-example-divider {
-			width: 100%;
-			height: 3rem;
-			background-color: rgba(0, 0, 0, .1);
-			border: solid rgba(0, 0, 0, .15);
-			border-width: 1px 0;
-			box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
-				rgba(0, 0, 0, .15);
-		}
-		
-		.b-example-vr {
-			flex-shrink: 0;
-			width: 1.5rem;
-			height: 100vh;
-		}
-		
-		.bi {
-			vertical-align: -.125em;
-			fill: currentColor;
-		}
-		
-		.nav-scroller {
-			position: relative;
-			z-index: 2;
-			height: 2.75rem;
-			overflow-y: hidden;
-		}
-		
-		.nav-scroller .nav {
-			display: flex;
-			flex-wrap: nowrap;
-			padding-bottom: 1rem;
-			margin-top: -1px;
-			overflow-x: auto;
-			text-align: center;
-			white-space: nowrap;
-			-webkit-overflow-scrolling: touch;
-		}
-		
-		.btn-bd-primary { -
-			-bd-violet-bg: #712cf9; -
-			-bd-violet-rgb: 112.520718, 44.062154, 249.437846; -
-			-bs-btn-font-weight: 600; -
-			-bs-btn-color: var(- -bs-white); -
-			-bs-btn-bg: var(- -bd-violet-bg); -
-			-bs-btn-border-color: var(- -bd-violet-bg); -
-			-bs-btn-hover-color: var(- -bs-white); -
-			-bs-btn-hover-bg: #6528e0; -
-			-bs-btn-hover-border-color: #6528e0; -
-			-bs-btn-focus-shadow-rgb: var(- -bd-violet-rgb); -
-			-bs-btn-active-color: var(- -bs-btn-hover-color); -
-			-bs-btn-active-bg: #5a23c8; -
-			-bs-btn-active-border-color: #5a23c8;
-		}
-		
-		.bd-mode-toggle {
-			z-index: 1500;
-		}
-
+			
+			@media ( min-width : 768px) {
+	
+				.bd-placeholder-img-lg {
+					font-size: 3.5rem;
+				}
+			}
+			
+			.b-example-divider {
+				width: 100%;
+				height: 3rem;
+				background-color: rgba(0, 0, 0, .1);
+				border: solid rgba(0, 0, 0, .15);
+				border-width: 1px 0;
+				box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em
+					rgba(0, 0, 0, .15);
+			}
+			
+			.b-example-vr {
+				flex-shrink: 0;
+				width: 1.5rem;
+				height: 100vh;
+			}
+			
+			.bi {
+				vertical-align: -.125em;
+				fill: currentColor;
+			}
+			
+			.nav-scroller {
+				position: relative;
+				z-index: 2;
+				height: 2.75rem;
+				overflow-y: hidden;
+			}
+			
+			.nav-scroller .nav {
+				display: flex;
+				flex-wrap: nowrap;
+				padding-bottom: 1rem;
+				margin-top: -1px;
+				overflow-x: auto;
+				text-align: center;
+				white-space: nowrap;
+				-webkit-overflow-scrolling: touch;
+			}
+			
+			.btn-bd-primary { -
+				-bd-violet-bg: #712cf9; -
+				-bd-violet-rgb: 112.520718, 44.062154, 249.437846; -
+				-bs-btn-font-weight: 600; -
+				-bs-btn-color: var(- -bs-white); -
+				-bs-btn-bg: var(- -bd-violet-bg); -
+				-bs-btn-border-color: var(- -bd-violet-bg); -
+				-bs-btn-hover-color: var(- -bs-white); -
+				-bs-btn-hover-bg: #6528e0; -
+				-bs-btn-hover-border-color: #6528e0; -
+				-bs-btn-focus-shadow-rgb: var(- -bd-violet-rgb); -
+				-bs-btn-active-color: var(- -bs-btn-hover-color); -
+				-bs-btn-active-bg: #5a23c8; -
+				-bs-btn-active-border-color: #5a23c8;
+			}
+			
+			.bd-mode-toggle {
+				z-index: 1500;
+			}
 		</style>
 	
 	
 	</head>
 	<body>
+	<%-- 세션에서 ID를 불러옴 --%>
+    <c:set var="userId" value="${sessionScope.id}" />
+
+    <%-- ID가 있을 경우에만 표시 --%>
+    <c:if test="${not empty userId}">
+        <p>Welcome, ${userId}!</p>
+    </c:if>
+    <c:if test="${empty userId}">
+        <p>Welcome, Guest!</p>
+    </c:if>
 		<!-- <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
 	      <symbol id="check2" viewBox="0 0 16 16">
 	        <path
@@ -203,6 +209,10 @@
 		                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">
 		                    <i class="bi bi-person-fill fs-2"></i>
 		                </button>
+		                <!-- 마이버튼 -->
+		                <button id="toggleButton" class="btn btn-primary" data-bs-target="{{ id_exists ? '#signupModal' : '#dropdownMenu' }}">
+						    <i id="icon" class="{{ id_exists ? 'bi bi-person-fill' : 'bi bi-list' }} fs-2"></i>
+						</button>
 		                <!-- 메뉴버튼 -->
 		                <button class="btn btn-primary">
 		                    <i class="bi bi-list  fs-2"></i>
@@ -212,7 +222,7 @@
 		    </div>
 		</header>
 	
-		<!-- 로그인 모달 -->
+		<!-- 로그인X 로그인 모달 -->
 		<div class="modal fade" id="signupModal" tabindex="-1"
 			aria-labelledby="signupModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -224,6 +234,7 @@
 					</div>
 	
 					<div class="modal-body p-5 pt-0">
+					
 						<form id="loginForm">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control rounded-3"
@@ -237,8 +248,13 @@
 							</div>
 							<button id="btnLogin"  class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
 								type="button">로그인</button>
-							<button class="w-100 mb-2 btn btn-lg rounded-3 btn-secondary"
+						</form>
+						
+						<form id="joinForm" action="<c:url value='/joinMembership'/>">
+							<button id="btnJoinMembership" class="w-100 mb-2 btn btn-lg rounded-3 btn-secondary"
 								type="submit">회원가입</button>
+						</form>
+						
 							계정 찾기
 							<hr class="my-4">
 							<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
@@ -263,12 +279,21 @@
 									<use xlink:href="#github"></use></svg>
 								구글 로그인
 							</button>
-						</form>
+					
 					</div>
 				</div>
 			</div>
 		</div>
 		
+		<!-- 로그인o 드롭다운
+		<ul id="dropdownMenu" class="dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px" data-bs-theme="light">
+		    <li><a class="dropdown-item rounded-2 active" href="#">Action</a></li>
+		    <li><a class="dropdown-item rounded-2" href="#">Another action</a></li>
+		    <li><a class="dropdown-item rounded-2" href="#">Something else here</a></li>
+		    <li><hr class="dropdown-divider"></li>
+		    <li><a class="dropdown-item rounded-2" href="#">Separated link</a></li>
+		</ul> -->
+	  	
 		<main>
 	
 		<section class="py-5 text-center container">
@@ -524,36 +549,40 @@
 		</footer>
 		
 		<script>
-		    // 로그인 버튼을 찾아서 이벤트 리스너 추가
-		    document.getElementById("btnLogin").addEventListener("click", function() {
-		        // 이벤트 핸들러 내에서 로그인 폼 데이터를 가져와서 서버로 전송
-		        var formData = new FormData(document.getElementById("loginForm"));
+		    // 버튼 클릭 이벤트 리스너 등록
+		    $("#btnLogin").on("click", function () {
+		        // 로그인 폼 데이터 가져오기
+		        var formData = $("#loginForm").serialize();
 		
-		        fetch("/login", {
-		            method: "POST",
-		            body: formData
-		        })
-		        .then(response => {
-		            if (!response.ok) {
-		                throw new Error("서버 응답이 실패했습니다.");
-		            }
-		            return response.json();
-		        })
-		        .then(data => {
-		            // 서버 응답 처리
-		            console.log(data);
+		        // 서버에 AJAX 요청
+		        $.ajax({
+		            url: "/login",
+		            type: "POST",
+		            data: formData,
+		            success: function (data) {
+		                // 서버 응답 처리
+		                console.log(data);
 		
-		            // 성공 또는 실패에 따라 동작 수행
-		            if (data.message === "로그인에 성공했습니다.") {
-		                // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
-		                window.location.href = "/home";
-		            } else {
-		                // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
-		                console.error("로그인 실패:", data.message);
+		                // 성공 또는 실패에 따라 동작 수행
+		                if (data.message === "로그인 성공") {
+		                    // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
+		                    window.location.href = "/home";
+		                } else {
+		                    // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
+		                    console.error("로그인 실패:", data.message);
+		                    alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
+		                    // 실패 메시지를 표시하는 스크립트 또는 원하는 동작 추가
+		                    // 예: 다시 로그인 페이지로 이동
+		                    // window.location.href = "/login";
+		                }
+		            },
+		            error: function (error) {
+		                console.error("에러:", error);
+		                alert("서버 응답이 실패했습니다.");
 		            }
-		        })
-		        .catch(error => console.error("에러:", error));
+		        });
 		    });
 		</script>
+		
 	</body>
 </html>

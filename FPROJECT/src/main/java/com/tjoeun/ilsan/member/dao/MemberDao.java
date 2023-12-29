@@ -4,6 +4,7 @@ import java.util.Map;
 
 public interface MemberDao {
 	
-    Map checkLogin(Map map);
+    public Map checkLogin(Map map);
+    public int joinMembership(Map map);
 
 }

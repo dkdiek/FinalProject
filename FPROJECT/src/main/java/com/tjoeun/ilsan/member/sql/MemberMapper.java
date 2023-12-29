@@ -4,6 +4,7 @@ import java.util.Map;
 
 public interface MemberMapper {
 	
-    Map checkLogin(Map map);
-
+    public Map checkLogin(Map map);
+    public int joinMembership(Map map);
+    
 }

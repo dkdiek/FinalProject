@@ -1,16 +1,14 @@
-saero_market 3306port
-
 CREATE TABLE `member_info` (
-  `seq` int NOT NULL AUTO_INCREMENT,
-  `member_id` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_pw` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_name` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_phone` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_email` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_addr1` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_addr2` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_addr3` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_postal` varchar(300) COLLATE utf8mb3_bin NOT NULL,
-  `member_del` char(1) COLLATE utf8mb3_bin NOT NULL DEFAULT 'n',
+  `seq` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_pw` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_name` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_phone` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_email` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_addr1` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_addr2` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_addr3` varchar(300) COLLATE utf8_bin NOT NULL,
+  `member_place` varchar(300) COLLATE utf8_bin DEFAULT NULL,
+  `member_del` char(1) COLLATE utf8_bin NOT NULL DEFAULT 'n',
   PRIMARY KEY (`seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
