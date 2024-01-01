@@ -24,10 +24,10 @@
 			<input type="text" id="email" name="member_email" placeholder="이메일"><br>
 			<div id="condition_msg"></div>
 			<hr>
-			<input type="button" onclick="daumPost()" value="우편주소찾기">
-			<input type="text" id="addr1" name="member_addr1" placeholder="우편번호"><br>
-			<input type="text" id="addr2" name="member_addr2" placeholder="주소"><br>
-			<input type="text" id="addr3" name="member_addr3" placeholder="상세주소"><br>
+			<input type="button" onclick="daumPost()" value="우편 주소 찾기"><br>
+			<input type="text" id="addr1" name="member_addr1" placeholder="우편번호" readonly><br>
+			<input type="text" id="addr2" name="member_addr2" placeholder="주소" readonly><br>
+			<input type="text" id="addr3" name="member_addr3" placeholder="상세 주소"><br>
 			<hr>
 			<input type="button" id="btnJoinProcess" value="회원가입"><br>
 		</form>

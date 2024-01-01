@@ -63,7 +63,6 @@
 								<ul class="dropdown-menu">
 									<li class="dropdown-item active">${id} 님</li>
 							        <li><hr class="dropdown-divider"></li>
-							        <li><a class="dropdown-item rounded-2" href="#">마이페이지</a></li>
 							        <li><a class="dropdown-item rounded-2" href="#">관심목록</a></li>
 							        <li><a class="dropdown-item rounded-2" href="#">판매내역</a></li>
 							        <li><a class="dropdown-item rounded-2" href="#">구매내역</a></li>
@@ -128,14 +127,14 @@
 							<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
 							<div id="snsLoginBtnDiv" style="text-align: center">
 								<button
-									class="w-60 mb-2 btn btn-outline-secondary rounded-3"
+									class="w-100 mb-2 btn btn-outline-secondary rounded-3"
 									type="submit" style="background-color: #06be34">
-									<img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
+									<img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 100%;">
 								</button>
 								<button
-									class="w-60 btn btn-outline-secondary rounded-3"
+									class="w-100 btn btn-outline-secondary rounded-3"
 									type="submit" style="background-color: #f9e000">
-									<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 90%">
+									<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 100%;">
 								</button>
 							</div>
 							

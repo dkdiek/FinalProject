@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tjoeun.ilsan.member.service.MemberService;
 
@@ -23,30 +25,41 @@ public class MemberController {
 	
 	// 로그인
 	@PostMapping("/login")
+	@ResponseBody
 	public ResponseEntity<String> login(@RequestParam String id, @RequestParam String password, HttpSession session) {
 	    boolean loginResult = memberService.checkLogin(id, password);
 
 	    if (loginResult) {
 	        session.setAttribute("id", id);
-	        return ResponseEntity.ok("{\"message\": \"로그인 성공\"}");
+	        return ResponseEntity.ok("{\"message\": \"success\"}");
 	    } else {
-	        return ResponseEntity.status(401).body("{\"message\": \"로그인 실패\"}");
+	        return ResponseEntity.status(401).body("{\"message\": \"fail\"}");
 	    }
 	}
 	
-	// 회원가입 1단계
-	@RequestMapping(value="/joinMembership", method = RequestMethod.GET)
+	// 로그아웃
+	@GetMapping("/logout")
+    public String logout(HttpSession session) {
+        // 세션에서 사용자 정보 제거
+        session.removeAttribute("id");
+
+        // 로그인 페이지로 리다이렉트
+        return "redirect:/";
+    }
+	
+	// 회원가입 1단계 - 약관
+	@GetMapping("/joinMembership")
 	public String joinMember( ) {
 		return "member/join/joinMember";
 	}
 	
-	// 회원가입 2단계
-	@RequestMapping(value="/joinMembership2", method = RequestMethod.GET)
+	// 회원가입 2단계 - 정보 입력
+	@GetMapping("/joinMembership2")
 	public String joinMember2( ) {
 		return "member/join/joinMember2";
 	}
 	
-	// 회원가입 처리
+	// 회원 가입 처리
 	@PostMapping("/joinProcess")
 	public String joinProcess (@RequestParam Map map, Model model) {
 		try {
