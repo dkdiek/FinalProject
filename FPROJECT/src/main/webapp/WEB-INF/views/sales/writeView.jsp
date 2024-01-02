@@ -11,13 +11,13 @@
 		<link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-		<link href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		<!-- favicon -->
 		<link rel="shortcut icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
     	<link rel="icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
     	
    	  	<script src="/cdn/js/jquery-3.7.1.min.js"></script>
-		<link rel="/cdn/css/home.css">
+    	<link rel="stylesheet" href="/cdn/css/home.css">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="새로마켓에서 모든 것이 새로워진다!">
@@ -27,208 +27,276 @@
 	</head>
 
 	<body>
-	
-		<header class="sticky-top">
-		
-		    <div class="navbar bg-primary shadow-sm">
-		        <div class="container">
-		            <!-- 로고 -->
-		            <div class="col-2">
-		            	<a href="<c:url value='/'/>">
-			                <img src="<c:url value='/cdn/images/common/LogoEng.png'/>" style="max-width: 100%;">
-		            	</a>
-		            </div>
-		            <!-- 검색창 -->
-		            <div class="col-6 offset-1">
-		                <form role="search">
-		                    <input class="form-control" type="search" placeholder="원하는 제품 또는 지역을 검색하세요" aria-label="Search">
-		                </form>
-		            </div>
-	                <!-- 마이버튼 -->
-   		            <div class="col-1  offset-1">
-		                <%-- 세션에서 ID를 불러옴 --%>
-			    		<c:set var="userId" value="${sessionScope.id}" />
-	               	    <c:if test="${empty userId}">
-	   	    	            <div>
-				                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">
-				                    <i class="bi bi-person-fill fs-1"></i>
-				                </button>
-			                </div>
-		                </c:if>
-	    				<c:if test="${not empty userId}">
-            	    		<div class="dropdown" >
-	    						 <button class="btn btn-primary" data-bs-toggle="dropdown">
-							        <i class="bi bi-person-check-fill fs-1"></i>
-							    </button>
-								<ul class="dropdown-menu">
-									<li class="dropdown-item active">${id} 님</li>
-							        <li><hr class="dropdown-divider"></li>
-							        <li><a class="dropdown-item rounded-2" href="#">관심목록</a></li>
-							        <li><a class="dropdown-item rounded-2" href="#">판매내역</a></li>
-							        <li><a class="dropdown-item rounded-2" href="#">구매내역</a></li>
-							        <li><hr class="dropdown-divider"></li>
-							        <li><a class="dropdown-item rounded-2" href="<c:url value='/logout'/>">로그아웃</a></li>
-							    </ul>
-					        </div>
-		                </c:if>
-	                </div>
-	                <!-- 메뉴버튼 -->
-	                <div class="col-1">
-		                <button class="btn btn-primary">
-		                    <i class="bi bi-list  fs-1"></i>
-		                </button>
-	                </div>
-		        </div>
-		    </div>
-		
-		</header>
-		
-		<!-- 로그인X 로그인 모달 -->
-		<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content rounded-4 shadow">
-					<div class="modal-header p-5 pb-4 border-bottom-0">
-						<h1 class="fw-bold mb-0 fs-2">로그인</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-	
-					<div class="modal-body p-5 pt-0">
-					
-						<form id="loginForm">
-							<div class="form-floating mb-3">
-								<input type="text" class="form-control rounded-3"
-									id="floatingInput" name="id" placeholder="name@example.com"> <label
-									for="floatingInput" >ID</label>
-							</div>
-							<div class="form-floating mb-3">
-								<input type="password" class="form-control rounded-3"
-									id="floatingPassword" name="password" placeholder="Password"> <label
-									for="floatingPassword" >비밀번호</label>
-							</div>
-							<button id="btnLogin"  class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-								type="button">로그인</button>
-						</form>
-						
-						<form id="joinForm" action="<c:url value='/joinMembership'/>">
-							<button id="btnJoinMembership" class="w-100 mb-2 btn btn-lg rounded-3 btn-secondary"
-								type="submit">회원가입</button>
-						</form>
-						
-						<div style="text-align:center">
-							<form id="findMembership" action="<c:url value='/미정'/>">
-								<button id="btnFindMembership" class="btn btn-link
-									type="submit">계정 찾기</button>
-							</form>
-						</div>
-						
-						
-							<hr class="my-4">
-							<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
-							<div id="snsLoginBtnDiv" style="text-align: center">
-								<button
-									class="w-100 mb-2 btn btn-outline-secondary rounded-3"
-									type="submit" style="background-color: #06be34">
-									<img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 100%;">
-								</button>
-								<button
-									class="w-100 btn btn-outline-secondary rounded-3"
-									type="submit" style="background-color: #f9e000">
-									<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 100%;">
-								</button>
-							</div>
-							
-					</div>
-				</div>
-			</div>
-		</div>
-	
 		<main>
-		
-			<div class="album py-5 bg-body-tertiary">
-				<div class="container">
-		
-					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-						<div class="col">
-							<div class="card shadow-sm">
-								<svg class="bd-placeholder-img card-img-top" width="100%"
-									height="225" xmlns="http://www.w3.org/2000/svg" role="img"
-									aria-label="Placeholder: Thumbnail"
-									preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-										fill="#55595c" />
-										<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-								<div class="card-body">
-									<p class="card-text">세탁세제</p>
-									<p class="card-text">10,000원</p>
-									<p class="card-text">인천 계양구 계양1동</p>
-									<p class="card-text">관심 21.채팅14</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-heart-fill"></i></button>
-											<button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-chat-left-text-fill"></i></button>
-										</div>
-										<small class="text-body-secondary">9 분전</small>
-									</div>
+			<div class="container mt-3">
+			    <form action="/writeProcess" method="post" enctype="multipart/form-data">
+
+				    <!-- 이미지 업로드 폼 -->
+			        <div class="custom-file mb-3">
+					    <label for="imageInput" class="form-label fw-bold">사진 첨부</label>
+					    <div class="input-group">
+					        <input type="file" class="form-control" id="imageInput" name="images" multiple accept="image/*">
+					    </div>
+					    
+					    <!-- 이미지 미리보기 영역 -->
+					    <div id="imagePreview" class="mt-3"></div>
+					</div>
+			    
+		    		<!-- 제목 -->
+			        <div class="mb-3">
+						<label for="title" class="form-label fw-bold">제목</label>
+			            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해 주세요" required>
+			        </div>
+			        <!-- 가격 -->
+			        <div class="mb-3">
+			            <label for="price" class="form-label fw-bold">판매 가격</label>
+			            <input type="number" class="form-control" id="price" name="price" placeholder="₩ 가격을 입력해 주세요" required>
+			        </div>
+			        <!-- 설명 -->
+			        <div class="mb-3">
+					    <label for="description" class="form-label fw-bold">자세한 설명</label>
+					    <textarea class="form-control" id="content" name="content" rows="6" placeholder="게시글 내용을 작성해 주세요 (판매 금지 물품은 게시가 제한될 수 있어요)" required>${fn:escapeXml(description)}</textarea>
+					</div>
+			        <!-- 장소 -->
+					<div class="mb-3">
+			            <label for="title" class="form-label fw-bold">거래 희망 장소</label>
+			            <input type="text" class="form-control mb-2" id="address" name="address" placeholder="주소 검색 버튼을 눌러 거래 희망 장소를 선택해 주세요" required readonly>
+						<input type="button" class="btn btn-primary" onclick="sample5_execDaumPostcode()" value="주소 검색 "><br>
+						<div id="map" style="width:300px;height:300px;margin-top:10px;display:none" class="rounded"></div>
+			        </div>
+			        <!-- 카테고리 -->
+					<div class="container mt-4">
+						<label for="category" class="form-label fw-bold">카테고리</label>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="digital" value="디지털기기"> <label
+										class="form-check-label" for="digital">디지털기기</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="furniture" value="가구/인테리어"> <label
+										class="form-check-label" for="furniture">가구/인테리어</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="baby" value="유아동"> <label class="form-check-label"
+										for="baby">유아동</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="womenClothing" value="여성의류"> <label
+										class="form-check-label" for="womenClothing">여성의류</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="womenAccessories" value="여성잡화"> <label
+										class="form-check-label" for="womenAccessories">여성잡화</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="menFashion" value="남성패션/잡화"> <label
+										class="form-check-label" for="menFashion">남성패션/잡화</label>
+								</div>
+							</div>
+	
+							<div class="col-md-4">
+								<!-- 두 번째 열의 라디오 버튼들 추가 -->
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="homeAppliances" value="생활가전"> <label
+										class="form-check-label" for="homeAppliances">생활가전</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="livingKitchen" value="생활/주방"> <label
+										class="form-check-label" for="livingKitchen">생활/주방</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="processedFood" value="가공식품"> <label
+										class="form-check-label" for="processedFood">가공식품</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="sportsLeisure" value="스포츠/레저"> <label
+										class="form-check-label" for="sportsLeisure">스포츠/레저</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="hobbyGameMusic" value="취미/게임/음반"> <label
+										class="form-check-label" for="hobbyGameMusic">취미/게임/음반</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="beautyCare" value="뷰티/미용"> <label
+										class="form-check-label" for="beautyCare">뷰티/미용</label>
+								</div>
+							</div>
+	
+							<div class="col-md-4">
+								<!-- 세 번째 열의 라디오 버튼들 추가 -->
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="plants" value="식물"> <label class="form-check-label"
+										for="plants">식물</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="petSupplies" value="반려동물용품"> <label
+										class="form-check-label" for="petSupplies">반려동물용품</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="ticketsVouchers" value="티켓/교환권"> <label
+										class="form-check-label" for="ticketsVouchers">티켓/교환권</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="books" value="도서"> <label class="form-check-label"
+										for="books">도서</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="babyBooks" value="유아도서"> <label
+										class="form-check-label" for="babyBooks">유아도서</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="category"
+										id="otherUsedItems" value="기타 중고물품"> <label
+										class="form-check-label" for="otherUsedItems">기타 중고물품</label>
 								</div>
 							</div>
 						</div>
-		
 					</div>
-				</div>
+					<div class="text-center mt-5">
+					    <button type="submit" class="btn btn-primary">작성 완료</button>
+    					<a href="<c:url value='/'/>" class="btn btn-secondary">작성 취소</a>
+					</div>
+			    </form>
 			</div>
 			
 		</main>
 		
-		<!-- Footer -->
-		<footer class="text-body-secondary py-5">
-			<div class="container">
-				<p class="float-end mb-1">
-					<a href="#">Back to top</a>
-				</p>
-				<p>
-				대표 박새로이<br>
-				사업자번호 135-37-00238<br>
-				주소 서울특별시 구로구 디지털로 10길 25, 1209호<br>
-				전화 1544-9796<br>
-				고객문의 cs@saero.com<br>
-				</p>
-			</div>
-		</footer>
-		
-		<!-- 스크립트 -->
+		<!-- 지도 -->
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce5959441a26bb6ca04de7134c4cc8e3&libraries=services"></script>
 		<script>
-		    // 버튼 클릭 이벤트 리스너 등록
-		    $("#btnLogin").on("click", function () {
-		        // 로그인 폼 데이터 가져오기
-		        var formData = $("#loginForm").serialize();
-		
-		        // 서버에 AJAX 요청
-		        $.ajax({
-		            url: "/login",
-		            type: "POST",
-		            data: formData,
-		            dataType: "json", // 데이터 타입을 JSON으로 명시
-		            success: function (data) {
-		                // 서버 응답 처리
-		                console.log(data);
-		
-		                // 성공 또는 실패에 따라 동작 수행
-		                if (data.message === "success") {
-		                    // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
-		                    window.location.href = "/";
-		                } else {
-		                    // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
-		                    console.error("로그인 실패:", data.message);
-		                    alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
-		                }
-		            },
-		            error: function (error) {
-		                console.error("에러:", error);
-	                    alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
-		            }
-		        });
-		    });
+			var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+			mapOption = {
+				center : new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+				level : 5
+			// 지도의 확대 레벨
+			};
+
+			//지도를 미리 생성
+			var map = new daum.maps.Map(mapContainer, mapOption);
+			//주소-좌표 변환 객체를 생성
+			var geocoder = new daum.maps.services.Geocoder();
+			//마커를 미리 생성
+			var marker = new daum.maps.Marker({
+				position : new daum.maps.LatLng(37.537187, 127.005476),
+				map : map
+			});
+
+			function sample5_execDaumPostcode() {
+				new daum.Postcode({
+					oncomplete : function(data) {
+						var addr = data.address; // 최종 주소 변수
+
+						// 주소 정보를 해당 필드에 넣는다.
+						document.getElementById("address").value = addr;
+						// 주소로 상세 정보를 검색
+						geocoder.addressSearch(data.address, function(results,
+								status) {
+							// 정상적으로 검색이 완료됐으면
+							if (status === daum.maps.services.Status.OK) {
+
+								var result = results[0]; //첫번째 결과의 값을 활용
+
+								// 해당 주소에 대한 좌표를 받아서
+								var coords = new daum.maps.LatLng(result.y,
+										result.x);
+								// 지도를 보여준다.
+								mapContainer.style.display = "block";
+								map.relayout();
+								// 지도 중심을 변경한다.
+								map.setCenter(coords);
+								// 마커를 결과값으로 받은 위치로 옮긴다.
+								marker.setPosition(coords)
+							}
+						});
+					}
+				}).open();
+			}
 		</script>
+		
+		<!-- 파일 첨부 스크립트 -->
+		<script>
+		    var imageInput = document.getElementById("imageInput"); // 파일 입력란
+		    var imagePreview = document.getElementById("imagePreview"); // 이미지 미리보기 영역
+		    var maxFileCount = 10; // 최대 업로드 가능한 파일 개수
+		
+		    // 파일 선택 변경 감지 이벤트 추가
+		    imageInput.addEventListener("change", handleFileSelect);
+		
+		    function handleFileSelect(event) {
+		        var files = event.target.files;
+		
+		        if (files.length > maxFileCount) {
+		            alert("최대 " + maxFileCount + "개의 파일을 업로드할 수 있습니다.");
+		            // 파일 개수가 제한을 초과하면 파일 선택 취소
+		            imageInput.value = "";
+		            return;
+		        }
+		
+		        // 이미지 미리보기 초기화
+		        imagePreview.innerHTML = "";
+		
+		        for (var i = 0; i < files.length; i++) {
+		            var file = files[i];
+		
+		            if (i < maxFileCount) {
+		                previewImage(file);
+		            }
+		        }
+		    }
+		
+		    function previewImage(file) {
+		        var reader = new FileReader();
+		
+		        reader.onload = function (e) {
+		            var imgContainer = document.createElement("div");
+		            imgContainer.className = "img-container";
+		
+		            var img = document.createElement("img");
+		            img.src = e.target.result;
+		            img.className = "img-thumbnail";
+		            img.style.width = "100px";
+		            img.style.height = "100px";
+		
+		            imgContainer.appendChild(img);
+		            imagePreview.appendChild(imgContainer);
+		        };
+		
+		        reader.readAsDataURL(file);
+		    }
+		</script>
+
+		
+		
+		<!-- 스타일 추가 -->
+		<style>
+		    .img-container {
+		        position: relative;
+		        display: inline-block;
+		        margin-right: 10px; /* 이미지 간 간격 조절 */
+		    }
+		</style>
+
+
+		
+		
 	</body>
 </html>

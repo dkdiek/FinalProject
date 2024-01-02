@@ -11,13 +11,13 @@
 		<link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-		<link href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 		<!-- favicon -->
 		<link rel="shortcut icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
     	<link rel="icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
     	
    	  	<script src="/cdn/js/jquery-3.7.1.min.js"></script>
-		<link rel="/cdn/css/home.css">
+   		<link rel="stylesheet" href="/cdn/css/home.css">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="새로마켓에서 모든 것이 새로워진다!">
@@ -74,12 +74,14 @@
 		                </c:if>
 	                </div>
 	                <!-- 메뉴버튼 -->
-	                <div class="col-1">
-		                <button class="btn btn-primary">
-		                    <i class="bi bi-list  fs-1"></i>
-		                </button>
-	                </div>
-		        </div>
+					<div class="col-1">
+						<button class="btn btn-primary" data-bs-toggle="offcanvas"
+							data-bs-target="#sidebar" aria-controls="sidebar">
+							<i class="bi bi-list fs-1"></i>
+						</button>
+					</div>
+
+				</div>
 		    </div>
 		
 		</header>
@@ -143,8 +145,37 @@
 				</div>
 			</div>
 		</div>
-	
-		<main>
+		
+		<!-- 사이드바 -->
+		<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+		    <div class="offcanvas-header">
+		        <h5 class="offcanvas-title" id="sidebarLabel">Sidebar</h5>
+		        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		    </div>
+		    <div class="offcanvas-body">
+		        <ul class="nav flex-column">
+		            <li class="nav-item">
+		                <a class="nav-link active" href="<c:url value='/'/>">
+		                    <i class="bi bi-house-door"></i> 메인화면
+		                </a>
+		            </li>
+
+     	    		<c:if test="${not empty userId}">
+					    <li class="nav-item">
+					        <form id="writeForm" action="<c:url value='/writeView'/>" method="post">
+					            <input type="hidden" name="id" value="${userId}">
+					            <button type="submit" class="nav-link active" style="border: none; background-color: transparent; cursor: pointer;">
+					                <i class="bi bi-upload"></i> 판매하기
+					            </button>
+					        </form>
+					    </li>
+					</c:if>
+		            
+		        </ul>
+		    </div>
+		</div>
+
+	<main>
 		
 			<div class="album py-5 bg-body-tertiary">
 				<div class="container">
@@ -230,6 +261,11 @@
 		            }
 		        });
 		    });
+		</script>
+		<script>
+		    function submitForm() {
+		        document.getElementById("writeForm").submit();
+		    }
 		</script>
 	</body>
 </html>
