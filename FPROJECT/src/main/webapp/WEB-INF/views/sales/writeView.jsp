@@ -2,31 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
-	<head>
-		<!-- 수정된 부트스트랩 CSS 파일 경로 -->
-		<script src="/cdn/js/bootstrap/color-modes.js"></script>
-		<script src="/cdn/js/bootstrap/bootstrap.bundle.min.js"></script>
-		<link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-		<link rel="stylesheet" href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-		<!-- favicon -->
-		<link rel="shortcut icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
-    	<link rel="icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
-    	
-   	  	<script src="/cdn/js/jquery-3.7.1.min.js"></script>
-    	<link rel="stylesheet" href="/cdn/css/home.css">
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="새로마켓에서 모든 것이 새로워진다!">
-		<meta name="author" content="Yongkwon Lee">
-		<meta name="generator" content="Hugo 0.115.4">
-		<title>새로마켓</title>
-	</head>
-
+	<!-- head -->
+	<%@ include file="../common/head.jsp" %>
+	<!-- css -->
+	<link rel="stylesheet" href="/cdn/css/sales/writeView.css" rel="stylesheet">
+	<!-- body -->
 	<body>
+		<!-- header -->
+		<%@ include file="../common/header.jsp" %>
 		<main>
 			<div class="container mt-3">
 			    <form action="/writeProcess" method="post" enctype="multipart/form-data">
@@ -179,9 +165,10 @@
 			
 		</main>
 		
-		<!-- 지도 -->
-		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce5959441a26bb6ca04de7134c4cc8e3&libraries=services"></script>
+		<!-- footer -->
+		<%@ include file="../common/footer.jsp" %>
+		
+		<!-- 지도 header.jsp에 넣어놓았음-->
 		<script>
 			var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 			mapOption = {
@@ -283,20 +270,5 @@
 		        reader.readAsDataURL(file);
 		    }
 		</script>
-
-		
-		
-		<!-- 스타일 추가 -->
-		<style>
-		    .img-container {
-		        position: relative;
-		        display: inline-block;
-		        margin-right: 10px; /* 이미지 간 간격 조절 */
-		    }
-		</style>
-
-
-		
-		
 	</body>
 </html>

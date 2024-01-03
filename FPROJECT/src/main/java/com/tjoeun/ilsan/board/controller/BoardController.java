@@ -1,5 +1,6 @@
 package com.tjoeun.ilsan.board.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +24,9 @@ public class BoardController {
 	BoardService boardService;
 	
 	// 작성페이지
-	@PostMapping("/writeView")
-	public String writeView() {
-	    // id를 사용하여 필요한 작업 수행
-	    return "sales/writeView";
+	@GetMapping("/writeView")
+	public String writeView(HttpSession session) {
+		return "/sales/writeView";
 	}
 	
 	// 작성
@@ -47,6 +47,7 @@ public class BoardController {
 		Map map = new HashMap();
 	    map.put("seq", seq);
 	    Map boardDetail = boardService.selectBoardDetail(map);
+	    
 	    model.addAttribute("boardDetail", boardDetail);
 	    model.addAttribute("imgList", boardDetail.get("imgList"));
 
