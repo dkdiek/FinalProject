@@ -3,16 +3,50 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tjoeun.ilsan.board.sql.BoardMapper">
-
-		<!-- keyProperty에 원하는 리턴받을 컬럼 pk아니어도 상관없음 -->
+	
+	<!-- 게시글 업로드 -->
 	<insert id="uploadBoard" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
-		insert into board(
-			member_id
+	    INSERT INTO board(
+	        member_id, title, price, content, address, category, img1
+	        <if test="img2 != null and img2 != ''">, img2</if>
+	        <if test="img3 != null and img3 != ''">, img3</if>
+	        <if test="img4 != null and img4 != ''">, img4</if>
+	        <if test="img5 != null and img5 != ''">, img5</if>
+	        <if test="img6 != null and img6 != ''">, img6</if>
+	        <if test="img7 != null and img7 != ''">, img7</if>
+	        <if test="img8 != null and img8 != ''">, img8</if>
+	        <if test="img9 != null and img9 != ''">, img9</if>
+	        <if test="img10 != null and img10 != ''">, img10</if>
+	    ) VALUES (
+	        #{member_id}, #{title}, #{price}, #{content}, #{address}, #{category}, #{img1}
+	        <if test="img2 != null and img2 != ''">, #{img2}</if>
+	        <if test="img3 != null and img3 != ''">, #{img3}</if>
+	        <if test="img4 != null and img4 != ''">, #{img4}</if>
+	        <if test="img5 != null and img5 != ''">, #{img5}</if>
+	        <if test="img6 != null and img6 != ''">, #{img6}</if>
+	        <if test="img7 != null and img7 != ''">, #{img7}</if>
+	        <if test="img8 != null and img8 != ''">, #{img8}</if>
+	        <if test="img9 != null and img9 != ''">, #{img9}</if>
+	        <if test="img10 != null and img10 != ''">, #{img10}</if>
+	    )
+	</insert>
+	
+	<!-- 게시글 상세 조회 -->
+	<select id="selectBoard" resultType="map">
+		select
+			seq
+			, member_id
 			, title
 			, price
 			, content
 			, address
 			, category
+			, del_yn
+			, create_date
+			, update_date
+			, delete_date
+			, view_cnt
+			, like_cnt
 			, img1
 			, img2
 			, img3
@@ -23,12 +57,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, img8
 			, img9
 			, img10
-		) values (
-			#{title}
-			, #{content}
-			, #{writer}
-		)
-	</insert>
+		FROM board
+		WHERE 1+1
+		AND	del_yn = 'n'
+		<if test="seq != null">
+       		AND seq = #{seq}
+    	</if>
+	</select>
 	
 	
 </mapper>

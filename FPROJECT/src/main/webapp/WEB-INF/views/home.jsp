@@ -210,6 +210,10 @@
 				</div>
 			</div>
 			
+			<!-- 위치가져오기 테스트 -->
+			<button onclick="getCurrentLocation()">Get Current Location</button>
+			
+			
 		</main>
 		
 		<!-- Footer -->
@@ -227,6 +231,22 @@
 				</p>
 			</div>
 		</footer>
+		<script>
+		<!-- 위치가져오기테스트 -->
+		
+		    function getCurrentLocation() {
+		        if (navigator.geolocation) {
+		            navigator.geolocation.getCurrentPosition(showPosition);
+		        } else {
+		            alert("Geolocation is not supported by this browser.");
+		        }
+		    }
+		
+		    function showPosition(position) {
+		        alert("Latitude: " + position.coords.latitude + 
+		              "\nLongitude: " + position.coords.longitude);
+		    }
+		</script>
 		
 		<!-- 스크립트 -->
 		<script>

@@ -26,20 +26,20 @@
 		<title>새로마켓</title>
 	</head>
 	
-	<body>
+	<body style="bg-color:blue">
     <div class="container mt-5">
         <h1 class="text-center">회원 가입</h1>
 
         <div id="agreement" class="row mt-5">
-            <div id="agreement1" class="col-md-6 ">
+            <div id="agreement1" class="col-md-6">
                 <h4 class="d-flex align-items-center justify-content-center">이용약관</h4>
                 <div id="agreement1-content">
                     <textarea id="agreement1-txt" class="form-control w-100" rows="20"></textarea>
                 </div>
                 <form>
-                    <div class="form-check d-flex align-items-center justify-content-center mt-2">
-                        <input id="agreeCheckbox1" type="checkbox" class="form-check-input" name="checkbox">
-                        <label for="agreeCheckbox1" class="form-check-label">위 이용약관에 동의합니다</label>
+                    <div class="form-check mt-2 ">
+                        <input id="agreeCheckbox1" type="checkbox" class="form-check-input border border-primary" name="checkbox">
+                        <label for="agreeCheckbox1" class="form-check-label">위 이용약관에 동의합니다 (필수 체크)</label>
                     </div>
                 </form>
             </div>
@@ -50,9 +50,9 @@
                     <textarea id="agreement2-txt" class="form-control w-100" rows="20"></textarea>
                 </div>
                 <form>
-                    <div class="form-check d-flex align-items-center justify-content-center mt-2">
-                        <input id="agreeCheckbox2" type="checkbox" class="form-check-input" name="checkbox">
-                        <label for="agreeCheckbox2" class="form-check-label ">위의 개인정보 수집 및 이용에 대한 안내에 동의합니다</label>
+                    <div class="form-check mt-2">
+                        <input id="agreeCheckbox2" type="checkbox" class="form-check-input border border-primary" name="checkbox">
+                        <label for="agreeCheckbox2" class="form-check-label ">위의 개인정보 수집 및 이용에 대한 안내에 동의합니다 (필수 체크)</label>
                     </div>
                 </form>
             </div>
@@ -61,8 +61,8 @@
         <div id="agreementRecheck" class="mt-4 d-flex align-items-center justify-content-center">
             <form>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="checkbox">
-                    <label class="form-check-label">위의 이용약관 및 개인정보 수집 및 이용에 대한 안내에 동의합니다.</label>
+                    <input type="checkbox" class="form-check-input border border-primary" name="checkbox">
+                    <label for="checkbox" class="form-check-label">위의 이용약관 및 개인정보 수집 및 이용에 대한 안내에 동의합니다 (필수 체크)</label>
                 </div>
             </form>
         </div>

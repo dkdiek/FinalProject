@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardService {
 	
-	public void upload(Map map, List<MultipartFile> mFiles, HttpSession httpSession) throws Exception;
-
+	public int upload(Map map, List<MultipartFile> mFiles, HttpSession httpSession) throws Exception;
+	public Map selectBoardDetail(Map map);
 
 }

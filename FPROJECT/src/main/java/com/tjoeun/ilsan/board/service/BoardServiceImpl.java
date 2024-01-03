@@ -1,6 +1,8 @@
 package com.tjoeun.ilsan.board.service;
 
 import java.io.File;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,12 +30,10 @@ public class BoardServiceImpl implements BoardService {
 	private String fileUploadPath;
 	
 	@Override
-	@Transactional( readOnly = false ,propagation = Propagation.MANDATORY
+	@Transactional( readOnly = false ,propagation = Propagation.REQUIRES_NEW
 	,rollbackFor = {Exception.class} )
-	public void upload(Map map, List<MultipartFile> mFiles, HttpSession session) throws Exception {
+	public int upload(Map map, List<MultipartFile> mFiles, HttpSession session) throws Exception {
 		int imgNo=1;
-	    String memberId = (String) session.getAttribute("id"); // "userId"는 세션에 저장된 사용자 ID의 키 값
-
 		for (MultipartFile mFile : mFiles) {
             String o_filename = mFile.getOriginalFilename();
             String n_filename = UUID.randomUUID().toString() + "-" + o_filename;
@@ -44,15 +44,35 @@ public class BoardServiceImpl implements BoardService {
                 e.printStackTrace();
                 throw e;
             }
-            map.put("member_id", memberId);
 			map.put(("img"+imgNo), n_filename);
-			int result = boardDao.uploadBoard(map);
 			imgNo++;
-			if (1 != result) { throw new Exception();
-			}
-			
         }
+		String memberId = (String) session.getAttribute("id"); // "userId"는 세션에 저장된 사용자 ID의 키 값
+		map.put("member_id", memberId);
+		int result = boardDao.uploadBoard(map);
+		BigInteger seqBigInteger = (BigInteger) map.get("seq");
+		int seq = seqBigInteger.intValue();
+		if (1 != result) {
+			throw new Exception();
+		}
+		System.out.println(map);
+		return seq;
     }
+
+	@Override
+	@Transactional
+	public Map selectBoardDetail(Map map) {
+		Map detailMap = boardDao.selectBoardDetail(map);
+		List<String> imgList = new ArrayList();
+		for ( int i = 1 ; i < 11 ; i++ ) {
+			Object img = detailMap.get("img"+i);
+			if ( null != img ) {
+				imgList.add(img.toString());
+			}
+		}
+		detailMap.put("imgList", imgList);
+		return detailMap;
+	}
 
 
 }

@@ -5,5 +5,7 @@ import java.util.Map;
 public interface BoardDao {
 	
 	public int uploadBoard(Map map);
+	public Map selectBoardDetail(Map map);
+
 
 }
