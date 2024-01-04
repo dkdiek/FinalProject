@@ -9,6 +9,9 @@
 	<%@ include file="../common/head.jsp" %>
 	<!-- css -->
 	<link rel="stylesheet" href="/cdn/css/sales/writeView.css" rel="stylesheet">
+	<!-- daum writeView -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce5959441a26bb6ca04de7134c4cc8e3&libraries=services"></script>
 	<!-- body -->
 	<body>
 		<!-- header -->

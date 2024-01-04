@@ -42,6 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, address
 			, category
 			, del_yn
+			, soldout_yn
+			, buyer_id
 			, create_date
 			, update_date
 			, delete_date
@@ -63,7 +65,125 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="seq != null">
        		AND seq = #{seq}
     	</if>
+    	<if test="soldout_yn != null">
+       		AND soldout_yn = #{soldout_yn}
+    	</if>
+    	<if test="category != null">
+       		AND category = #{cateogry}
+    	</if>
+    	ORDER BY create_date DESC
+    	<if test="limit != null">
+	    	LIMIT #{limit}
+    	</if>
 	</select>
 	
+	<!-- 게시글 리스트 조회 메인화면 -->
+	<select id="selectBoardList" resultType="map">
+		select
+			seq
+			, member_id
+			, title
+			, price
+			, content
+			, address
+			, category
+			, del_yn
+			, soldout_yn
+			, buyer_id
+			, create_date
+			, update_date
+			, delete_date
+			, view_cnt
+			, like_cnt
+			, img1
+			, img2
+			, img3
+			, img4
+			, img5
+			, img6
+			, img7
+			, img8
+			, img9
+			, img10
+		FROM board
+		WHERE 1+1
+		AND	del_yn = 'n'
+		<if test="seq != null">
+       		AND seq = #{seq}
+    	</if>
+   	   	<if test="soldout_yn != null">
+       		AND soldout_yn = #{soldout_yn}
+    	</if>
+    	<if test="category != null">
+       		AND category = #{cateogry}
+    	</if>
+    	ORDER BY create_date DESC
+    	<if test="limit != null">
+	    	LIMIT #{limit}
+    	</if>
+	</select>
+	
+	<!-- 게시글 검색 조회 (페이징 처리 포함) -->
+	<select id="searchBoardList" resultType="map">
+	    SELECT
+	        seq,
+	        member_id,
+	        title,
+	        price,
+	        content,
+	        address,
+	        category,
+	        del_yn,
+	        soldout_yn,
+	        buyer_id,
+	        create_date,
+	        update_date,
+	        delete_date,
+	        view_cnt,
+	        like_cnt,
+	        img1,
+	        img2,
+	        img3,
+	        img4,
+	        img5,
+	        img6,
+	        img7,
+	        img8,
+	        img9,
+	        img10
+	    FROM board
+	    WHERE del_yn = 'n'
+	    <if test="soldout_yn != null">
+	        AND soldout_yn = #{soldout_yn}
+	    </if>
+	    <if test="category != null">
+	        AND category = #{category}
+	    </if>
+	    <if test="title != null and title != ''">
+	        AND title LIKE CONCAT('%', #{title}, '%')
+	    </if>
+	    ORDER BY create_date DESC
+	    <if test="limit != null">
+	        LIMIT #{limit}
+	        <if test="offset != null">
+	            OFFSET #{offset}
+	        </if>
+	    </if>
+	</select>
+	
+	<!-- 게시글 총 레코드 수 조회 -->
+	<select id="selectBoardCount" resultType="int">
+	    SELECT COUNT(*) FROM board
+	    WHERE del_yn = 'n'
+	    <if test="soldout_yn != null">
+	        AND soldout_yn = #{soldout_yn}
+	    </if>
+	    <if test="category != null">
+	        AND category = #{category}
+	    </if>
+	    <if test="title != null and title != ''">
+	        AND title LIKE CONCAT('%', #{title}, '%')
+	    </if>
+	</select>
 	
 </mapper>

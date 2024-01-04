@@ -7,6 +7,9 @@
 <html lang="en" data-bs-theme="auto">
 	<!-- head -->
 	<%@ include file="../../common/head.jsp" %>
+	<!-- daum joinMember2-->
+	<script src="<c:url value='/cdn/js/daumPost.js'/>"></script>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<!-- body -->
 	<body class="bg-light">
 

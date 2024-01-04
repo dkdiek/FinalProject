@@ -74,5 +74,27 @@ public class BoardServiceImpl implements BoardService {
 		return detailMap;
 	}
 
+	
+	@Override
+	@Transactional
+	public List selectBoardList(Map map) {
+		map.put("limit", 6);
+		map.put("soldout_yn", "n");
+		List BoardList = boardDao.selectBoardList(map);
+		return BoardList;
+	}
+
+	@Override
+	public List<Map> searchBoardList(Map map) {
+		List BoardList = boardDao.searchBoardList(map);
+		return BoardList;
+	}
+
+	@Override
+	public int selectBoardCount(Map map) {
+		int BoardCnt = boardDao.selectBoardCount(map);
+		return BoardCnt;
+	}
+
 
 }

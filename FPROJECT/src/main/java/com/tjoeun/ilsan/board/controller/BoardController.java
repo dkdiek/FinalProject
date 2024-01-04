@@ -1,6 +1,5 @@
 package com.tjoeun.ilsan.board.controller;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +53,21 @@ public class BoardController {
 	    return "sales/detailView"; // detail.jsp로 포워딩
 	}
 	
+	@GetMapping("/search")
+	public String showSearch(@RequestParam Map map, Model model) {
+	    // limit와 offset을 사용하여 페이징 처리 등을 수행
+
+	    // 검색 결과 가져오기
+	    List<Map> boardList = boardService.searchBoardList(map);
+
+	    // 페이징 정보 가져오기
+	    int boardCount = boardService.selectBoardCount(map);
+
+	    model.addAttribute("boardList", boardList);
+	    model.addAttribute("boardCount", boardCount);
+
+	    return "sales/searchView";
+	}
 	
 	
 	

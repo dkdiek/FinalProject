@@ -12,20 +12,12 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 	<!-- favicon -->
-	<link rel="shortcut icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
-   	<link rel="icon" href="/cdn/images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="<c:url value='/cdn/images/favicon.ico'/>" type="image/x-icon" />
+   	<link rel="icon" href="<c:url value='/cdn/images/favicon.ico'/>" type="image/x-icon" />
 	<!-- jquery -->
-  	<script src="/cdn/js/jquery-3.7.1.min.js"></script>
+  	<script src="<c:url value='/cdn/js/jquery-3.7.1.min.js'/>"></script>
   	<!-- common css -->
-	<link rel="stylesheet" href="/cdn/css/common/common.css">
-	<!-- daum joinMember2-->
-	<script src="<c:url value='/cdn/js/daumPost.js'/>"></script>
-	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<!-- daum writeView -->
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce5959441a26bb6ca04de7134c4cc8e3&libraries=services"></script>
-	<!-- daum detailView -->
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce5959441a26bb6ca04de7134c4cc8e3&libraries=services"></script>
+	<link rel="stylesheet" href="<c:url value='/cdn/css/common/common.css'/>">
 	<!-- metadata -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">

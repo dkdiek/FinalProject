@@ -1,5 +1,6 @@
 package com.tjoeun.ilsan.board.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -24,6 +25,24 @@ public class BoardDaoImpl implements BoardDao {
 	public Map selectBoardDetail(Map map) {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
 		return mapper.selectBoard(map);
+	}
+
+	@Override
+	public List selectBoardList(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.selectBoardList(map);
+	}
+
+	@Override
+	public List<Map> searchBoardList(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.searchBoardList(map);
+	}
+
+	@Override
+	public int selectBoardCount(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.selectBoardCount(map);
 	}
 
 }

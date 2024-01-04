@@ -16,10 +16,9 @@
 			</div>
 			<!-- 검색창 -->
 			<div class="col-6 offset-1">
-				<form role="search">
-					<input class="form-control" type="search"
-						placeholder="원하는 제품 또는 지역을 검색하세요" aria-label="Search">
-				</form>
+			    <form id="searchForm" role="search" action="/search" method="GET" class="d-flex align-items-center">
+			        <input class="form-control" type="search" name="title" placeholder="어떤 상품을 찾으시나요?" aria-label="Search">
+			    </form>
 			</div>
 			<!-- 마이버튼 -->
 			<div class="col-1  offset-1">
@@ -188,4 +187,16 @@
             }
         });
     });
+</script>
+<!-- 검색창 폼 섭밋 -->
+<script>
+	function handleSearch(event) {
+	    if (event.key === 'Enter') {
+	        submitSearchForm();
+	    }
+	}
+	
+	function submitSearchForm() {
+	    document.getElementById("searchForm").submit();
+	}
 </script>

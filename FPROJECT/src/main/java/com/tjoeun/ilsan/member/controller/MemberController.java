@@ -37,6 +37,10 @@ public class MemberController {
 	    }
 	}
 	
+	//http://localhost/naverLogin
+	//azdDptdhj5zpBKzKMGuq
+	//Irj41To1KM
+	
 	// 로그아웃
 	@GetMapping("/logout")
     public String logout(HttpSession session) {

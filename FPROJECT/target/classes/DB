@@ -53,6 +53,8 @@ VALUES
   `address` varchar(500) NOT NULL,
   `category` varchar(300) NOT NULL,
   `del_yn` char(1) NOT NULL DEFAULT 'n',
+  `soldout_yn` char(1) NOT NULL DEFAULT 'n',
+  `buyer_id` varchar(300) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -69,4 +71,4 @@ VALUES
   `img9` varchar(500) DEFAULT NULL,
   `img10` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`seq`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8
