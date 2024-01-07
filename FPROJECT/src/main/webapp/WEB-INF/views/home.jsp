@@ -7,131 +7,162 @@
 <html lang="en" data-bs-theme="auto">
 	<!-- head -->
 	<%@ include file="common/head.jsp" %>
-	<style>
-	    .card-link {
-	        text-decoration: none;
-	    }
-	</style>
-	
 	<!-- body -->
-	<body>
+	<body class="bg-body-tertiary">
 		<!-- header -->
 		<%@ include file="common/header.jsp" %>
 		<!-- main -->
 		<main>
-		<!-- 우리동네 글 -->
-		<div class="album py-5 bg-body-tertiary">
-			<div class="d-flex justify-content-center">
-				<h4>
-					<span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">우리동네 판매글</span>
-				</h4>
-			</div>
-			<div class="container">
-
-				<div class="album py-5 bg-body-tertiary">
-					<div class="container">
-						<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-							<c:forEach var="board" items="${boardList}">
-								<div class="col">
-									<div class="card shadow-sm">
-										<div class="card-img-top"
-											style="width: 100%; height: 300px; overflow: hidden;">
-											<a href="http://localhost/detail?seq=${board.seq}"
-												class="img-link"> <img
-												src="<c:url value='/cdn/upload/${board.img1}'/>"
-												class="img-fluid" alt="Image"
-												style="width: 100%; height: 100%; object-fit: cover;">
-											</a>
-										</div>
-										<div class="card-body"
-											style="height: 225px; overflow: hidden;">
-											<!-- card-body 내용 -->
-											<p class="card-text">${board.title}</p>
-											<p class="card-text">${board.price}원</p>
-											<p class="card-text">${board.address}</p>
-											<p class="card-text">${board.like_cnt}</p>
-											<div
-												class="d-flex justify-content-between align-items-center">
-												<div class="btn-group">
-													<button type="button"
-														class="btn btn-sm btn-outline-secondary">
-														<i class="bi bi-heart-fill"></i>
-													</button>
-													<button type="button"
-														class="btn btn-sm btn-outline-secondary">
-														<i class="bi bi-chat-left-text-fill"></i>
-													</button>
+			<!-- 우리동네 글 -->
+			<div class="album py-5 bg-body-tertiary">
+				<div class="d-flex justify-content-center align-items-center">
+					<h4>
+						<span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">♥Like가 증명하는</span>
+					</h4>
+				</div>
+				<div class="d-flex justify-content-center align-items-center">
+					<i class="bi bi-people fs-1"></i>
+					<h4 class="text-dark fw-bold">"우리 동네, 인기 상품을 만나보세요!"</h4>
+				</div>
+				<div class="container">
+		
+					<div class="album py-3 bg-body-tertiary">
+						<div class="container">
+							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+								<c:forEach var="board" items="${boardList}">
+									<div class="col">
+										<div class="card shadow-sm">
+											<div class="card-img-top"
+												style="width: 100%; height: 300px; overflow: hidden;">
+												<a href="http://localhost/detail?seq=${board.seq}"
+													class="img-link"> <img
+													src="<c:url value='/cdn/upload/${board.img1}'/>"
+													class="img-fluid" alt="Image"
+													style="width: 100%; height: 100%; object-fit: cover;">
+												</a>
+											</div>
+											<div class="card-body" >
+												<!-- card-body 내용 -->
+												<div>
+											        <p class="card-text fw-bold overflow-hidden text-truncate">
+														<i class="bi bi-gift me-2"></i>  ${board.title}
+													</p>
+													<hr>
+													<p class="card-text fw-bold" style="font-size:14px">
+														<i class="bi bi-cash me-2"></i>  <fmt:formatNumber value="${board.price}" pattern="#,###원" />
+													</p>
+													<p class="card-text overflow-hidden text-truncate" style="font-size:14px">
+														<i class="bi bi-geo-alt me-2"></i> ${board.address}
+													</p>
+													<p class="card-text" style="font-size:14px">
+														<i class="bi bi-eye me-2"></i> ${board.view_cnt} <i class="bi bi-heart ms-5 me-2"></i> ${board.like_cnt}
+														<i class="bi bi-car-front ms-5 me-2"></i><c:out value="${board.distance}" /> km
+													</p>
+													<hr>
 												</div>
-												<small class="text-body-secondary createDate"
-													data-create-date="${board.create_date}">${board.create_date}</small>
+												<div class="d-flex justify-content-between align-items-center mt-3">
+													<div class="btn-group">
+														<button type="button"
+															class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board.seq}">
+															<i class="${board.likeStatus}"></i>
+														</button>
+														<button type="button"
+															class="btn btn-sm btn-outline-secondary">
+															<i class="bi bi-chat-left-text-fill"></i>
+														</button>
+													</div>
+													<small class="text-body-secondary">
+													 	${board.formattedDifference}
+													</small>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</c:forEach>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
 				</div>
-		</main>
-		<!-- new 판매글 -->
-		<div class="album py-5 bg-body-tertiary">
-			<div class="d-flex justify-content-center">
-				<h4>
-					<span
-						class="badge bg-primary-subtle text-primary-emphasis rounded-pill">New
-						판매글</span>
-				</h4>
 			</div>
-			<div class="container">
+			
 
-				<div class="album py-5 bg-body-tertiary">
-					<div class="container">
-						<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-							<c:forEach var="board" items="${boardList}">
-								<div class="col">
-									<div class="card shadow-sm">
-										<div class="card-img-top"
-											style="width: 100%; height: 300px; overflow: hidden;">
-											<a href="http://localhost/detail?seq=${board.seq}"
-												class="img-link"> <img
-												src="<c:url value='/cdn/upload/${board.img1}'/>"
-												class="img-fluid" alt="Image"
-												style="width: 100%; height: 100%; object-fit: cover;">
-											</a>
-										</div>
-										<div class="card-body"
-											style="height: 225px; overflow: hidden;">
-											<!-- card-body 내용 -->
-											<p class="card-text">${board.title}</p>
-											<p class="card-text">${board.price}원</p>
-											<p class="card-text">${board.address}</p>
-											<p class="card-text">${board.like_cnt}</p>
-											<div
-												class="d-flex justify-content-between align-items-center">
-												<div class="btn-group">
-													<button type="button"
-														class="btn btn-sm btn-outline-secondary">
-														<i class="bi bi-heart-fill"></i>
-													</button>
-													<button type="button"
-														class="btn btn-sm btn-outline-secondary">
-														<i class="bi bi-chat-left-text-fill"></i>
-													</button>
+				
+					
+					<!-- new 판매글 -->
+					<div class="album py-5 bg-body-tertiary">
+						<div class="d-flex justify-content-center align-items-center">
+							<h4>
+								<span class="badge bg-primary-subtle text-primary-emphasis rounded-pill mb-1">~따끈따끈한 New 판매글</span>
+							</h4>
+						</div>
+						<div class="d-flex justify-content-center align-items-center">
+							<i class="bi bi-cup-hot fs-1"></i>
+							<h4 class="text-dark fw-bold">"새로운 아이템을 놓치지 마세요!"</h4>
+						</div>
+		
+						<div class="container">
+		
+					<div class="album py-3 bg-body-tertiary">
+						<div class="container">
+							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+								<c:forEach var="board" items="${boardList}">
+									<div class="col">
+										<div class="card shadow-sm">
+											<div class="card-img-top"
+												style="width: 100%; height: 300px; overflow: hidden;">
+												<a href="http://localhost/detail?seq=${board.seq}"
+													class="img-link"> <img
+													src="<c:url value='/cdn/upload/${board.img1}'/>"
+													class="img-fluid" alt="Image"
+													style="width: 100%; height: 100%; object-fit: cover;">
+												</a>
+											</div>
+											<div class="card-body" >
+												<!-- card-body 내용 -->
+												<div>
+											        <p class="card-text fw-bold overflow-hidden text-truncate">
+														<i class="bi bi-gift me-2"></i>  ${board.title}
+													</p>
+													<hr>
+													<p class="card-text fw-bold" style="font-size:14px">
+														<i class="bi bi-cash me-2"></i>  <fmt:formatNumber value="${board.price}" pattern="#,###원" />
+													</p>
+													<p class="card-text overflow-hidden text-truncate" style="font-size:14px">
+														<i class="bi bi-geo-alt me-2"></i> ${board.address}
+													</p>
+													<p class="card-text" style="font-size:14px">
+														<i class="bi bi-eye me-2"></i> ${board.view_cnt} <i class="bi bi-heart ms-5 me-2"></i> ${board.like_cnt}
+													</p>
+													
+													<hr>
 												</div>
-												<small class="text-body-secondary createDate"
-													data-create-date="${board.create_date}">${board.create_date}</small>
+												<div class="d-flex justify-content-between align-items-center mt-3">
+													<div class="btn-group">
+														<button type="button" class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board.seq}">
+															<i class="${board.likeStatus}"></i>
+														</button>
+														<button type="button"
+															class="btn btn-sm btn-outline-secondary">
+															<i class="bi bi-chat-left-text-fill"></i>
+														</button>
+													</div>
+													<small class="text-body-secondary">
+													 	${board.formattedDifference}
+													</small>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</c:forEach>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 		</main>
 		<!-- Footer -->
-		<%@ include file="common/footer.jsp" %>
-		
+		<%@ include file="common/footer.jsp"%>
+
 		<!-- 위치가져오기테스트 -->
 		<script>
 			function getCurrentLocation() {
@@ -147,35 +178,40 @@
 						+ position.coords.longitude);
 			}
 		</script>
-		<!-- 게시 시간 차이 계산 -->
+		
+		<!-- 좋아요 버튼 클릭 -->
 		<script>
-		    function calculateTimeDifference() {
-		        // 각 createDate 엘리먼트에 대해 시간 차이 계산 및 표시
-		        const createDateElements = document.getElementsByClassName("createDate");
-
-		        for (let i = 0; i < createDateElements.length; i++) {
-		            const createDateElement = createDateElements[i];
-		            const createDate = createDateElement.getAttribute("data-create-date");
-		            const createDateObj = new Date(createDate);
-
-		            // 현재 날짜와 시간을 가져오기
-		            const currentDate = new Date();
-
-		            // 시간 차이 계산 (밀리초 단위)
-		            const timeDifference = currentDate - createDateObj;
-
-		            // 시간 차이를 분 단위로 변환
-		            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-
-		            // 분 단위로 표시
-		            createDateElement.innerText = `${minutesDifference} 분전`;
-		        }
-		    }
-
-		    // 페이지 로드 시에 한 번 실행
-		    window.onload = function() {
-		        calculateTimeDifference();
-		    };
+			$(document).ready(function() {
+			    // 좋아요 버튼 클릭 이벤트
+			    $(".btn-like").click(function() {
+			        var seq = $(this).data("seq");
+	
+			        // AJAX 요청
+			        $.ajax({
+			            type: "POST"
+			            , url: "/like"
+			            , dataType: "json"
+			            , data: { seq: seq }
+			            , success: function(data) {
+			                // 서버로부터의 응답을 처리
+			                if (data.message === "success_add") {
+			                  
+			                    location.reload();
+			                } if (data.message === "success_cancel") {
+			               
+			                    location.reload();
+			                } else if (data.message === "login_required") {
+			                    alert("로그인이 필요합니다.");
+			                }
+			            },
+			            error: function() {
+			                // AJAX 요청 실패 시 처리 로직 추가
+			                alert("AJAX 요청 실패");
+			            }
+			        });
+			    });
+			});
 		</script>
+	
 	</body>
 </html>

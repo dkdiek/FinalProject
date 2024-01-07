@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardService {
@@ -14,5 +15,10 @@ public interface BoardService {
 	public List selectBoardList(Map map);
 	public List<Map> searchBoardList(Map map);
     public int selectBoardCount(Map map);
+    public int increaseViewCount(int seq);
+    public int checkLikeStatus(Map map);
+    public ResponseEntity<String> processLike(Map map);
+    public ResponseEntity<String> soldout(int seq);
+    public ResponseEntity<String> deleteBoard(int seq);
 
 }

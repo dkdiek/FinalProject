@@ -7,8 +7,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 게시글 업로드 -->
 	<insert id="uploadBoard" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
 	    INSERT INTO board(
-	        member_id, title, price, content, address, category, img1
-	        <if test="img2 != null and img2 != ''">, img2</if>
+	        member_id, title, price, content, address, category, latitude, longitude, img1
+	        <if test="img2 != null and img3 != ''">, img2</if>
 	        <if test="img3 != null and img3 != ''">, img3</if>
 	        <if test="img4 != null and img4 != ''">, img4</if>
 	        <if test="img5 != null and img5 != ''">, img5</if>
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        <if test="img9 != null and img9 != ''">, img9</if>
 	        <if test="img10 != null and img10 != ''">, img10</if>
 	    ) VALUES (
-	        #{member_id}, #{title}, #{price}, #{content}, #{address}, #{category}, #{img1}
+	        #{member_id}, #{title}, #{price}, #{content}, #{address}, #{category}, #{latitude}, #{longitude}, #{img1}
 	        <if test="img2 != null and img2 != ''">, #{img2}</if>
 	        <if test="img3 != null and img3 != ''">, #{img3}</if>
 	        <if test="img4 != null and img4 != ''">, #{img4}</if>
@@ -59,6 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, img8
 			, img9
 			, img10
+			, latitude
+			, longitude
 		FROM board
 		WHERE 1+1
 		AND	del_yn = 'n'
@@ -77,7 +79,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	</if>
 	</select>
 	
-	<!-- 게시글 리스트 조회 메인화면 -->
+	 <!-- 게시글 리스트 조회 메인화면 -->
+	<!--
 	<select id="selectBoardList" resultType="map">
 		select
 			seq
@@ -105,6 +108,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, img8
 			, img9
 			, img10
+			, latitude
+			, longitude
 		FROM board
 		WHERE 1+1
 		AND	del_yn = 'n'
@@ -116,12 +121,84 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	</if>
     	<if test="category != null">
        		AND category = #{cateogry}
-    	</if>
-    	ORDER BY create_date DESC
+     	</if>
+       		
+    	 order 값에 따라 동적으로 정렬
+	    <if test="order != null and order != ''">
+	        ORDER BY ${order} ${desc}
+	    </if>
+	    <if test="order == null or order == ''">
+	        ORDER BY create_date DESC
+	    </if>
+	    
     	<if test="limit != null">
 	    	LIMIT #{limit}
     	</if>
-	</select>
+	</select> -->
+	
+	
+	
+	<select id="selectBoardList" resultType="map">
+    SELECT
+        board.seq as board_seq,
+        board.member_id as board_member_id,
+        board.title,
+        board.price,
+        board.content,
+        board.address,
+        board.category,
+        board.del_yn,
+        board.soldout_yn,
+        board.buyer_id,
+        board.create_date,
+        board.update_date,
+        board.delete_date,
+        board.view_cnt,
+        board.like_cnt,
+        board.img1,
+        board.img2,
+        board.img3,
+        board.img4,
+        board.img5,
+        board.img6,
+        board.img7,
+        board.img8,
+        board.img9,
+        board.img10,
+        board.latitude AS latitude,
+        board.longitude AS longitude,
+        (
+            6371 * acos(
+                cos(radians(#{userLatitude})) * cos(radians(board.latitude)) *
+                cos(radians(board.longitude) - radians(#{userLongitude})) +
+                sin(radians(#{userLatitude})) * sin(radians(board.latitude))
+            )
+        ) AS distance
+    FROM board
+    WHERE 1 + 1
+        AND board.del_yn = 'n'
+        <!-- other conditions... -->
+
+    <!-- order 값에 따라 동적으로 정렬 -->
+    <if test="order != null and order != ''">
+        ORDER BY ${order} ${desc}
+    </if>
+    <if test="order == null or order == ''">
+        ORDER BY board.create_date DESC
+    </if>
+
+    <if test="limit != null">
+        LIMIT #{limit}
+    </if>
+</select>
+
+
+
+
+	
+	
+	
+	
 	
 	<!-- 게시글 검색 조회 (페이징 처리 포함) -->
 	<select id="searchBoardList" resultType="map">
@@ -150,12 +227,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        img7,
 	        img8,
 	        img9,
-	        img10
+	        img10,
+	        latitude,
+			longitude
 	    FROM board
 	    WHERE del_yn = 'n'
 	    <if test="soldout_yn != null">
 	        AND soldout_yn = #{soldout_yn}
 	    </if>
+       	<if test="seller_id != null">
+       		AND member_id = #{seller_id}
+    	</if>
 	    <if test="category != null">
 	        AND category = #{category}
 	    </if>
@@ -178,6 +260,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    <if test="soldout_yn != null">
 	        AND soldout_yn = #{soldout_yn}
 	    </if>
+	    <if test="seller_id != null">
+       		AND member_id = #{seller_id}
+    	</if>
 	    <if test="category != null">
 	        AND category = #{category}
 	    </if>
@@ -186,4 +271,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </if>
 	</select>
 	
+	<!-- 조회수 증가시키기 -->
+	<update id="increaseViewCount" parameterType="int">
+	    UPDATE board
+	    SET view_cnt = view_cnt + 1
+	    WHERE seq = #{seq}
+	</update>
+	
+	<!-- like 상태 확인 -->
+	<select id="checkLikeStatus" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM interest
+        WHERE seq = #{seq}
+        AND member_id = #{member_id}
+    </select>
+    
+    <!-- 좋아요 추가 -->
+    <insert id="addLike" parameterType="map">
+        INSERT INTO interest (seq, member_id)
+        VALUES (#{seq}, #{member_id})
+    </insert>
+
+    <!-- 좋아요 취소 -->
+    <delete id="cancelLike" parameterType="map">
+        DELETE FROM interest
+        WHERE seq = #{seq}
+        <if test="member_id != null">
+        	AND member_id = #{member_id}
+    	</if>
+    </delete>
+    
+   	<!-- 게시글 판매완료 처리 -->
+    <update id="soldout" parameterType="int">
+        UPDATE board
+        SET soldout_yn = 'y'
+        WHERE seq = #{seq}
+    </update>
+    
+    <!-- 게시글 삭제 처리 -->
+    <update id="deleteBoard" parameterType="int">
+        UPDATE board
+        SET del_yn = 'y'
+        WHERE seq = #{seq}
+    </update>
+    
 </mapper>

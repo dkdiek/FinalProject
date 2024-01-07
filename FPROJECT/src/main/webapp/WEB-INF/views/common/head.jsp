@@ -9,7 +9,7 @@
 	<script src="/cdn/js/bootstrap/bootstrap.bundle.min.js"></script>
 	<link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/album/">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="/cdn/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 	<!-- favicon -->
 	<link rel="shortcut icon" href="<c:url value='/cdn/images/favicon.ico'/>" type="image/x-icon" />

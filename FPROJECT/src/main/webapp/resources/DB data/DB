@@ -1,0 +1,122 @@
+!!!!!!!!!!!!!!!!!!!보드 테이블!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CREATE TABLE `board` (
+  `seq` int NOT NULL AUTO_INCREMENT,
+  `member_id` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `del_yn` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `soldout_yn` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `buyer_id` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `delete_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `view_cnt` int NOT NULL DEFAULT '0',
+  `like_cnt` int NOT NULL DEFAULT '0',
+  `img1` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img2` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img3` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img4` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img5` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img6` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img7` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img8` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img9` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `img10` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  PRIMARY KEY (`seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+
+
+
+!!!!!!!!!!!!!!!!!!!카테고리 테이블!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CREATE TABLE `categories` (
+  `seq` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(300) NOT NULL,
+  `del_yn` char(1) NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`seq`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
+
+INSERT INTO categories (name)
+VALUES
+  ('디지털기기'),
+  ('가구/인테리어'),
+  ('유아동'),
+  ('여성의류'),
+  ('여성잡화'),
+  ('남성패션/잡화'),
+  ('생활가전'),
+  ('생활/주방'),
+  ('가공식품'),
+  ('스포츠/레저'),
+  ('취미/게임/음반'),
+  ('뷰티/미용'),
+  ('식물'),
+  ('반려동물용품'),
+  ('티켓/교환권'),
+  ('도서'),
+  ('유아도서'),
+  ('기타 중고물품');
+  
+  
+  
+  
+  
+  
+  
+ !!!!!!!!!!!!!!!!!!!인터레스트 테이블!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  CREATE TABLE `interest` (
+  `idx` int NOT NULL AUTO_INCREMENT,
+  `seq` varchar(300) NOT NULL,
+  `member_id` varchar(300) NOT NULL,
+  PRIMARY KEY (`idx`,`seq`,`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+!!!!!!!!!!!!!!!!!!!인터레스트 트리거!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+DELIMITER //
+CREATE TRIGGER after_add_like
+AFTER INSERT ON interest
+FOR EACH ROW
+BEGIN
+    UPDATE board
+    SET like_cnt = like_cnt + 1
+    WHERE seq = NEW.seq;
+END //
+!!!!!!!!!!!!!!!!!!!인터레스트 트리거!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+DELIMITER //
+CREATE TRIGGER after_cancel_like
+AFTER DELETE ON interest
+FOR EACH ROW
+BEGIN
+    UPDATE board
+    SET like_cnt = like_cnt - 1
+    WHERE seq = OLD.seq;
+END //
+
+
+
+
+
+
+!!!!!!!!!!!!!!!!!!!멤버인포 테이블!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CREATE TABLE `member_info` (
+  `seq` int NOT NULL AUTO_INCREMENT,
+  `member_id` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_pw` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_phone` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_email` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_addr1` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `member_addr2` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_addr3` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `member_place` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `member_del` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `member_join_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  PRIMARY KEY (`seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

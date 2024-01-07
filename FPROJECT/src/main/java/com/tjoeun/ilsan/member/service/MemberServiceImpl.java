@@ -24,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
 	        params.put("id", id);
 	        params.put("password", password);
 
-	        // ÀÌ ºÎºÐ¿¡¼­´Â MapÀ» ¹ÝÈ¯ÇÏÁö ¾Ê°í, ¼º°ø ¿©ºÎ¿¡ µû¶ó true ¶Ç´Â false¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+	        // ï¿½ï¿½ ï¿½ÎºÐ¿ï¿½ï¿½ï¿½ï¿½ï¿½ Mapï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ true ï¿½Ç´ï¿½ falseï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
 	        return memberDao.checkLogin(params) != null;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -42,4 +42,13 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public Map checkDuplication(Map map) {
+        return memberDao.checkDuplication(map);
+	}
+
+	@Override
+	public Map getMemberInfoById(String member_id) {
+        return memberDao.getMemberInfoById(member_id);
+	}
 }

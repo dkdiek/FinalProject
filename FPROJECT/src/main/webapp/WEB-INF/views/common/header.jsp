@@ -42,22 +42,21 @@
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item rounded-2" href="#">마이페이지</a></li>
 							<li><a class="dropdown-item rounded-2" href="#">관심목록</a></li>
-							<li><a class="dropdown-item rounded-2" href="#">판매내역</a></li>
-							<li><a class="dropdown-item rounded-2" href="#">구매내역</a></li>
+							<li><a class="dropdown-item rounded-2" href="<c:url value='/search?seller_id=${id}'/>">판매내역</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item rounded-2" href="<c:url value='/logout'/>">로그아웃</a></li>
+							<li>
+								<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtn">로그아웃</a>
+							</li>
 						</ul>
 					</div>
 				</c:if>
 			</div>
 			<!-- 메뉴버튼 -->
 			<div class="col-1">
-				<button class="btn btn-primary" data-bs-toggle="offcanvas"
-					data-bs-target="#sidebar" aria-controls="sidebar">
+				<button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
 					<i class="bi bi-list fs-1"></i>
 				</button>
 			</div>
-
 		</div>
 	</div>
 
@@ -126,55 +125,78 @@
 </div>
 
 <!-- 사이드바 -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar"
-	aria-labelledby="sidebarLabel">
-	<div class="offcanvas-header">
-		<h5 class="offcanvas-title" id="sidebarLabel">Sidebar</h5>
-		<button type="button" class="btn-close text-reset"
-			data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+    <div class="offcanvas-header bg-light">
+		<p style="max-width: 150px">
+			<a class="nav-link active" href="<c:url value='/'/>"> <img
+				class="img-fluid"
+				src="<c:url value='/cdn/images/common/LogoKor.png'/>">
+			</a>
+		</p>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 	</div>
-	<div class="offcanvas-body">
-		<ul class="nav flex-column">
-			<li class="nav-item"><a class="nav-link active"
-				href="<c:url value='/'/>"> <i class="bi bi-house-door"></i> 메인화면
-			</a></li>
-
-			<c:if test="${not empty userId}">
-				<li class="nav-item">
-					<form action="/writeView" method="get">
-            			<button type="submit" class="nav-link active" style="border: none; background-color: transparent; cursor: pointer;">
-               				 <i class="bi bi-upload"></i> 판매하기
-           				 </button>
-     				</form>
-				</li>
-			</c:if>
-
-		</ul>
-	</div>
+	
+    <div class="offcanvas-body bg-light">
+        <ul class="nav flex-column">
+            <c:if test="${not empty userId}">
+           	 <hr>
+                <li class="nav-item">
+                    <form action="/writeView" method="get">
+                        <button type="submit" class="nav-link active" style="border: none; background-color: transparent; cursor: pointer;">
+                            <i class="bi bi-upload"></i> 판매하기
+                        </button>
+                    </form>
+                </li>
+            </c:if>
+            
+          	<hr>
+            <li class="nav-item fw-bold fs-5">
+                <a class="nav-link active" href="<c:url value='/search?category=디지털기기'/>">
+                    <i class="bi bi-house-door me-2"></i> 디지털기기
+                </a>
+            </li>
+            
+      
+            
+            
+			
+            
+        </ul>
+    </div>
 </div>
 
-
-<!-- 스크립트 -->
+<!-- 로그인 스크립트 -->
 <script>
     // 버튼 클릭 이벤트 리스너 등록
     $("#btnLogin").on("click", function () {
         // 로그인 폼 데이터 가져오기
         var formData = $("#loginForm").serialize();
 
+        // 현재 페이지 URL 가져오기
+        var currentUrl = window.location.href;
+
+        // 로그인 폼 데이터에 현재 페이지 URL 추가
+        formData += "&returnUrl=" + encodeURIComponent(currentUrl);
+
         // 서버에 AJAX 요청
         $.ajax({
             url: "/login",
             type: "POST",
             data: formData,
-            dataType: "json", // 데이터 타입을 JSON으로 명시
+            dataType: "json",
             success: function (data) {
                 // 서버 응답 처리
                 console.log(data);
 
-                // 성공 또는 실패에 따라 동작 수행
                 if (data.message === "success") {
                     // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
-                    window.location.href = "/";
+                    if (data.returnUrl) {
+                        // 리다이렉트 URL이 있으면 해당 URL로 이동
+                        window.location.href = data.returnUrl;
+                    } else {
+                        // 리다이렉트 URL이 없으면 기본 페이지로 이동
+                        window.location.href = "/";
+                    }
                 } else {
                     // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
                     console.error("로그인 실패:", data.message);
@@ -183,11 +205,39 @@
             },
             error: function (error) {
                 console.error("에러:", error);
-                   alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
+                alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
             }
         });
     });
 </script>
+
+
+<!-- 로그아웃 -->
+<script>
+  $(document).ready(function () {
+    // 로그아웃 버튼 클릭 이벤트 리스너 등록
+    $("#logoutBtn").on("click", function () {
+      // 현재 페이지 URL 가져오기
+      var pageUrl = window.location.href;
+
+      // 로그아웃 요청
+      $.ajax({
+        url: "/logout",
+        type: "GET",
+        data: { pageUrl: pageUrl }, // 페이지 URL 전달
+        success: function () {
+          // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
+          window.location.reload(); // 현재 페이지 새로고침
+        },
+        error: function (error) {
+          console.error("에러:", error);
+          alert("로그아웃에 실패했습니다.");
+        }
+      });
+    });
+  });
+</script>
+
 <!-- 검색창 폼 섭밋 -->
 <script>
 	function handleSearch(event) {

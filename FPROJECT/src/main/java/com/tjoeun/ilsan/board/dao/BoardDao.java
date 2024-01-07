@@ -10,4 +10,11 @@ public interface BoardDao {
 	public List selectBoardList(Map map);
 	public List<Map> searchBoardList(Map map);
     public int selectBoardCount(Map map);
+    public int increaseViewCount(int seq);
+    public int checkLikeStatus(Map map);
+    public int addLike(Map map);
+    public int cancelLike(Map map);
+    public int soldout(int seq);
+    public int deleteBoard(int seq);
+
 }

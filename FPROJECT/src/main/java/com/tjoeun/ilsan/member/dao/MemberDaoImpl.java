@@ -26,4 +26,16 @@ public class MemberDaoImpl implements MemberDao{
 		return mapper.joinMembership(map);
 	}
 
+	@Override
+	public Map checkDuplication(Map map) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+		return mapper.checkDuplication(map);
+	}
+
+	@Override
+	public Map getMemberInfoById(String member_id) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+		return mapper.getMemberInfoById(member_id);
+	}
+
 }

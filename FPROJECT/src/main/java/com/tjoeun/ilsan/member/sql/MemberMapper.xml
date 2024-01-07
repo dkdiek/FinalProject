@@ -27,6 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    ,member_addr1
 			,member_addr2
 			,member_addr3
+			,latitude
+			,longitude
 		) values (
 			#{member_id}
 		    ,#{member_pw}
@@ -36,8 +38,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    ,#{member_addr1}
 		    ,#{member_addr2}
 		    ,#{member_addr3}
+		    ,#{latitude}
+		    ,#{longitude}
 		)
 	
 	</insert>
+	
+	<!-- 회원가입 아이디, 이메일  확인 -->
+	<select id="checkDuplication" resultType="map" parameterType="map">
+		SELECT
+			<if test="member_id != null">
+				member_id
+			</if>
+			<if test="member_email != null">
+				, member_email
+			</if>
+			<if test="member_phone != null">
+				, member_phone
+			</if>
+		 FROM member_info
+		 where
+		 	1+1
+ 			<if test="member_id != null">
+		 		and member_id = #{member_id}
+			</if>
+ 			<if test="member_email != null">
+		 		and member_email = #{member_email}
+			</if>
+ 			<if test="member_phone != null">
+		 		and member_phone = #{member_phone}
+			</if>
+	</select>
+	
+	<!-- id로 회원정보 가져오기 -->
+	<select id="getMemberInfoById" resultType="map" parameterType="string">
+	    SELECT 
+	        seq,
+	        member_id,
+	        member_name,
+	        member_phone,
+	        member_email,
+	        member_addr1,
+	        member_addr2,
+	        member_addr3,
+	        member_place,
+	        member_del,
+	        member_join_date,
+	        latitude,
+	        longitude
+	    FROM member_info
+	    WHERE member_id = #{member_id}
+	</select>
 
 </mapper>

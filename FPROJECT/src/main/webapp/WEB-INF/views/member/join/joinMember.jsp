@@ -8,9 +8,11 @@
 	<!-- head -->
 	<%@ include file="../../common/head.jsp" %>
 	<!-- body -->
-	<body>
+	<body class="bg-body-tertiary">
 		<div class="container mt-5">
-			<h1 class="text-center">새로마켓 회원 가입</h1>
+		 	<p style="max-width:200px" class="text-center mx-auto">
+		        <img class="img-fluid" src="<c:url value='/cdn/images/common/LogoKor.png'/>">
+	        </p>			
 	
 			<div id="agreement" class="row mt-5">
 				<div id="agreement1" class="col-md-6">
@@ -46,7 +48,7 @@
 			</div>
 	
 			<div id="agreementRecheck"
-				class="mt-4 d-flex align-items-center justify-content-center">
+				class="mt-5 d-flex align-items-center justify-content-center">
 				<form>
 					<div class="form-check">
 						<input type="checkbox"
@@ -57,9 +59,8 @@
 				</form>
 			</div>
 	
-			<div class="mt-3 d-flex align-items-center justify-content-center">
-				<form id="frm1" action="<c:url value='/joinMembership2'/>"
-					method="GET">
+			<div class="py-5 d-flex align-items-center justify-content-center">
+				<form id="frm1" action="<c:url value='/joinMembership2'/>" method="GET">
 					<button id="btnConfirm" type="button" class="btn btn-primary">확인</button>
 					<a id="btnCancel" href="/" class="btn btn-secondary">취소</a>
 				</form>

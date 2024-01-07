@@ -44,5 +44,41 @@ public class BoardDaoImpl implements BoardDao {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
 		return mapper.selectBoardCount(map);
 	}
+	
+	@Override
+    public int increaseViewCount(int seq) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.increaseViewCount(seq);
+    }
+	
+	@Override
+    public int checkLikeStatus(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.checkLikeStatus(map);
+    }
+
+	@Override
+	public int addLike(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.addLike(map);
+	}
+
+	@Override
+	public int cancelLike(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.cancelLike(map);
+	}
+
+	@Override
+	public int soldout(int seq) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.soldout(seq);
+	}
+	
+	@Override
+	public int deleteBoard(int seq) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.deleteBoard(seq);
+	}
 
 }
