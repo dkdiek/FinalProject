@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -189,27 +190,44 @@ public class BoardController {
 	}
 	
 	// 게시물 삭제 처리 ------------------------------------------------------------------------------------------
-		@PostMapping("/deleteBoard")
-		@ResponseBody
-		public ResponseEntity<String> deleteBoard(@RequestParam("seq") int seq, HttpSession session) {
-		    // 세션에서 사용자 ID 가져오기
-		    String member_id = (String) session.getAttribute("id");
+	@PostMapping("/deleteBoard")
+	@ResponseBody
+	public ResponseEntity<String> deleteBoard(@RequestParam("seq") int seq, HttpSession session) {
+	    // 세션에서 사용자 ID 가져오기
+	    String member_id = (String) session.getAttribute("id");
 
-		    if (member_id == null || member_id.isEmpty()) {
-		        // 로그인이 필요한 경우
-		        return ResponseEntity.ok("{\"message\": \"login_required\"}");
-		    }
+	    if (member_id == null || member_id.isEmpty()) {
+	        // 로그인이 필요한 경우
+	        return ResponseEntity.ok("{\"message\": \"login_required\"}");
+	    }
 
-		    ResponseEntity<String> soldoutResponse = boardService.deleteBoard(seq);
+	    ResponseEntity<String> soldoutResponse = boardService.deleteBoard(seq);
 
-		    // 판매 완료 처리 결과에 따라 응답 생성
-		    if (soldoutResponse.getStatusCode().is2xxSuccessful()) {
-		        return ResponseEntity.ok("{\"message\": \"success\"}");
-		    } else if (soldoutResponse.getStatusCodeValue() == 404) {
-		        return ResponseEntity.ok("{\"message\": \"not_found\"}");
-		    } else {
-		        return ResponseEntity.status(500).body("{\"message\": \"internal_server_error\"}");
-		    }
-		}
-	
+	    // 판매 완료 처리 결과에 따라 응답 생성
+	    if (soldoutResponse.getStatusCode().is2xxSuccessful()) {
+	        return ResponseEntity.ok("{\"message\": \"success\"}");
+	    } else if (soldoutResponse.getStatusCodeValue() == 404) {
+	        return ResponseEntity.ok("{\"message\": \"not_found\"}");
+	    } else {
+	        return ResponseEntity.status(500).body("{\"message\": \"internal_server_error\"}");
+	    }
+	}
+		
+	// 게시물 수정
+	@GetMapping("/modifyBoardView")
+	public String modifyView(@RequestParam Map map, HttpSession session, Model model) {
+		String result="/common/errorPage";
+	    String member_id_session = (String) session.getAttribute("id");
+	    String member_id_map = (String) map.get("member_id");
+	    
+	    if ( member_id_map.equals(member_id_session) ) {
+	    	 Map<String, Object> boardDetail = boardService.selectBoardDetail(map);
+	 	    	model.addAttribute("boardDetail", boardDetail);
+	 	    	result = "/sales/modifyView";
+	    } else {
+	    	 String errorMessage = "조건에 맞는 게시물이 없습니다.";
+	         model.addAttribute("errorMessage", errorMessage);
+	    }
+	    return result;
+	}
 }

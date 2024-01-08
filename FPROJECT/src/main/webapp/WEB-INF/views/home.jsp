@@ -24,6 +24,10 @@
 					<i class="bi bi-people fs-1"></i>
 					<h4 class="text-dark fw-bold">"우리 동네, 인기 상품을 만나보세요!"</h4>
 				</div>
+				<div class="text-center">
+					<i class="bi bi-geo-alt me-2 me-2"></i><c:out value="${memberInfo.member_addr2}" />
+				</div>
+				
 				<div class="container">
 		
 					<div class="album py-3 bg-body-tertiary">
@@ -105,14 +109,14 @@
 					<div class="album py-3 bg-body-tertiary">
 						<div class="container">
 							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-								<c:forEach var="board" items="${boardList}">
+								<c:forEach var="board2" items="${boardList2}">
 									<div class="col">
 										<div class="card shadow-sm">
 											<div class="card-img-top"
 												style="width: 100%; height: 300px; overflow: hidden;">
-												<a href="http://localhost/detail?seq=${board.seq}"
+												<a href="http://localhost/detail?seq=${board2.seq}"
 													class="img-link"> <img
-													src="<c:url value='/cdn/upload/${board.img1}'/>"
+													src="<c:url value='/cdn/upload/${board2.img1}'/>"
 													class="img-fluid" alt="Image"
 													style="width: 100%; height: 100%; object-fit: cover;">
 												</a>
@@ -121,25 +125,26 @@
 												<!-- card-body 내용 -->
 												<div>
 											        <p class="card-text fw-bold overflow-hidden text-truncate">
-														<i class="bi bi-gift me-2"></i>  ${board.title}
+														<i class="bi bi-gift me-2"></i>  ${board2.title}
 													</p>
 													<hr>
 													<p class="card-text fw-bold" style="font-size:14px">
-														<i class="bi bi-cash me-2"></i>  <fmt:formatNumber value="${board.price}" pattern="#,###원" />
+														<i class="bi bi-cash me-2"></i>  <fmt:formatNumber value="${board2.price}" pattern="#,###원" />
 													</p>
 													<p class="card-text overflow-hidden text-truncate" style="font-size:14px">
-														<i class="bi bi-geo-alt me-2"></i> ${board.address}
+														<i class="bi bi-geo-alt me-2"></i> ${board2.address}
 													</p>
 													<p class="card-text" style="font-size:14px">
-														<i class="bi bi-eye me-2"></i> ${board.view_cnt} <i class="bi bi-heart ms-5 me-2"></i> ${board.like_cnt}
+														<i class="bi bi-eye me-2"></i> ${board2.view_cnt} <i class="bi bi-heart ms-5 me-2"></i> ${board2.like_cnt}
+														<i class="bi bi-car-front ms-5 me-2"></i><c:out value="${board2.distance}" /> km
 													</p>
 													
 													<hr>
 												</div>
 												<div class="d-flex justify-content-between align-items-center mt-3">
 													<div class="btn-group">
-														<button type="button" class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board.seq}">
-															<i class="${board.likeStatus}"></i>
+														<button type="button" class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board2.seq}">
+															<i class="${board2.likeStatus}"></i>
 														</button>
 														<button type="button"
 															class="btn btn-sm btn-outline-secondary">
@@ -147,7 +152,7 @@
 														</button>
 													</div>
 													<small class="text-body-secondary">
-													 	${board.formattedDifference}
+													 	${board2.formattedDifference}
 													</small>
 												</div>
 											</div>

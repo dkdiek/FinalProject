@@ -139,63 +139,85 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<select id="selectBoardList" resultType="map">
-    SELECT
-        board.seq as board_seq,
-        board.member_id as board_member_id,
-        board.title,
-        board.price,
-        board.content,
-        board.address,
-        board.category,
-        board.del_yn,
-        board.soldout_yn,
-        board.buyer_id,
-        board.create_date,
-        board.update_date,
-        board.delete_date,
-        board.view_cnt,
-        board.like_cnt,
-        board.img1,
-        board.img2,
-        board.img3,
-        board.img4,
-        board.img5,
-        board.img6,
-        board.img7,
-        board.img8,
-        board.img9,
-        board.img10,
-        board.latitude AS latitude,
-        board.longitude AS longitude,
-        (
-            6371 * acos(
-                cos(radians(#{userLatitude})) * cos(radians(board.latitude)) *
-                cos(radians(board.longitude) - radians(#{userLongitude})) +
-                sin(radians(#{userLatitude})) * sin(radians(board.latitude))
-            )
-        ) AS distance
-    FROM board
-    WHERE 1 + 1
-        AND board.del_yn = 'n'
-        <!-- other conditions... -->
+		SELECT a.*
+		FROM (
+			    SELECT
+			        seq,
+					member_id,
+					title,
+					price,
+					content,
+					address,
+					category,
+					del_yn,
+					soldout_yn,
+					buyer_id,
+					create_date,
+					update_date,
+					delete_date,
+					view_cnt,
+					like_cnt,
+					img1,
+					img2,
+					img3,
+					img4,
+					img5,
+					img6,
+					img7,
+					img8,
+					img9,
+					img10,
+					latitude AS latitude,
+					longitude AS longitude,
+			        ROUND(
+			            6371 * acos(
+			                cos(radians(#{userLatitude})) * cos(radians(latitude)) *
+			                cos(radians(longitude) - radians(#{userLongitude})) +
+			                sin(radians(#{userLatitude})) * sin(radians(latitude))
+			            ), 2
+			        ) AS distance
+			      
+			    FROM board
+		) a
+	    WHERE 1 + 1
+	    <!-- 게시물 삭제가 아닌 것 -->
+	    AND a.del_yn = 'n'
+	    <!-- 거리가 파람 이상 인것 -->
+		<if test="null != soldout_yn and soldout_yn != ''">
+			AND soldout_yn = #{soldout_yn}
+		</if>
+		<!-- 거리가 파람 이상 인것 -->
+		<if test="null != distance_from and distance_from != ''">
+			AND #{distance_from} <![CDATA[ <= ]]> a.distance
+		</if>
+		<!-- 거리가 파람 이내 인것 -->
+		<if test="null != distance_to and distance_to != ''">
+			AND #{distance_to} <![CDATA[ >=  ]]> a.distance
+		</if>
+		
+	    <!-- order 값에 따라 동적으로 정렬 -->
+	    <if test="order != null and order != ''">
+		    ORDER BY ${order}
+		    <if test="order_desc != null and order_desc != ''">
+		        ${order_desc}
+		    </if>
+		    <if test="order2 != null and order2 != ''">
+		        , ${order2}
+		    </if>
+		    <if test="order_desc2 != null and order_desc2 != ''">
+		        ${order_desc2}
+		    </if>
+		</if>
+		 <if test="order == null or order == ''">
+	        ORDER BY a.create_date DESC
+	    </if>
+		
+		<!-- limit -->
+	    <if test="limit != null or limit != ''">
+	        LIMIT #{limit}
+	    </if>
+	</select>
 
-    <!-- order 값에 따라 동적으로 정렬 -->
-    <if test="order != null and order != ''">
-        ORDER BY ${order} ${desc}
-    </if>
-    <if test="order == null or order == ''">
-        ORDER BY board.create_date DESC
-    </if>
-
-    <if test="limit != null">
-        LIMIT #{limit}
-    </if>
-</select>
-
-
-
-
-	
 	
 	
 	

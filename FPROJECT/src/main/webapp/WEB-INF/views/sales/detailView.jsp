@@ -94,9 +94,15 @@
 							<c:if test="${sessionScope.id eq boardDetail.member_id}">
 								<hr class="my-4">
 								<i class="bi bi-person-lock fs-5 me-2"></i>
-								<a href="<c:url value='/modify?seq=${boardDetail.seq}' />" class="btn btn-outline-danger">수정</a>
+								<button class="btn btn-outline-danger" id="btnModify">수정</button>
 								<button class="btn btn-outline-danger" onclick="deleteBoard(${boardDetail.seq})">삭제</button>
 								<button class="btn btn-outline-primary" onclick="markAsSoldOut(${boardDetail.seq})">판매완료</button>
+								
+								<form id="frmModify" action="/modifyBoardView" method="get">
+								    <input type="hidden" name="seq" id="seqHiddenInput" value="${boardDetail.seq}">
+								    <input type="hidden" name="member_id" id="memberIdHiddenInput" value="${boardDetail.member_id}">
+								</form>
+								
 							</c:if>
 						</c:if>
 						<c:if test="${boardDetail.soldout_yn eq 'y'}">
@@ -292,6 +298,14 @@
 				            },
 				        });
 				    }
+				</script>
+				
+				<!--  게시물 수정 처리  -->
+				<script>
+				    document.getElementById('btnModify').addEventListener('click', function() {
+				        // 클릭 시 폼 제출
+				        document.getElementById('frmModify').submit();
+				    });
 				</script>
 	</body>
 </html>

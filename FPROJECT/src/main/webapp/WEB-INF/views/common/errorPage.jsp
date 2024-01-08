@@ -22,7 +22,7 @@
 			        </div>
 			    </div>
 			    <div class="p-5 text-center justify-content-center bg-body-tertiary rounded-3">
-			        <h1 class="text-body-emphasis">조건에 맞는 게시물이 없습니다</h1>
+			        <h1 class="text-body-emphasis">오류가 발생하였습니다</h1>
 			        <p class="col-lg-8 mx-auto fs-5 text-muted">
 			            ${errorMessage}
 			        </p>
