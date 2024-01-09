@@ -18,25 +18,19 @@
 		<%@ include file="../common/header.jsp" %>
 		<main>
 			<div class="container mt-3">
-			    
-					
-			    	<!-- 기존 이미지 불러오는 폼 -->
-					<div id="imagePreview" class="py-3">
-					    <label for="imageLoading" class="form-label fw-bold">기존 첨부 사진</label><br>
-					    <c:forEach var="i" begin="1" end="10">
-					        <c:set var="imgProperty" value="img${i}" />
-					        <c:set var="imgURL" value="${boardDetail[imgProperty]}" />
-					
-					        <!-- Check if the image URL is not null or empty -->
-					        <c:if test="${not empty imgURL}">
-					            <div class="img-container">
-					                <img src="<c:url value='/cdn/upload/' />${imgURL}" class="img-thumbnail" style="width: 100px; height: 100px;">
-					            </div>
-					        </c:if>
-					    </c:forEach>
+			    <form action="/writeProcess" method="post" enctype="multipart/form-data">
+
+				    <!-- 이미지 업로드 폼 -->
+			        <div class="custom-file mb-3">
+					    <label for="imageInput" class="form-label fw-bold">사진 첨부</label>
+					    <div class="input-group">
+					        <input type="file" class="form-control" id="imageInput" name="images" multiple accept="image/*" required>
+					    </div>
+					    
+					    <!-- 이미지 미리보기 영역 -->
+					    <div id="imagePreview" class="mt-3"></div>
 					</div>
-					
-			    	<form action="/modifyBoardProcess" method="post" enctype="multipart/form-data">
+			    
 		    		<!-- 제목 -->
 			        <div class="mb-3">
 						<label for="title" class="form-label fw-bold">제목</label>
@@ -60,7 +54,6 @@
 						<div id="map" class="border border-light-subtle rounded" style="width:300px;height:300px;margin-top:10px;display:none" class="rounded"></div>
  				            <input type="hidden" id="latitude" name="latitude" value="${boardDetail.latitude}">
 							<input type="hidden" id="longitude" name="longitude" value="${boardDetail.longitude}">
-   							<input type="hidden" name="seq" value="${boardDetail.seq}">
 			        </div>
 			        
 			        <!-- 카테고리 -->
@@ -171,6 +164,7 @@
 					</div>
 					<div class="text-center mt-5">
 					    <button type="submit" class="btn btn-primary">작성 완료</button>
+<!-- 					    		    <input type="button" id="submitButton" class="btn btn-primary" value="작성 완료"> -->    
 						<a href="<c:url value='/'/>" class="btn btn-secondary">작성 취소</a>
 					</div>
 			    </form>
@@ -249,8 +243,37 @@
 		    });
 		</script>
 
-		<!-- 기존 이미지 미리보기 -->
+		<!-- 파일 첨부 스크립트 -->
 		<script>
+		    var imageInput = document.getElementById("imageInput"); // 파일 입력란
+		    var imagePreview = document.getElementById("imagePreview"); // 이미지 미리보기 영역
+		    var maxFileCount = 10; // 최대 업로드 가능한 파일 개수
+		
+		    // 파일 선택 변경 감지 이벤트 추가
+		    imageInput.addEventListener("change", handleFileSelect);
+		
+		    function handleFileSelect(event) {
+		        var files = event.target.files;
+		
+		        if (files.length > maxFileCount) {
+		            alert("최대 " + maxFileCount + "개의 파일을 업로드할 수 있습니다.");
+		            // 파일 개수가 제한을 초과하면 파일 선택 취소
+		            imageInput.value = "";
+		            return;
+		        }
+		
+		        // 이미지 미리보기 초기화
+		        imagePreview.innerHTML = "";
+		
+		        for (var i = 0; i < files.length; i++) {
+		            var file = files[i];
+		
+		            if (i < maxFileCount) {
+		                previewImage(file);
+		            }
+		        }
+		    }
+		
 		    function previewImage(file) {
 		        var reader = new FileReader();
 		

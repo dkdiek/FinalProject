@@ -192,4 +192,24 @@ public class BoardServiceImpl implements BoardService {
         }
     }
     
+    @Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
+	public int updateBoard(Map map) throws Exception {
+    		int result = 0;
+	        String seq  = (String) map.get("seq");
+	        
+	        if (seq != null && !seq.isEmpty()) {
+	        	result = boardDao.updateBoard(map);
+	        } else {
+	            throw new Exception("seq is null");
+	        }
+
+	        if (result != 1) {
+	            // 등록 실패 시 롤백
+	            throw new Exception("Board update failed");
+	        }
+	   
+	    return result;
+	}
+    
 }

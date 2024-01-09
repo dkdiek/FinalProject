@@ -40,9 +40,11 @@
 						<ul class="dropdown-menu">
 							<li class="dropdown-item active">${id}님</li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item rounded-2" href="#">마이페이지</a></li>
-							<li><a class="dropdown-item rounded-2" href="#">관심목록</a></li>
-							<li><a class="dropdown-item rounded-2" href="<c:url value='/search?seller_id=${id}'/>">판매내역</a></li>
+							<li><a class="dropdown-item rounded-2" href="#">관심 목록</a></li>
+							<li><a class="dropdown-item rounded-2" href="<c:url value='/search?seller_id=${sessionScope.id}'/>">판매 내역</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item rounded-2" href="<c:url value='/updateMemberInfo'/>">회원 정보 변경</a></li>
+							<li><a class="dropdown-item rounded-2" href="<c:url value='/withdrawal'/>">회원 탈퇴</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li>
 								<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtn">로그아웃</a>

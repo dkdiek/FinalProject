@@ -19,7 +19,7 @@
 				<div id="imageCarousel" class="carousel carousel-dark slide col-12 col-md-6 mx-auto" data-bs-ride="carousel">
 				    
 					    <div class="carousel-inner border rounded mt-5 " >
-					        <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
+					       <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
 					            <div class="carousel-item ${i.index == 0 ? 'active' : ''}">
 					                <img src="<c:url value='/cdn/upload/${img}' />"
 					                    class="d-block w-100 img-fluid carousel-image"
@@ -29,7 +29,9 @@
 					                    data-bs-slide-to="${i.index}">
 					                <!-- Additional data-bs attributes are added to open the modal and specify the selected image index -->
 					            </div>
-					        </c:forEach>
+					        </c:forEach> 
+
+
 				    	</div>
 				    	<div class="carousel-indicators">
 					        <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">

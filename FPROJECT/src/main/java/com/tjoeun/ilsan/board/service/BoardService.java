@@ -20,5 +20,7 @@ public interface BoardService {
     public ResponseEntity<String> processLike(Map map);
     public ResponseEntity<String> soldout(int seq);
     public ResponseEntity<String> deleteBoard(int seq);
+	public int updateBoard(Map map) throws Exception;
+
 
 }

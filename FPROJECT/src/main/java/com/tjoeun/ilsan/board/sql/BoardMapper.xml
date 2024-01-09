@@ -79,65 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	</if>
 	</select>
 	
-	 <!-- 게시글 리스트 조회 메인화면 -->
-	<!--
-	<select id="selectBoardList" resultType="map">
-		select
-			seq
-			, member_id
-			, title
-			, price
-			, content
-			, address
-			, category
-			, del_yn
-			, soldout_yn
-			, buyer_id
-			, create_date
-			, update_date
-			, delete_date
-			, view_cnt
-			, like_cnt
-			, img1
-			, img2
-			, img3
-			, img4
-			, img5
-			, img6
-			, img7
-			, img8
-			, img9
-			, img10
-			, latitude
-			, longitude
-		FROM board
-		WHERE 1+1
-		AND	del_yn = 'n'
-		<if test="seq != null">
-       		AND seq = #{seq}
-    	</if>
-   	   	<if test="soldout_yn != null">
-       		AND soldout_yn = #{soldout_yn}
-    	</if>
-    	<if test="category != null">
-       		AND category = #{cateogry}
-     	</if>
-       		
-    	 order 값에 따라 동적으로 정렬
-	    <if test="order != null and order != ''">
-	        ORDER BY ${order} ${desc}
-	    </if>
-	    <if test="order == null or order == ''">
-	        ORDER BY create_date DESC
-	    </if>
-	    
-    	<if test="limit != null">
-	    	LIMIT #{limit}
-    	</if>
-	</select> -->
-	
-	
-	
+	<!-- 게시글 리스트 조회 메인화면 -->
 	<select id="selectBoardList" resultType="map">
 		SELECT a.*
 		FROM (
@@ -335,5 +277,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET del_yn = 'y'
         WHERE seq = #{seq}
     </update>
+    
+    <!-- 게시글 수정 -->
+    <update id="updateBoard" parameterType="map" useGeneratedKeys="true" keyProperty="seq">
+		UPDATE board
+		SET
+		title = #{title},
+		price = #{price},
+		content = #{content},
+		address = #{address},
+		category = #{category},
+		latitude = #{latitude},
+		longitude = #{longitude}
+		            
+		WHERE seq = #{seq}
+	</update>
+	    
     
 </mapper>

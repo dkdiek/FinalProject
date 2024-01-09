@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -213,7 +212,7 @@ public class BoardController {
 	    }
 	}
 		
-	// 게시물 수정
+	// 게시물 수정 ------------------------------------------------------------------------------------------
 	@GetMapping("/modifyBoardView")
 	public String modifyView(@RequestParam Map map, HttpSession session, Model model) {
 		String result="/common/errorPage";
@@ -230,4 +229,47 @@ public class BoardController {
 	    }
 	    return result;
 	}
+	
+	// 게시물 수정 처리 ------------------------------------------------------------------------------------------
+	@PostMapping("/modifyBoardProcess")
+	public String modifyBoardProcess(@RequestParam Map map, Model model) {
+		String seq = (String) map.get("seq");
+		String result = "redirect:/detail?seq=" + seq;
+		try {
+			int update = boardService.updateBoard(map);
+			if (1 == update) {
+				result = "redirect:/detail?seq=" + seq;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage","게시물 수정 오류가 발생하였습니다");
+			result = "common/errorPage";
+
+		}
+		return result;
+	}
+	
+	// 마이페이지 ------------------------------------------------------------------------------------------
+	@GetMapping("/updateMemberInfo")
+	public String myPage(HttpSession Session, Model model) {
+		String result="";
+		String id = (String)Session.getAttribute("id");
+		
+		if(id != null && !id.isEmpty()) {
+			result= "/member/personal/updateMemberInfo1";
+		} else {
+			result="/common/errorPage";
+			model.addAttribute("errorMessage", "회원만 접근 가능한 메뉴입니다");
+		}
+		return result;
+	}
+	
+	// id, pw 존재 여부 db 확인-------------------------------------------------------------------------------
+	@PostMapping("/checkMemberAccount")
+	public ResponseEntity<String>(HttpSession Session, Map map) {
+		String id = (String)Session.getAttribute("id");
+		
+	}
+	
+	
 }

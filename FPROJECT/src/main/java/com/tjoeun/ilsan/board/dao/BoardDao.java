@@ -16,5 +16,6 @@ public interface BoardDao {
     public int cancelLike(Map map);
     public int soldout(int seq);
     public int deleteBoard(int seq);
+	public int updateBoard(Map map);
 
 }
