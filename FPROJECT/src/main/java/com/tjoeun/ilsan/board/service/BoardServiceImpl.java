@@ -219,4 +219,23 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
     
+    
+    
+    
+    
+    
+    @Override
+	@Transactional
+	public List<Map> searchFilterList(Map map) {
+		List BoardList = boardDao.searchFilterList(map);
+		return BoardList;
+	}
+
+	@Override
+	@Transactional
+	public int searchFilterListCount(Map map) {
+		int BoardCnt = boardDao.searchFilterListCount(map);
+		return BoardCnt;
+	}
+    
 }

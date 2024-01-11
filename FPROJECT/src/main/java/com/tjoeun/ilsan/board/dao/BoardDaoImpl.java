@@ -86,5 +86,23 @@ public class BoardDaoImpl implements BoardDao {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
 		return mapper.updateBoard(map);
 	}
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Map> searchFilterList(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.searchFilterList(map);
+	}
+
+	@Override
+	public int searchFilterListCount(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.searchFilterListCount(map);
+	}
 
 }

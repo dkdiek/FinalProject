@@ -22,6 +22,10 @@ public interface BoardService {
     public ResponseEntity<String> deleteBoard(Map map);
 	public int updateBoard(Map map) throws Exception;
     public int deleteLike(Map map);
+    
+    
+	public List<Map> searchFilterList(Map map);
+	public int searchFilterListCount(Map map);
 
 
 }

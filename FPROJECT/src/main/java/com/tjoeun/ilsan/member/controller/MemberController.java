@@ -116,7 +116,7 @@ public class MemberController {
 	    }
 	}
 	
-	// 회원 가입 결과 페이지
+	// 회원 가입 결과 페이지-------------------------------------------------------------------------------------
 	@GetMapping("/joinResult")
 	public String joinResult(@RequestParam(name = "result", defaultValue = "0") int result, Model model) {
 	    model.addAttribute("result", result);
@@ -138,7 +138,7 @@ public class MemberController {
 		return result;
 	}
 	
-	// 회원 정보 변경 2 - 비밀번호 재확인
+	// 회원 정보 변경 2 - 비밀번호 재확인-------------------------------------------------------------------------------------
 	@PostMapping("/checkMemberAccount")
 	public ResponseEntity<Map<String, Object>> checkMemberAccount(
 	        @RequestBody Map map,
@@ -284,6 +284,7 @@ public class MemberController {
 		    	//board에서 해당 member_id del_yn y로 변경
 		    	boardService.deleteBoard(map);
 		    	model.addAttribute("result",1);
+		    	session.removeAttribute("id");
 		        result = "/member/personal/withdrawalResult";
 		    } else {
 		    	model.addAttribute("result",0);

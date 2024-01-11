@@ -14,12 +14,13 @@
 	    <%@ include file="../common/header.jsp" %>
 
 		<div class="container mt-5 rounded border border-secondary border-opacity-50 bg-body">
+		
 			<div class="row">
 				<!-- Carousel -->
 				<div id="imageCarousel" class="carousel carousel-dark slide col-12 col-md-6 mx-auto" data-bs-ride="carousel">
 				    
 					    <div class="carousel-inner border rounded mt-5 " >
-					       <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
+					       <%-- <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
 					            <div class="carousel-item ${i.index == 0 ? 'active' : ''}">
 					                <img src="<c:url value='/cdn/upload/${img}' />"
 					                    class="d-block w-100 img-fluid carousel-image"
@@ -29,26 +30,41 @@
 					                    data-bs-slide-to="${i.index}">
 					                <!-- Additional data-bs attributes are added to open the modal and specify the selected image index -->
 					            </div>
-					        </c:forEach> 
+					        </c:forEach>  --%>
+					        <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
+							    <c:if test="${not empty img}">
+							        <div class="carousel-item ${i.index == 0 ? 'active' : ''}">
+							            <img src="<c:url value='/cdn/upload/${img}' />"
+							                class="d-block w-100 img-fluid carousel-image"
+							                style="object-fit: cover; object-position: center center; height: 500px; width: 500px;"
+							                data-bs-toggle="modal"
+							                data-bs-target="#imageModal"
+							                data-bs-slide-to="${i.index}">
+							        </div>
+							    </c:if>
+							</c:forEach>
 
 
 				    	</div>
-				    	<div class="carousel-indicators">
-					        <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
-					            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="${i.index}" class="${i.index == 0 ? 'active' : ''}" aria-label="Slide ${i.index + 1}"></button>
-					        </c:forEach>
-					    </div>
-						<c:if test="${fn:length(boardDetail.imgList) > 1}">
-					        <button class="carousel-control-prev " type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-					            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					            <span class="visually-hidden">Previous</span>
-					        </button>
-					        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-					            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-					            <span class="visually-hidden">Next</span>
-					        </button>
-					    </c:if>
+				    	<c:if test="${fn:length(boardDetail.imgList) > 1}">
+						    <div class="carousel-indicators">
+						        <c:forEach var="img" items="${boardDetail.imgList}" varStatus="i">
+						            <c:if test="${not empty img}">
+						                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="${i.index}" class="${i.index == 0 ? 'active' : ''}" aria-label="Slide ${i.index + 1}"></button>
+						            </c:if>
+						        </c:forEach>
+						    </div>
+						    <div class="carousel-control-prev " type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+						        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						        <span class="visually-hidden">Previous</span>
+						    </div>
+						    <div class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+						        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+						        <span class="visually-hidden">Next</span>
+						    </div>
+						</c:if>
 					</div>
+
 					<!-- Modal -->
 					<div class="modal" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
 					    <div class="modal-dialog">

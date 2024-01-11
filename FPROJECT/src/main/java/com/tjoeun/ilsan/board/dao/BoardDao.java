@@ -17,5 +17,11 @@ public interface BoardDao {
     public int soldout(int seq);
     public int deleteBoard(Map map);
 	public int updateBoard(Map map);
+	
+	
+	
+	public List<Map> searchFilterList(Map map);
+    public int searchFilterListCount(Map map);
+
 
 }

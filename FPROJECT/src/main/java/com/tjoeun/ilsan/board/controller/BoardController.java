@@ -20,12 +20,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tjoeun.ilsan.board.service.BoardService;
+import com.tjoeun.ilsan.member.service.MemberService;
 
 @Controller
 public class BoardController {
 	
 	@Autowired
 	BoardService boardService;
+	@Autowired
+	MemberService memberService;
 	
 	// 작성 페이지 ------------------------------------------------------------------------------------------
 	@GetMapping("/writeView")
@@ -93,57 +96,51 @@ public class BoardController {
 	    }
 	}
 	
-	// 조건 뷰 ------------------------------------------------------------------------------------------
-	@GetMapping("/search")
-	public String showSearch(@RequestParam Map map, Model model) {
-	    int limit = 10;
-	    String pageValue = (String) map.get("page");
-	    int currentPage = (pageValue != null && !pageValue.isEmpty()) ? Integer.parseInt(pageValue) : 1;
-	    int offset = (currentPage - 1) * limit;
-
-	    map.put("limit", limit);
-	    map.put("offset", offset);
-	    List<Map> boardList = boardService.searchBoardList(map);
-
-	    Date currentDate = new Date();
-
-	    for (Map<String, Object> board : boardList) {
-	        Timestamp createDateTimeStamp = (Timestamp) board.get("create_date");
-	        Date createDate = new Date(createDateTimeStamp.getTime());
-
-	        long timeDifference = currentDate.getTime() - createDate.getTime();
-	        long minutesDifference = timeDifference / (60 * 1000);
-
-	        // 조건에 따라 문자열 생성
-	        String formattedDifference;
-	        if (minutesDifference < 60) {
-	            formattedDifference = minutesDifference + "분 전";
-	        } else if (minutesDifference < (24 * 60)) {
-	            long hoursDifference = minutesDifference / 60;
-	            formattedDifference = hoursDifference + "시간 전";
-	        } else if (minutesDifference < (30 * 24 * 60)) {
-	            long daysDifference = minutesDifference / (24 * 60);
-	            formattedDifference = daysDifference + "일 전";
-	        } else {
-	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	            formattedDifference = sdf.format(createDate);
-	        }
-
-	        board.put("formattedDifference", formattedDifference);
-	    }
-
-
-	    int boardCount = boardService.selectBoardCount(map);
-	    int totalPages = (int) Math.ceil((double) boardCount / limit);
-
-	    model.addAttribute("boardList", boardList);
-	    model.addAttribute("boardCount", boardCount);
-	    model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("currentPage", currentPage);
-
-	    return "sales/searchView";
-	}
-
+	/*
+	 * // 조건 뷰
+	 * -----------------------------------------------------------------------------
+	 * -------------
+	 * 
+	 * @GetMapping("/search") public String showSearch(@RequestParam Map map, Model
+	 * model) { int limit = 10; String pageValue = (String) map.get("page"); int
+	 * currentPage = (pageValue != null && !pageValue.isEmpty()) ?
+	 * Integer.parseInt(pageValue) : 1; int offset = (currentPage - 1) * limit;
+	 * 
+	 * map.put("limit", limit); map.put("offset", offset); List<Map> boardList =
+	 * boardService.searchBoardList(map);
+	 * 
+	 * Date currentDate = new Date();
+	 * 
+	 * for (Map<String, Object> board : boardList) { Timestamp createDateTimeStamp =
+	 * (Timestamp) board.get("create_date"); Date createDate = new
+	 * Date(createDateTimeStamp.getTime());
+	 * 
+	 * long timeDifference = currentDate.getTime() - createDate.getTime(); long
+	 * minutesDifference = timeDifference / (60 * 1000);
+	 * 
+	 * // 조건에 따라 문자열 생성 String formattedDifference; if (minutesDifference < 60) {
+	 * formattedDifference = minutesDifference + "분 전"; } else if (minutesDifference
+	 * < (24 * 60)) { long hoursDifference = minutesDifference / 60;
+	 * formattedDifference = hoursDifference + "시간 전"; } else if (minutesDifference
+	 * < (30 * 24 * 60)) { long daysDifference = minutesDifference / (24 * 60);
+	 * formattedDifference = daysDifference + "일 전"; } else { SimpleDateFormat sdf =
+	 * new SimpleDateFormat("yyyy-MM-dd"); formattedDifference =
+	 * sdf.format(createDate); }
+	 * 
+	 * board.put("formattedDifference", formattedDifference); }
+	 * 
+	 * 
+	 * int boardCount = boardService.selectBoardCount(map); int totalPages = (int)
+	 * Math.ceil((double) boardCount / limit);
+	 * 
+	 * model.addAttribute("boardList", boardList); model.addAttribute("boardCount",
+	 * boardCount); model.addAttribute("totalPages", totalPages);
+	 * model.addAttribute("currentPage", currentPage);
+	 * 
+	 * return "sales/searchView"; }
+	 */
+	
+	
 	// 좋아요 처리 ------------------------------------------------------------------------------------------
 	@PostMapping("/like")
 	@ResponseBody
@@ -256,6 +253,83 @@ public class BoardController {
 		return result;
 	}
 	
-
 	
+	
+	@GetMapping("/search")
+	public String showSearch(@RequestParam Map map, Model model, HttpSession session) {
+	    int limit = 10;
+	    String pageValue = (String) map.get("page");
+	    int currentPage = (pageValue != null && !pageValue.isEmpty()) ? Integer.parseInt(pageValue) : 1;
+	    int offset = (currentPage - 1) * limit;
+	    
+	    // 세션에 id가 있는 경우 member 테이블에서 회원 위도 경도 불러오기
+	    String member_id = (String) session.getAttribute("id");
+	    
+	    if (member_id != null && !member_id.isEmpty()) {
+	    	map.put("member_id", member_id);
+			Map memberInfoMap = memberService.getMemberInfoById(map);
+			map.put("userLatitude", memberInfoMap.get("latitude"));
+			map.put("userLongitude", memberInfoMap.get("longitude"));
+			
+			// 클라이언트에 주소 보내기
+			model.addAttribute("memberInfoMap",memberInfoMap);
+			
+	    } else {
+	    	// 세션에 id가 없으면 위경도 서울로 세팅
+	    	double userLatitude =37.5665851;
+			double userLongitude =126.9782038;
+			String member_addr2 = "서울특별시 중구 세종대로 110";
+	    	map.put("userLatitude", userLatitude);
+			map.put("userLongitude", userLongitude);
+			
+			// 클라이언트에 주소 보내기
+			Map memberInfoMap = new HashMap();
+			memberInfoMap.put("member_addr2", "서울특별시 중구 세종대로 110");
+			model.addAttribute("memberInfoMap",memberInfoMap);
+	    }
+	    
+		
+	    
+	    map.put("limit", limit);
+	    map.put("offset", offset);
+	    List<Map> boardList = boardService.searchFilterList(map);
+
+	    Date currentDate = new Date();
+
+	    for (Map<String, Object> board : boardList) {
+	        Timestamp createDateTimeStamp = (Timestamp) board.get("create_date");
+	        Date createDate = new Date(createDateTimeStamp.getTime());
+
+	        long timeDifference = currentDate.getTime() - createDate.getTime();
+	        long minutesDifference = timeDifference / (60 * 1000);
+
+	        // 조건에 따라 문자열 생성
+	        String formattedDifference;
+	        if (minutesDifference < 60) {
+	            formattedDifference = minutesDifference + "분 전";
+	        } else if (minutesDifference < (24 * 60)) {
+	            long hoursDifference = minutesDifference / 60;
+	            formattedDifference = hoursDifference + "시간 전";
+	        } else if (minutesDifference < (30 * 24 * 60)) {
+	            long daysDifference = minutesDifference / (24 * 60);
+	            formattedDifference = daysDifference + "일 전";
+	        } else {
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	            formattedDifference = sdf.format(createDate);
+	        }
+
+	        board.put("formattedDifference", formattedDifference);
+	    }
+
+
+	    int boardCount = boardService.searchFilterListCount(map);
+	    int totalPages = (int) Math.ceil((double) boardCount / limit);
+
+	    model.addAttribute("boardList", boardList);
+	    model.addAttribute("boardCount", boardCount);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("currentPage", currentPage);
+
+	    return "sales/searchView";
+	}
 }

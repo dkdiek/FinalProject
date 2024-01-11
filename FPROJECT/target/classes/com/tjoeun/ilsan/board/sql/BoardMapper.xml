@@ -301,6 +301,169 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		            
 		WHERE seq = #{seq}
 	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- search filter -->
+	<select id="searchFilterList" resultType="map">
+		SELECT a.*
+		FROM (
+			    SELECT
+			        seq,
+					member_id,
+					title,
+					price,
+					content,
+					address,
+					category,
+					del_yn,
+					soldout_yn,
+					buyer_id,
+					create_date,
+					update_date,
+					delete_date,
+					view_cnt,
+					like_cnt,
+					img1,
+					img2,
+					img3,
+					img4,
+					img5,
+					img6,
+					img7,
+					img8,
+					img9,
+					img10,
+					latitude AS latitude,
+					longitude AS longitude,
+			        ROUND(
+			            6371 * acos(
+			                cos(radians(#{userLatitude})) * cos(radians(latitude)) *
+			                cos(radians(longitude) - radians(#{userLongitude})) +
+			                sin(radians(#{userLatitude})) * sin(radians(latitude))
+			            ), 2
+			        ) AS distance
+			      
+			    FROM board
+		) a
+	    WHERE 1 + 1
+	    <!-- 게시물 삭제가 아닌 것 -->
+	    AND a.del_yn = 'n'
+	    
+	    <!-- 조건 1 제목 -->
+	    <if test="title != null and title != ''">
+	        AND title LIKE CONCAT('%', #{title}, '%')
+	    </if>
+	    <!-- 조건 2 거리 from -->
+		<if test="null != distance_from and distance_from != ''">
+			AND #{distance_from} <![CDATA[ <= ]]> a.distance
+		</if>
+	    <!-- 조건 3 거리 to -->
+		<if test="null != distance_to and distance_to != ''">
+			AND #{distance_to} <![CDATA[ >=  ]]> a.distance
+		</if>
+		<!-- 조건4 soldout -->
+		<if test="null != soldout_yn and soldout_yn != ''">
+			AND soldout_yn = #{soldout_yn}
+		</if>
+		<!-- 조건5 category -->
+		<if test="null != category and category != ''">
+			AND category = #{category}
+		</if>
+		<!-- 조건6 category -->
+		<if test="null != seller_id and seller_id != ''">
+			AND member_id = #{seller_id}
+		</if>
+	   
+   		<!-- 정렬 조건x -->
+        ORDER BY a.create_date DESC
+	    
+		<!-- limit, offset -->
+	    <if test="limit != null">
+	        LIMIT #{limit}
+	        <if test="offset != null">
+	            OFFSET #{offset}
+	        </if>
+	    </if>
+	    
+	</select>
+	
+	<!-- search filter count 페이징용 -->
+	<select id="searchFilterListCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (
+			    SELECT
+			        seq,
+					member_id,
+					title,
+					price,
+					content,
+					address,
+					category,
+					del_yn,
+					soldout_yn,
+					buyer_id,
+					create_date,
+					update_date,
+					delete_date,
+					view_cnt,
+					like_cnt,
+					img1,
+					img2,
+					img3,
+					img4,
+					img5,
+					img6,
+					img7,
+					img8,
+					img9,
+					img10,
+					latitude AS latitude,
+					longitude AS longitude,
+			        ROUND(
+			            6371 * acos(
+			                cos(radians(#{userLatitude})) * cos(radians(latitude)) *
+			                cos(radians(longitude) - radians(#{userLongitude})) +
+			                sin(radians(#{userLatitude})) * sin(radians(latitude))
+			            ), 2
+			        ) AS distance
+			      
+			    FROM board
+		) a
+	    WHERE 1 + 1
+	    <!-- 게시물 삭제가 아닌 것 -->
+	    AND a.del_yn = 'n'
+	    
+	    <!-- 조건 1 제목 -->
+	    <if test="title != null and title != ''">
+	        AND title LIKE CONCAT('%', #{title}, '%')
+	    </if>
+	    <!-- 조건 2 거리 from -->
+		<if test="null != distance_from and distance_from != ''">
+			AND #{distance_from} <![CDATA[ <= ]]> a.distance
+		</if>
+	    <!-- 조건 3 거리 to -->
+		<if test="null != distance_to and distance_to != ''">
+			AND #{distance_to} <![CDATA[ >=  ]]> a.distance
+		</if>
+		<!-- 조건4 soldout -->
+		<if test="null != soldout_yn and soldout_yn != ''">
+			AND soldout_yn = #{soldout_yn}
+		</if>
+		<!-- 조건5 category -->
+		<if test="null != category and category != ''">
+			AND category = #{category}
+		</if>
+	    
+	</select>
 	    
     
 </mapper>
