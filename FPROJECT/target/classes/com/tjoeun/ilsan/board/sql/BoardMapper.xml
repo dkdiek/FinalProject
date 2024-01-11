@@ -258,7 +258,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 좋아요 취소 -->
     <delete id="cancelLike" parameterType="map">
         DELETE FROM interest
-        WHERE seq = #{seq}
+        WHERE 1+1
+        <if test="seq != null">
+	        AND seq = #{seq}
+        </if>
         <if test="member_id != null">
         	AND member_id = #{member_id}
     	</if>
@@ -272,10 +275,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <!-- 게시글 삭제 처리 -->
-    <update id="deleteBoard" parameterType="int">
+    <update id="deleteBoard" parameterType="map">
         UPDATE board
         SET del_yn = 'y'
-        WHERE seq = #{seq}
+        WHERE 1+1
+        <if test="seq != null">
+        	AND seq = #{seq}
+       	</if>
+        <if test="member_id != null">
+        	AND member_id = #{member_id}
+    	</if>
     </update>
     
     <!-- 게시글 수정 -->

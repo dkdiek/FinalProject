@@ -75,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    SELECT 
 	        seq,
 	        member_id,
+	        member_pw,
 	        member_name,
 	        member_phone,
 	        member_email,
@@ -88,6 +89,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        longitude
 	    FROM member_info
 	    WHERE member_id = #{member_id}
+		<if test="member_pw != null">
+		    AND member_pw = #{member_pw}
+	    </if>
 	</select>
+	
+	<!-- 회원 정보 수정 & 탈퇴 -->
+	<update id="updateMemberInfo" parameterType="map">
+	    <choose>
+	        <when test="member_del != null">
+	            <!-- member_del 값이 주어진 경우에만 해당 필드를 업데이트 -->
+	            update member_info
+	            set
+	                member_del = #{member_del}
+	            where member_id = #{member_id}
+	        </when>
+	        <otherwise>
+	            <!-- member_del 값이 주어지지 않은 경우 다른 필드들을 업데이트 -->
+	            update member_info
+	            set
+	                member_pw = #{member_pw},
+	                member_name = #{member_name},
+	                member_phone = #{member_phone},
+	                member_email = #{member_email},
+	                member_addr1 = #{member_addr1},
+	                member_addr2 = #{member_addr2},
+	                member_addr3 = #{member_addr3},
+	                latitude = #{latitude},
+	                longitude = #{longitude}
+	            where member_id = #{member_id}
+	        </otherwise>
+	    </choose>
+	</update>
+
 
 </mapper>

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -176,12 +177,10 @@ public class BoardServiceImpl implements BoardService {
     // 게시물 삭제 처리
     @Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
-    public ResponseEntity<String> deleteBoard(int seq) {
-        int rowsAffected = boardDao.deleteBoard(seq);
+    public ResponseEntity<String> deleteBoard(Map map) {
+        int rowsAffected = boardDao.deleteBoard(map);
         
         // 좋아요 테이블 데이터 삭제
-        Map map = new HashMap();
-        map.put("seq", seq);
         boardDao.cancelLike(map);
 
         // rowsAffected 값을 기반으로 적절한 응답 생성
@@ -211,5 +210,13 @@ public class BoardServiceImpl implements BoardService {
 	   
 	    return result;
 	}
+    
+    @Override
+	@Transactional
+	public int deleteLike(Map map) {
+		int result = boardDao.checkLikeStatus(map);
+        return result;
+	}
+	
     
 }

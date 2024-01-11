@@ -14,17 +14,17 @@
         <!-- main -->
 			  			
 			 <div class="mx-auto col-md-6 col-lg-4 py-5">
-			    <div class="text-center">회원 정보 변경을 위해 비밀번호를 입력해 주세요.</div>
+			    <div class="text-center">회원 탈퇴를 위해 비밀번호를 입력해 주세요.</div>
 			    <div class="frmCheckAccount">
 			        <input type="hidden" id="member_id"value="${sessionScope.id}">
 			        <input type="password" class="form-control rounded-3" id="member_pw">
 			    </div>
-			    <button id="btnCheckAccount" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">확인  </button>
+			    <button id="btnCheckAccount" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">확인 </button>
 			</div>
         
         <!-- footer -->
         <%@ include file="../../common/footer.jsp" %>
-        <form id="frm1" action="<c:url value='/updateMemberInfo2'/>" method="post"></form>
+        <form id="frm1" action="<c:url value='/withdrawal2'/>" method="post"></form>
      	<script>
 	       $(document).ready(function () {
 	    	    $("#btnCheckAccount").click(function () {
@@ -37,7 +37,6 @@
 	    	            contentType: 'application/json', // JSON 형식으로 전송
 	    	            data: JSON.stringify({
 	    	                member_id: memberId,
-	    	                member_pw: memberPw
 	    	            }),
 	    	            dataType: 'json',
 	    	            success: function (response) {

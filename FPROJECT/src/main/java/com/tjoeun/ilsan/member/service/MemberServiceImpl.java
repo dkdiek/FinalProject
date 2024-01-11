@@ -48,7 +48,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Map getMemberInfoById(String member_id) {
-        return memberDao.getMemberInfoById(member_id);
+	public Map getMemberInfoById(Map map) {
+        return memberDao.getMemberInfoById(map);
+	}
+
+	@Override
+	public int updateMemberInfo(Map map) {
+		return memberDao.updateMemberInfo(map);
 	}
 }

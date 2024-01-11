@@ -39,6 +39,8 @@ public class HomeController {
 
 		// 세션에서 사용자 ID 가져오기
 		String member_id = (String) session.getAttribute("id");
+		Map map = new HashMap();
+		map.put("member_id", member_id);
 
 		// 비회원일 경우 기본 위치 설정 (서울시)
 		double userLatitude =37.5665851;
@@ -47,7 +49,7 @@ public class HomeController {
 		// 사용자 ID를 이용하여 회원 정보 조회
 		if (member_id != null) {
 			// 회원 정보 가져오기
-			Map<String, Object> memberInfo = memberService.getMemberInfoById(member_id);
+			Map<String, Object> memberInfo = memberService.getMemberInfoById(map);
 
 			if (memberInfo != null) {
 				userLatitude = (double) memberInfo.get("latitude");

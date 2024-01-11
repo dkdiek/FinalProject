@@ -15,7 +15,7 @@ public interface BoardMapper {
     public int addLike(Map map);
     public int cancelLike(Map map);
     public int soldout(int seq);
-    public int deleteBoard(int seq);
+    public int deleteBoard(Map map);
 	public int updateBoard(Map map);
 
 

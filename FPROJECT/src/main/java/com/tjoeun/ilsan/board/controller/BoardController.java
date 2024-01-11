@@ -199,11 +199,18 @@ public class BoardController {
 	        // 로그인이 필요한 경우
 	        return ResponseEntity.ok("{\"message\": \"login_required\"}");
 	    }
-
-	    ResponseEntity<String> soldoutResponse = boardService.deleteBoard(seq);
+	    
+	    Map soldoutResponseMap = new HashMap();
+	    soldoutResponseMap.put("seq", seq);
+	    ResponseEntity<String> soldoutResponse = boardService.deleteBoard(soldoutResponseMap);
 
 	    // 판매 완료 처리 결과에 따라 응답 생성
 	    if (soldoutResponse.getStatusCode().is2xxSuccessful()) {
+	    	//좋아요 삭제 처리
+	    	Map delLikeMap = new HashMap();
+	    	delLikeMap.put("seq", seq);
+	    	boardService.deleteLike(delLikeMap);
+	    	
 	        return ResponseEntity.ok("{\"message\": \"success\"}");
 	    } else if (soldoutResponse.getStatusCodeValue() == 404) {
 	        return ResponseEntity.ok("{\"message\": \"not_found\"}");
@@ -249,27 +256,6 @@ public class BoardController {
 		return result;
 	}
 	
-	// 마이페이지 ------------------------------------------------------------------------------------------
-	@GetMapping("/updateMemberInfo")
-	public String myPage(HttpSession Session, Model model) {
-		String result="";
-		String id = (String)Session.getAttribute("id");
-		
-		if(id != null && !id.isEmpty()) {
-			result= "/member/personal/updateMemberInfo1";
-		} else {
-			result="/common/errorPage";
-			model.addAttribute("errorMessage", "회원만 접근 가능한 메뉴입니다");
-		}
-		return result;
-	}
-	
-	// id, pw 존재 여부 db 확인-------------------------------------------------------------------------------
-	@PostMapping("/checkMemberAccount")
-	public ResponseEntity<String>(HttpSession Session, Map map) {
-		String id = (String)Session.getAttribute("id");
-		
-	}
-	
+
 	
 }

@@ -76,9 +76,9 @@ public class BoardDaoImpl implements BoardDao {
 	}
 	
 	@Override
-	public int deleteBoard(int seq) {
+	public int deleteBoard(Map map) {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
-		return mapper.deleteBoard(seq);
+		return mapper.deleteBoard(map);
 	}
 	
 	@Override

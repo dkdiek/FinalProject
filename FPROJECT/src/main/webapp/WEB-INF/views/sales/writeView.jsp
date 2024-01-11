@@ -175,7 +175,7 @@
 		<!-- footer -->
 		<%@ include file="../common/footer.jsp" %>
 		
-		<script>
+		<!-- <script>
 		    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
 		    var mapOption = {
 		        center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
@@ -230,6 +230,80 @@
 		
 		                        // 좌표 업데이트
 		                        updateCoords();
+		                    }
+		                });
+		            }
+		        }).open();
+		    }
+		
+		    // 마커를 드래그할 때 발생하는 이벤트
+		    daum.maps.event.addListener(marker, 'dragend', function () {
+		        // 좌표 업데이트
+		        updateCoords();
+		    });
+		</script> -->
+		
+		<!-- 주소 빈곳 체크 추가-->
+		<script>
+		    var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+		    var mapOption = {
+		        center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+		        level: 5 // 지도의 확대 레벨
+		    };
+		
+		    // 지도를 미리 생성
+		    var map = new daum.maps.Map(mapContainer, mapOption);
+		
+		    // 주소-좌표 변환 객체를 생성
+		    var geocoder = new daum.maps.services.Geocoder();
+		
+		    // 마커를 미리 생성
+		    var marker = new daum.maps.Marker({
+		        position: new daum.maps.LatLng(37.537187, 127.005476),
+		        map: map
+		    });
+		
+		    function updateCoords() {
+		        // 현재 마커의 좌표를 가져와서 인풋 박스에 할당
+		        var position = marker.getPosition();
+		        document.getElementById("latitude").value = position.getLat();
+		        document.getElementById("longitude").value = position.getLng();
+		    }
+		
+		    function sample5_execDaumPostcode() {
+		        new daum.Postcode({
+		            oncomplete: function (data) {
+		                var addr = data.address; // 최종 주소 변수
+
+		                // 주소 정보를 해당 필드에 넣는다.
+		                document.getElementById("address").value = addr;
+
+		                // 주소로 상세 정보를 검색
+		                geocoder.addressSearch(data.address, function (results, status) {
+		                    // 정상적으로 검색이 완료됐으면
+		                    if (status === daum.maps.services.Status.OK) {
+		                        var result = results[0]; // 첫번째 결과의 값을 활용
+
+		                        // 해당 주소에 대한 좌표를 받아서
+		                        var coords = new daum.maps.LatLng(result.y, result.x);
+
+		                        // 지도를 보여준다.
+		                        mapContainer.style.display = "block";
+		                        map.relayout();
+
+		                        // 지도 중심을 변경한다.
+		                        map.setCenter(coords);
+
+		                        // 마커를 결과값으로 받은 위치로 옮긴다.
+		                        marker.setPosition(coords);
+
+		                        // 좌표 업데이트
+		                        updateCoords();
+		                    } else {
+		                        // 주소 검색 결과가 없을 때의 처리
+		                        alert("사용 불가능한 주소입니다.");
+		                        document.getElementById("address").value = "";
+		                        // 기타 필요한 처리를 추가할 수 있습니다.
 		                    }
 		                });
 		            }

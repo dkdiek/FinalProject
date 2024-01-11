@@ -19,8 +19,9 @@ public interface BoardService {
     public int checkLikeStatus(Map map);
     public ResponseEntity<String> processLike(Map map);
     public ResponseEntity<String> soldout(int seq);
-    public ResponseEntity<String> deleteBoard(int seq);
+    public ResponseEntity<String> deleteBoard(Map map);
 	public int updateBoard(Map map) throws Exception;
+    public int deleteLike(Map map);
 
 
 }
