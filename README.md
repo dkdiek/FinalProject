@@ -11,4 +11,4 @@
 ![sendmessage](https://github.com/dkdiek/fproject_sts3/assets/144099638/8aa50c67-ed6d-4c40-acff-de0501efea99)
 
 메시지함
-![sendmessage](https://github.com/dkdiek/fproject_sts3/assets/144099638/420a638f-6245-49e2-b93e-537382bf0b49)
+![readmessage](https://github.com/dkdiek/fproject_sts3/assets/144099638/1ea5e3c6-c2f7-4eb1-a6cc-0fc980d16205)
