@@ -43,5 +43,11 @@ public class MemberDaoImpl implements MemberDao{
 		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
 		return mapper.updateMemberInfo(map);
 	}
+	
+	@Override
+	public Map findAccount(Map map) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+		return mapper.findAccount(map);
+	}
 
 }

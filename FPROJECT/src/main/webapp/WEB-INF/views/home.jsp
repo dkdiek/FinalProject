@@ -11,8 +11,7 @@
 	<body class="bg-body-tertiary">
 		<!-- header -->
 		<%@ include file="common/header.jsp" %>
-		<!-- main -->
-		<main>
+	
 			<!-- 우리동네 글 -->
 			<div class="album py-5 bg-body-tertiary">
 				<div class="d-flex justify-content-center align-items-center">
@@ -70,9 +69,8 @@
 															class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board.seq}">
 															<i class="${board.likeStatus}"></i>
 														</button>
-														<button type="button"
-															class="btn btn-sm btn-outline-secondary">
-															<i class="bi bi-chat-left-text-fill"></i>
+														<button type="button" class="btn btn-sm btn-outline-secondary btn-chat" data-value="${board.member_id}">
+														    <i class="bi bi-chat-left-text-fill"></i>
 														</button>
 													</div>
 													<small class="text-body-secondary">
@@ -145,9 +143,9 @@
 													<div class="btn-group">
 														<button type="button" class="btn btn-sm btn-outline-secondary btn-like" data-seq="${board2.seq}">
 															<i class="${board2.likeStatus}"></i>
+															
 														</button>
-														<button type="button"
-															class="btn btn-sm btn-outline-secondary">
+														<button type="button" class="btn btn-sm btn-outline-secondary btn-chat"  data-value="${board2.member_id}">
 															<i class="bi bi-chat-left-text-fill"></i>
 														</button>
 													</div>
@@ -164,7 +162,6 @@
 					</div>
 				</div>
 			</div>
-		</main>
 		<!-- Footer -->
 		<%@ include file="common/footer.jsp"%>
 
@@ -217,6 +214,26 @@
 			    });
 			});
 		</script>
-	
+		
+
+		<!-- 메세지 보내기 -->
+		<script>
+			$(document).ready(function() {
+			    $(".btn-chat").click(function() {
+			        var to_id = $(this).data("value");
+			        var from_id = '${sessionScope.id}';
+
+			        if (from_id == null || from_id === '') {
+			            alert('로그인이 필요합니다');
+			        } else {
+			        	var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id
+			            window.open(url, '_blank',  'width=500,height=500');
+			        }
+			    });
+			});
+		</script>
+
+		
+		
 	</body>
 </html>

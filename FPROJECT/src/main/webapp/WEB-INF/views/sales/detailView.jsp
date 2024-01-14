@@ -96,8 +96,8 @@
 						<hr class="my-4">
 						<%-- 모든 멤버 메뉴 --%>
 						<c:if test="${boardDetail.soldout_yn eq 'n'}">
-							<button class="btn btn btn-primary" type="button">
-								<i class="bi bi-chat-right-text-fill me-2"></i> 판매자와 채팅하기
+							<button class="btn btn btn-primary btn-chat" type="button" data-value="${boardDetail.member_id}">
+								<i class="bi bi-chat-right-text-fill me-2"></i> 메시지 보내기
 							</button>
 							<button class="btn btn-secondary btn-like" data-seq="${boardDetail.seq}" type="button">
 								<i class="${boardDetail.likeStatus} me-2"></i> 관심 상품
@@ -325,5 +325,23 @@
 				        document.getElementById('frmModify').submit();
 				    });
 				</script>
+				
+				<!-- 메세지 보내기 -->
+				<script>
+					$(document).ready(function() {
+					    $(".btn-chat").click(function() {
+					        var to_id = $(this).data("value");
+					        var from_id = '${sessionScope.id}';
+		
+					        if (from_id == null || from_id === '') {
+					            alert('로그인이 필요합니다');
+					        } else {
+					        	var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id
+					            window.open(url, '_blank',  'width=500,height=500');
+					        }
+					    });
+					});
+				</script>
+				
 	</body>
 </html>

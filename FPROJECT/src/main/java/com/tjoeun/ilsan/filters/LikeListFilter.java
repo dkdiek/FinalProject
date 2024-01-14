@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter("/writeView")
-public class LoginFilter implements Filter {
+@WebFilter("/likeList")
+public class LikeListFilter implements Filter {
 	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -24,8 +24,10 @@ public class LoginFilter implements Filter {
         String userId = (String) session.getAttribute("id");
 
         if (userId == null || userId.isEmpty()) {
-            // 세션에 "id"가 없으면 로그인 페이지로 리다이렉트
-            httpResponse.sendRedirect("/");
+            // 세션에 "id"가 없으면 errorPage로 리다이렉트
+            String errorMessage = "회원만 접근 가능한 메뉴입니다";
+            session.setAttribute("errorMessage", errorMessage);
+            httpResponse.sendRedirect("/errorPage");
             return;
         }
 

@@ -11,39 +11,17 @@
     <body class="bg-body-tertiary">
         <!-- header -->
         <%@ include file="../common/header.jsp" %>
-        <!-- main -->
-        <c:choose>
-	        <c:when test="${empty boardList}">
-	            <!-- 조회 결과가 없을 때의 메시지 -->
-	             <div class="container mt-5">
-				    <div class="row text-center">
-					    <div class="col-12 text-center">
-					    	<div class="w-25 mx-auto">
-						        <img class="w-50 mx-auto" src="<c:url value='/cdn/images/common/notice.png'/>">
-					    	</div>
-					    </div>
-					</div>
-				    <div class="p-5 text-center justify-content-center bg-body-tertiary rounded-3">
-				        <h1 class="text-body-emphasis fs-3">조건에 맞는 게시물이 없습니다</h1>
-				        <p class="col-lg-8 mx-auto fs-5 text-muted">
-				            다른 조건으로 다시 검색해 주세요<br>
-				            <!-- 뒤로 가기 버튼 -->
-            				<button onclick="goBack()" class="btn btn-primary">뒤로 가기</button>
-				        </p>
-				    </div>
-				</div>
-	        </c:when>
-        	<c:otherwise>
+        
 			<!-- 전체 -->
 			<div class="container mt-5">
 				<!-- 필터+검색리스트+페이지 -->
 				<div class="row border border-secondary border-opacity-50 rounded bg-white">
 					<!-- 필터 -->
-					<div class="col-3" id="filterDiv" >
+					<div class="col-3 mb-4" id="filterDiv" >
 						<!-- 제출 버튼  -->
 						<div class="text-center py-4">
 							<div class="mb-3">
-								<i class="bi bi-geo me-2"></i> ${memberInfoMap.member_addr2}
+								<i class="bi bi-geo-alt me-2"></i> ${memberInfoMap.member_addr2}
 							</div>
 							<button class="btn  btn-outline-primary me-2" type="button"
 								id="btnFilter">검색 조건 적용</button>
@@ -56,13 +34,20 @@
 							<label for="distance" class="form-label fw-bold">제목</label> <input
 								type="text" class="form-control" id="title" name="title"
 								placeholder="제목">
-
+						
 							<!-- 거리 선택 -->
 							<label for="distance" class="form-label fw-bold mt-4 ">나와의
 								거리(km)</label> <input type="text" class="form-control"
 								id="distance_from" name="distance_from" placeholder="부터">
 							<input type="text" class="form-control" id="distance_to"
 								name="distance_to" placeholder="까지">
+								
+										
+							<!-- seller_id 선택 -->
+							<label for="distance" class="form-label fw-bold mt-4">판매자</label> <input
+								type="text" class="form-control" id="seller_id" name="seller_id"
+								placeholder="판매자 ID">
+								
 
 							<!-- 판매 완료 선택 -->
 							<div class="row mt-4">
@@ -201,6 +186,26 @@
 					<!-- 검색 리스트 -->
 					<div class="col-9 mt-3">
 						<!-- 검색리스트+페이지 -->
+						 <c:choose>
+			        <c:when test="${empty boardList}">
+			            <!-- 조회 결과가 없을 때의 메시지 -->
+			             <div class="container mt-5">
+						    <div class="row text-center">
+							    <div class="col-12 text-center">
+							    	<div class="w-25 mx-auto">
+								        <img class="w-50 mx-auto" src="<c:url value='/cdn/images/common/notice.png'/>">
+							    	</div>
+							    </div>
+							</div>
+						    <div class="p-5 text-center justify-content-center rounded-3">
+						        <h1 class="text-body-emphasis fs-3">조건에 맞는 게시물이 없습니다</h1>
+						        <p class="col-lg-8 mx-auto fs-5 text-muted">
+						            다른 조건으로 다시 검색해 주세요
+						        </p>
+						    </div>
+						</div>
+			        </c:when>
+		        	<c:otherwise>
 
 						<div class="container">
 							<div>
@@ -238,87 +243,53 @@
 								</table>
 							</div>
 						</div>
-
 						<!-- 페이징 처리 -->
-						<%-- <div class="row">
-							<div class="col">
-								<nav aria-label="Page navigation">
-									<ul class="pagination justify-content-center">
-										<c:forEach begin="0" end="${totalPages-1}" varStatus="i">
-											<c:set var="pageLink" value="?page=${i.index+1}" />
-
-											<!-- 검색 조건이 있는 경우 -->
-											<c:if test="${not empty param.title}">
-												<c:set var="pageLink"
-													value="${pageLink}&title=${param.title}" />
-											</c:if>
-											<c:if test="${not empty param.seller_id}">
-												<c:set var="pageLink"
-													value="${pageLink}&seller_id=${param.seller_id}" />
-											</c:if>
-											<c:if test="${not empty param.category}">
-												<c:set var="pageLink"
-													value="${pageLink}&category=${param.category}" />
-											</c:if>
-
-											<li
-												class="page-item ${currentPage == i.index + 1 ? 'active' : ''}">
-												<a class="page-link" href="${pageLink}">${i.index + 1}</a>
-											</li>
-										</c:forEach>
-									</ul>
-								</nav>
-							</div>
-						</div> --%>
-						<!-- 페이징 처리 -->
-						<!-- 페이징 처리 -->
-<div class="row">
-    <div class="col">
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <c:forEach begin="0" end="${totalPages-1}" varStatus="i">
-                    <c:set var="pageLink" value="?page=${i.index+1}" />
-
-                    <!-- 검색 조건이 있는 경우 -->
-                    <c:if test="${not empty param.title}">
-                        <c:set var="pageLink" value="${pageLink}&title=${param.title}" />
-                    </c:if>
-                    <c:if test="${not empty param.seller_id}">
-                        <c:set var="pageLink" value="${pageLink}&seller_id=${param.seller_id}" />
-                    </c:if>
-                    <c:if test="${not empty param.category}">
-                        <c:set var="pageLink" value="${pageLink}&category=${param.category}" />
-                    </c:if>
-                    <!-- 조건 2, 3, 4, 5, 6 추가 -->
-                    <c:if test="${not empty param.distance_from}">
-                        <c:set var="pageLink" value="${pageLink}&distance_from=${param.distance_from}" />
-                    </c:if>
-                    <c:if test="${not empty param.distance_to}">
-                        <c:set var="pageLink" value="${pageLink}&distance_to=${param.distance_to}" />
-                    </c:if>
-                    <c:if test="${not empty param.soldout_yn}">
-                        <c:set var="pageLink" value="${pageLink}&soldout_yn=${param.soldout_yn}" />
-                    </c:if>
-                    <!-- 조건 6은 seller_id이므로 이미 추가되어 있습니다. -->
-
-                    <li class="page-item ${currentPage == i.index + 1 ? 'active' : ''}">
-                        <a class="page-link" href="${pageLink}">${i.index + 1}</a>
-                    </li>
-                </c:forEach>
-            </ul>
-        </nav>
-    </div>
-</div>
-
+						<div class="row">
+						    <div class="col">
+						        <nav aria-label="Page navigation">
+						            <ul class="pagination justify-content-center">
+						                <c:forEach begin="0" end="${totalPages-1}" varStatus="i">
+						                    <c:set var="pageLink" value="?page=${i.index+1}" />
 						
-
+						                    <!-- 검색 조건이 있는 경우 -->
+						                    <c:if test="${not empty param.title}">
+						                        <c:set var="pageLink" value="${pageLink}&title=${param.title}" />
+						                    </c:if>
+						                    <c:if test="${not empty param.seller_id}">
+						                        <c:set var="pageLink" value="${pageLink}&seller_id=${param.seller_id}" />
+						                    </c:if>
+						                    <c:if test="${not empty param.category}">
+						                        <c:set var="pageLink" value="${pageLink}&category=${param.category}" />
+						                    </c:if>
+						                    <!-- 조건 2, 3, 4, 5, 6 추가 -->
+						                    <c:if test="${not empty param.distance_from}">
+						                        <c:set var="pageLink" value="${pageLink}&distance_from=${param.distance_from}" />
+						                    </c:if>
+						                    <c:if test="${not empty param.distance_to}">
+						                        <c:set var="pageLink" value="${pageLink}&distance_to=${param.distance_to}" />
+						                    </c:if>
+						                    <c:if test="${not empty param.soldout_yn}">
+						                        <c:set var="pageLink" value="${pageLink}&soldout_yn=${param.soldout_yn}" />
+						                    </c:if>
+						                    <!-- 조건 6은 seller_id이므로 이미 추가되어 있습니다. -->
+						
+						                    <li class="page-item ${currentPage == i.index + 1 ? 'active' : ''}">
+						                        <a class="page-link" href="${pageLink}">${i.index + 1}</a>
+						                    </li>
+						                </c:forEach>
+						            </ul>
+						        </nav>
+						    </div>
+						</div>
+						
+					 </c:otherwise>
+			        </c:choose> 
 					</div>
 					<!-- 검색리스트+페이지 -->
 				</div>
 				<!-- 필터+검색리스트+페이지 -->
 			</div>
-		</c:otherwise>
-        </c:choose>
+			
         <!-- footer -->
         <%@ include file="../common/footer.jsp" %>
         
@@ -328,6 +299,8 @@
 		        window.location.href = '<c:url value="/detail?seq=" />' + seq;
 		    }
 		</script>
+		
+		<!-- 마우스 오버 효과 -->
 		<script>
 		    document.addEventListener('DOMContentLoaded', function() {
 		        var trElements = document.querySelectorAll('.custom-pointer');
@@ -348,6 +321,7 @@
 		    });
 		</script>
 		
+		<!-- 필터 조건 초기화-->
 		<script>
 		function resetFilters() {
 		    // radio 버튼 초기화
@@ -361,7 +335,7 @@
 		            }
 		        } else if (input.name === 'soldout_yn') {
 		            // 판매완료 상품 라디오 버튼인 경우, '미포함'이 체크되도록 설정
-		            if (input.value === 'n') {
+		            if (input.value === '') {
 		                input.checked = true;
 		            } else {
 		                input.checked = false;
@@ -395,10 +369,94 @@
 		</script>
          
           <!-- JavaScript로 뒤로 가기 함수 정의 -->
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+	    <script>
+	        function goBack() {
+	            window.history.back();
+	        }
+	    </script>
+    	
+    	<!-- 필터 조건 유지 -->
+    	<!-- <script>
+    	document.addEventListener('DOMContentLoaded', function () {
+		    // 현재 URL의 파라미터를 가져오는 함수
+		    function getUrlParameter(name) {
+		        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+		        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+		        var results = regex.exec(location.search);
+		        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+		    }
+		
+		    // 각 필터에 대해 파라미터 값을 가져와서 설정
+		    document.getElementById('title').value = getUrlParameter('title');
+		    document.getElementById('distance_from').value = getUrlParameter('distance_from');
+		    document.getElementById('distance_to').value = getUrlParameter('distance_to');
+		    document.getElementById('seller_id').value = getUrlParameter('seller_id');
+		
+		    // 라디오 버튼의 경우 체크 상태를 설정
+		    var soldout_yn = getUrlParameter('soldout_yn');
+		    if (soldout_yn === '') {
+		        document.getElementById('soldout_yn_y').checked = true;
+		    } else if (soldout_yn === 'n') {
+		        document.getElementById('soldout_yn_n').checked = true;
+		    }
+		
+		    // 카테고리 라디오 버튼도 설정
+		    var category = getUrlParameter('category');
+		    if (category === '') {
+		        document.getElementById('allCategories').checked = true;
+		    } else {
+		        document.getElementById(category).checked = true;
+		    }
+		});
+    	</script> -->
+    	<script>
+    	document.addEventListener('DOMContentLoaded', function () {
+    	    // 현재 URL의 파라미터를 가져오는 함수
+    	    function getUrlParameter(name) {
+    	        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+    	        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    	        var results = regex.exec(location.search);
+    	        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    	    }
+
+    	    // 각 필터에 대해 파라미터 값을 가져와서 설정
+    	    document.getElementById('title').value = getUrlParameter('title');
+    	    document.getElementById('distance_from').value = getUrlParameter('distance_from');
+    	    document.getElementById('distance_to').value = getUrlParameter('distance_to');
+    	    document.getElementById('seller_id').value = getUrlParameter('seller_id');
+
+    	    // 라디오 버튼의 경우 체크 상태를 설정
+    	    var soldout_yn = getUrlParameter('soldout_yn');
+    	    if (soldout_yn === '') {
+    	        document.getElementById('soldout_yn_y').checked = true;
+    	    } else if (soldout_yn === 'n') {
+    	        document.getElementById('soldout_yn_n').checked = true;
+    	    }
+
+    	    // 카테고리 라디오 버튼도 설정
+    	    var category = getUrlParameter('category');
+    	    console.log('Category from URL:', category); // 디버깅용 로그 추가
+    	    if (category === '') {
+    	        console.log('Setting allCategories checked.'); // 디버깅용 로그 추가
+    	        document.querySelector('input[name="category"][value=""]').checked = true;
+    	    } else {
+    	        category = decodeURIComponent(category); // 디코딩
+    	        console.log('Setting category checked:', category); // 디버깅용 로그 추가
+
+    	        // 카테고리가 존재하는지 확인 후 체크
+    	        var categoryElements = document.querySelectorAll('input[name="category"]');
+    	        for (var i = 0; i < categoryElements.length; i++) {
+    	            if (categoryElements[i].value === category) {
+    	                categoryElements[i].checked = true;
+    	                break;
+    	            }
+    	        }
+    	    }
+    	});
+
+
+
+    	</script>
+    
     </body>
 </html>

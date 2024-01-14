@@ -121,6 +121,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        </otherwise>
 	    </choose>
 	</update>
+	
+	<!-- ID, PW 찾기 -->
+	<select id="findAccount" resultType="map" parameterType="map">
+	    SELECT
+	    	member_id,
+	    	member_pw,
+	    	member_email
+	    FROM member_info
+	    WHERE member_email = #{member_email}
+	    	AND member_del = 'n'
+	 	<if test="member_name != null and member_id != null">
+       		AND (member_name = #{member_name} OR member_id = #{member_id})
+	    </if>
+	    <if test="member_name != null and member_id == null">
+	        AND member_name = #{member_name}
+	    </if>
+	    <if test="member_name == null and member_id != null">
+	        AND member_id = #{member_id}
+	    </if>
+	</select>
 
 
 </mapper>

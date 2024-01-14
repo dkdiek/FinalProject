@@ -219,6 +219,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
     
+
+	@Override
+	public List<Map> selectLikeList(Map map) {
+        return boardDao.selectLikeList(map);
+	}
     
     
     
@@ -237,5 +242,13 @@ public class BoardServiceImpl implements BoardService {
 		int BoardCnt = boardDao.searchFilterListCount(map);
 		return BoardCnt;
 	}
-    
+
+
+	@Override
+	public List<Map> selectBoardsWithInterest(Map map) {
+		List BoardList = boardDao.searchFilterList(map);
+		return BoardList;
+	}
+
+
 }

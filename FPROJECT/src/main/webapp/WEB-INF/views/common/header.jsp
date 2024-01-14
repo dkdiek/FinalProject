@@ -15,7 +15,7 @@
 				</a>
 			</div>
 			<!-- 검색창 -->
-			<div class="col-6 offset-1">
+			<div class="col-5 offset-1">
 			    <form id="searchForm" role="search" action="/search" method="GET" class="d-flex align-items-center">
 			        <input class="form-control" type="search" name="title" placeholder="어떤 상품을 찾으시나요?" aria-label="Search">
 			    </form>
@@ -40,7 +40,7 @@
 						<ul class="dropdown-menu">
 							<li class="dropdown-item active">${id}님</li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item rounded-2" href="#">관심 목록</a></li>
+							<li><a class="dropdown-item rounded-2" href="<c:url value='/likeList'/>">관심 목록</a></li>
 							<li><a class="dropdown-item rounded-2" href="<c:url value='/search?seller_id=${sessionScope.id}'/>">판매 내역</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item rounded-2" href="<c:url value='/updateMemberInfo'/>">회원 정보 변경</a></li>
@@ -53,6 +53,15 @@
 					</div>
 				</c:if>
 			</div>
+			<c:if test="${not empty userId}">
+			
+			<!-- 메시지버튼 -->
+			<div class="col-1">
+				<button id="btnMsg" class="btn btn-primary">
+					<i class="bi bi-chat-left-text-fill fs-3"></i>
+				</button>
+			</div>
+			</c:if>
 			<!-- 메뉴버튼 -->
 			<div class="col-1">
 				<button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
@@ -99,9 +108,8 @@
 				</form>
 
 				<div style="text-align: center">
-					<form id="findMembership" action="<c:url value='/미정'/>">
-						<button id="btnFindMembership"
-							class="btn btn-link type="submit">계정 찾기</button>
+					<form id="findMembership" action="<c:url value='/findAccount'/>">
+						<button id="btnFindMembership" class="btn btn-link type="submit">계정 찾기</button>
 					</form>
 				</div>
 
@@ -109,10 +117,8 @@
 				<hr class="my-4">
 				<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
 				<div id="snsLoginBtnDiv" style="text-align: center">
-					<button class="w-60 mb-2 btn btn-outline-secondary rounded-3"
-						type="submit" style="background-color: #06be34">
-						<img src="<c:url value='/cdn/images/common/btnNaver.png'/>"
-							style="max-width: 90%">
+					<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34" onclick="location.href='/naverLogin'">
+					    <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
 					</button>
 					<button class="w-60 btn btn-outline-secondary rounded-3"
 						type="submit" style="background-color: #f9e000">
@@ -127,45 +133,55 @@
 </div>
 
 <!-- 사이드바 -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
-    <div class="offcanvas-header bg-light">
-		<p style="max-width: 150px">
-			<a class="nav-link active" href="<c:url value='/'/>"> <img
-				class="img-fluid"
-				src="<c:url value='/cdn/images/common/LogoKor.png'/>">
-			</a>
-		</p>
-		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-	</div>
-	
-    <div class="offcanvas-body bg-light">
-        <ul class="nav flex-column">
-            <c:if test="${not empty userId}">
-           	 <hr>
-                <li class="nav-item">
-                    <form action="/writeView" method="get">
-                        <button type="submit" class="nav-link active" style="border: none; background-color: transparent; cursor: pointer;">
-                            <i class="bi bi-upload"></i> 판매하기
-                        </button>
-                    </form>
-                </li>
-            </c:if>
-            
-          	<hr>
-            <li class="nav-item fw-bold fs-5">
-                <a class="nav-link active" href="<c:url value='/search?category=디지털기기'/>">
-                    <i class="bi bi-house-door me-2"></i> 디지털기기
-                </a>
-            </li>
-            
-      
-            
-            
-			
-            
-        </ul>
+<div class="offcanvas offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" style="width: 280px;">
+
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;">
+    <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" onclick="closeSidebar()">
+      <svg class="bi pe-none me-2" width="40" height="32"></svg>
+      <span class="fs-4"><i class="bi bi-list me-2"></i> MENU</span>
     </div>
-</div>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a  class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="16" height="16"> </svg>
+          	<c:if test="${empty id}">
+			    <i class="bi bi-person-fill me-2"></i> 비회원
+			</c:if>
+			<c:if test="${not empty id}">
+			    <i class="bi bi-person-check-fill me-2"></i> ${id}
+			</c:if>
+        </a>
+      </li>
+      <li>
+        <a href="<c:url value='/'/>" class="nav-link link-body-emphasis">
+          <svg class="bi pe-none me-2" width="16" height="16"></svg>
+         	홈 화면
+        </a>
+      </li>
+      <li>
+        <a href="<c:url value='/writeView'/>" class="nav-link link-body-emphasis">
+          <svg class="bi pe-none me-2" width="16" height="16"></svg>
+         	 판매글 작성
+        </a>
+      </li>
+      <hr>
+      <!-- 하드코딩된 카테고리 목록 -->
+      <c:set var="categoryList" value="${fn:split('디지털기기,가구/인테리어,유아동,생활가전,생활/주방,가공식품,스포츠/레저,취미/게임/음반,뷰티/미용,식물,반려동물용품,티켓/교환권,도서,유아도서,기타 중고물품', ',')}"/>
+
+		<c:forEach var="category" items="${categoryList}">
+		    <li>
+		        <a href="http://localhost/search?title=&distance_from=&distance_to=&soldout_yn=&category=${category}" class="nav-link link-body-emphasis">
+		            <svg class="bi pe-none me-2" width="16" height="16"></svg>
+		            ${category}
+		        </a>
+		    </li>
+		</c:forEach>
+
+    </ul>
+    <hr>
+  </div>
+ </div>
 
 <!-- 로그인 스크립트 -->
 <script>
@@ -252,3 +268,15 @@
 	    document.getElementById("searchForm").submit();
 	}
 </script>
+
+<!-- 메세지버튼 -->
+<script>
+
+btnMsg.addEventListener('click', function() {
+    window.location.href = '/messageList'})
+    
+</script>
+
+
+
+

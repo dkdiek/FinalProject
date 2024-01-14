@@ -332,4 +332,6 @@ public class BoardController {
 
 	    return "sales/searchView";
 	}
+	
+
 }

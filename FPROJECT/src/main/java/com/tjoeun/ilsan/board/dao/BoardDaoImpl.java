@@ -68,7 +68,13 @@ public class BoardDaoImpl implements BoardDao {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
 		return mapper.cancelLike(map);
 	}
-
+	
+	@Override
+	public List<Map> selectLikeList(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.selectLikeList(map);
+	}
+	
 	@Override
 	public int soldout(int seq) {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
@@ -103,6 +109,12 @@ public class BoardDaoImpl implements BoardDao {
 	public int searchFilterListCount(Map map) {
 		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
 		return mapper.searchFilterListCount(map);
+	}
+
+	@Override
+	public List<Map> selectBoardsWithInterest(Map map) {
+		BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+		return mapper.selectBoardsWithInterest(map);
 	}
 
 }

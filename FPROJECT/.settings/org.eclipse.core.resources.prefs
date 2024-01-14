@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/tjoeun/ilsan/board/controller/BoardController.java=UTF-8
+encoding//src/main/java/com/tjoeun/ilsan/chat/EchoHandler.java=UTF-8
 encoding//src/main/java/com/tjoeun/ilsan/member/controller/MemberController.java=UTF-8
+encoding//src/main/java/com/tjoeun/ilsan/message/controller/MessageController.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/common/head.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/common/header.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/home.jsp=UTF-8
@@ -10,4 +12,3 @@ encoding//src/main/webapp/resources/DB\ data/DB=utf-8
 encoding//src/main/webapp/resources/document/agreement1.txt=UTF-8
 encoding//src/main/webapp/resources/document/agreement2.txt=UTF-8
 encoding//src/main/webapp/resources/upload=UTF-8
-encoding/<project>=UTF-8

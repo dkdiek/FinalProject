@@ -9,4 +9,6 @@ public interface MemberService {
 	public Map checkDuplication(Map map);
 	public Map getMemberInfoById(Map map);
 	public int updateMemberInfo(Map map);
+    public Map findAccount(Map map);
+
 }

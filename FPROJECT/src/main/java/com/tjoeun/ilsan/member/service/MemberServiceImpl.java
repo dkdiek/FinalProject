@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tjoeun.ilsan.member.dao.MemberDao;
 
@@ -33,6 +35,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
 	public int joinMembership(Map map) throws Exception {
 		int result = memberDao.joinMembership(map);
 		if( 1 != result) {
@@ -53,7 +56,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
 	public int updateMemberInfo(Map map) {
 		return memberDao.updateMemberInfo(map);
+	}
+
+	@Override
+	public Map findAccount(Map map) {
+		return memberDao.findAccount(map);
 	}
 }

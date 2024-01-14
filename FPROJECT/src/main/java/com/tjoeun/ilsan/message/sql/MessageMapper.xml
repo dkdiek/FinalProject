@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjoeun.ilsan.message.sql.MessageMapper">
+	
+	<!-- 메세지 보내기 -->
+	<insert id="sendMessage" parameterType="map">
+		insert into message(
+			from_id
+		    ,to_id
+		    ,content
+
+		) values (
+			#{from_id}
+		    ,#{to_id}
+		    ,#{content}
+		)
+	</insert>
+	
+	<!-- 메세지 가져오기1 -->
+	<select id="selectMessageList" resultType="map" parameterType="map">
+		SELECT
+		    idx,
+		    from_id,
+		    to_id,
+		    content,
+		    create_date,
+		    del_yn,
+		    read_yn,
+		    show_from_id,
+		    show_to_id
+	
+		FROM message
+		WHERE del_yn = "N"
+	    AND to_id = #{member_id}
+		ORDER BY create_date DESC
+		<if test="limit != null">
+	        LIMIT #{limit}
+	        <if test="offset != null">
+	            OFFSET #{offset}
+	        </if>
+	    </if>
+	</select>
+	
+	<!-- 메세지 페이징 가져오기1 -->
+	<select id="selectMessageListCnt" resultType="int">
+	 	    SELECT COUNT(*)
+		    FROM message
+		    WHERE del_yn = "N"
+		    AND to_id = #{member_id}
+	</select>
+	
+	<!-- 메세지 가져오기2 -->
+	<select id="selectMessageList2" resultType="map" parameterType="map">
+		SELECT
+		    idx,
+		    from_id,
+		    to_id,
+		    content,
+		    create_date,
+		    del_yn,
+		    read_yn,
+		    show_from_id,
+		    show_to_id
+	
+		FROM message
+		WHERE del_yn = "N"
+	    AND from_id = #{member_id}
+		ORDER BY create_date DESC
+		<if test="limit != null">
+	        LIMIT #{limit}
+	        <if test="offset != null">
+	            OFFSET #{offset}
+	        </if>
+	    </if>
+	</select>
+	
+	<!-- 메세지 페이징 가져오기2 -->
+	<select id="selectMessageListCnt2" resultType="int">
+	 	    SELECT COUNT(*)
+		    FROM message
+		    WHERE del_yn = "N"
+		    AND from_id = #{member_id}
+	</select>
+	
+	<!-- 읽음 업데이트 -->
+	<update id="updateMessageRead" parameterType="map">
+          update message
+          set
+              read_yn = "y"
+          where idx = #{idx}
+	</update>
+	
+
+</mapper>

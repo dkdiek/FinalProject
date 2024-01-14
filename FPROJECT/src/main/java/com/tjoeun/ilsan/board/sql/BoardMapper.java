@@ -14,12 +14,14 @@ public interface BoardMapper {
     public int checkLikeStatus(Map map);
     public int addLike(Map map);
     public int cancelLike(Map map);
+    public List<Map> selectLikeList(Map map);
     public int soldout(int seq);
     public int deleteBoard(Map map);
 	public int updateBoard(Map map);
 	
 	public List<Map> searchFilterList(Map map);
     public int searchFilterListCount(Map map);
+    public List<Map> selectBoardsWithInterest(Map map);
 
 
 

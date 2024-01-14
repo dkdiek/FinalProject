@@ -120,3 +120,47 @@ CREATE TABLE `member_info` (
   `longitude` double NOT NULL,
   PRIMARY KEY (`seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+-----------------트리거 meber테이블 회원 삭제 시 message 테이블 del_yn업데이트
+DELIMITER //
+
+CREATE TRIGGER update_message_del_yn
+AFTER UPDATE ON member_info
+FOR EACH ROW
+BEGIN
+    DECLARE recordCount INT;
+
+    IF NEW.member_del = 'n' AND OLD.member_del != NEW.member_del THEN
+        SELECT COUNT(*) INTO recordCount
+        FROM message
+        WHERE (from_id = NEW.member_id OR to_id = NEW.member_id) AND del_yn = 'n';
+
+        IF recordCount > 0 THEN
+            UPDATE message
+            SET del_yn = 'y'
+            WHERE (from_id = NEW.member_id OR to_id = NEW.member_id) AND del_yn = 'n';
+        END IF;
+    END IF;
+END //
+
+DELIMITER ;
+
+
+
+!!!!!!!!!!!!!!!!!!!메세지 테이블!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CREATE TABLE `message` (
+  `idx` int NOT NULL AUTO_INCREMENT,
+  `from_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `del_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `read_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `show_from_id` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `show_to_id` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+
+
+

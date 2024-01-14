@@ -267,6 +267,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	</if>
     </delete>
     
+	<!-- 좋아요 리스트 가져오기 -->
+	<select id="selectLikeList" resultType="map" parameterType="map">
+		SELECT seq
+		FROM interest
+		WHERE member_id = #{member_id}
+	</select>
+    
    	<!-- 게시글 판매완료 처리 -->
     <update id="soldout" parameterType="int">
         UPDATE board
@@ -313,7 +320,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- search filter -->
-	<select id="searchFilterList" resultType="map">
+	<select id="searchFilterList" resultType="map" parameterType="map">
 		SELECT a.*
 		FROM (
 			    SELECT
@@ -380,7 +387,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<!-- 조건6 category -->
 		<if test="null != seller_id and seller_id != ''">
-			AND member_id = #{seller_id}
+			AND member_id LIKE CONCAT('%', #{seller_id}, '%')
 		</if>
 	   
    		<!-- 정렬 조건x -->
@@ -397,7 +404,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- search filter count 페이징용 -->
-	<select id="searchFilterListCount" resultType="int">
+	<select id="searchFilterListCount" resultType="int" parameterType="map">
 		SELECT COUNT(*)
 		FROM (
 			    SELECT
@@ -462,8 +469,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="null != category and category != ''">
 			AND category = #{category}
 		</if>
-	    
+		<!-- 조건6 category -->
+		<if test="null != seller_id and seller_id != ''">
+			AND member_id LIKE CONCAT('%', #{seller_id}, '%')
+		</if>
 	</select>
 	    
+	    
+	    
+	    
+    <!-- XML 매퍼 파일 예시 -->
+	<select id="selectBoardsWithInterest" resultMap="boardResult" parameterType="map">
+	    SELECT b.*
+	    FROM board b
+	    JOIN interest i ON b.seq = i.seq
+	    WHERE i.member_id = #{member_id}
+	    AND del_yn = 'n'
+	</select>
+	
+	<resultMap id="boardResult" type="map">
+	    <!-- board 테이블의 컬럼들을 resultMap에 추가 -->
+	    <result property="seq" column="seq"/>
+	    <result property="member_id" column="member_id"/>
+	    <result property="title" column="title"/>
+	    <result property="price" column="price"/>
+	    <result property="content" column="content"/>
+	    <result property="category" column="category"/>
+	    <result property="soldout_yn" column="soldout_yn"/>
+	    <result property="create_date" column="create_date"/>
+	    <result property="view_cnt" column="view_cnt"/>
+	    <result property="like_cnt" column="like_cnt"/>
+	    <result property="img1" column="img1"/>
+	    <result property="img2" column="img2"/>
+	    <result property="img3" column="img3"/>
+	    <result property="img4" column="img4"/>
+	    <result property="img5" column="img5"/>
+	    <result property="img6" column="img6"/>
+	    <result property="img7" column="img7"/>
+	    <result property="img8" column="img8"/>
+	    <result property="img9" column="img9"/>
+	    <result property="img10" column="img10"/>
+	    <result property="latitude" column="latitude"/>
+	    <result property="longtitude" column="longtitude"/>
+	  
+	</resultMap>
     
 </mapper>

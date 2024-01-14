@@ -16,7 +16,6 @@
 	<body class="bg-body-tertiary">
 		<!-- header -->
 		<%@ include file="../common/header.jsp" %>
-		<main>
 			<div class="container mt-3">
 			    
 					
@@ -57,7 +56,7 @@
 			            <label for="title" class="form-label fw-bold">거래 희망 장소</label>
 			            <input type="text" class="form-control mb-2" id="address" name="address" placeholder="주소 검색 버튼을 눌러 거래 희망 장소를 선택해 주세요" required onclick="sample5_execDaumPostcode()" value="${boardDetail.address}">
 						<!-- <input type="button" class="btn btn-primary" onclick="sample5_execDaumPostcode()" value="주소 검색 "><br>   -->
-						<div id="map" class="border border-light-subtle rounded" style="width:300px;height:300px;margin-top:10px;display:none" class="rounded"></div>
+						<div id="map" class="border border-light-subtle rounded" style="width:500px;height:500px;margin-top:10px;display:none" class="rounded"></div>
  				            <input type="hidden" id="latitude" name="latitude" value="${boardDetail.latitude}">
 							<input type="hidden" id="longitude" name="longitude" value="${boardDetail.longitude}">
    							<input type="hidden" name="seq" value="${boardDetail.seq}">
@@ -176,8 +175,6 @@
 			    </form>
 			</div>
 			
-		</main>
-		
 		<!-- footer -->
 		<%@ include file="../common/footer.jsp" %>
 		
