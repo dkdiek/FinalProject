@@ -51,11 +51,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public Map checkDuplication(Map map) {
         return memberDao.checkDuplication(map);
 	}
 
 	@Override
+	@Transactional
 	public Map getMemberInfoById(Map map) {
         return memberDao.getMemberInfoById(map);
 	}

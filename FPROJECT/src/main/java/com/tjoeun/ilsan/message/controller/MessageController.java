@@ -25,7 +25,8 @@ public class MessageController {
 	@Autowired
 	MessageService messageService;
 	
-	//  쪽지 보내기------------------------------------------------------------------------------
+	
+	//  쪽지 폼 작성 페이지------------------------------------------------------------------------------
 	@GetMapping("/sendMessage")
 	public String enterChat(Model model, @RequestParam Map map, HttpSession session, HttpServletRequest request) {
 		
@@ -33,25 +34,19 @@ public class MessageController {
 		return "member/message/sendMessage";
 	}
 	
-	/*
-	 * @PostMapping("/sendMessageProcess")
-	 * 
-	 * @ResponseBody public ResponseEntity<String> sendMessageProcess(@RequestParam
-	 * Map map) { int result = messageService.sendMessage(map);
-	 * 
-	 * if (result > 0) { return ResponseEntity.ok("success"); } else { return
-	 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error"); } }
-	 */
+	// 쪽지 보내기
 	 @PostMapping("/sendMessageProcess")
 	 @ResponseBody
 	 public ResponseEntity<String> sendMessageProcess(@RequestBody Map<String, String> data) {
-        int result = messageService.sendMessage(data);
-
-        if (result > 0) {
-            return ResponseEntity.ok("{\"message\": \"success\"}");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"error\"}");
-        }
+		
+			int result = messageService.sendMessage(data);
+			
+			if (result > 0) {
+				return ResponseEntity.ok("{\"message\": \"success\"}");
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"error\"}");
+			}
+		
 	 }
 	
 	 //받은 메시지함
