@@ -26,14 +26,14 @@
 			</div>
 			<div
 				class="container border border-secondary border-opacity-50 rounded bg-white">
-				<table
-					class="table table-borderless table-hover table-sm table-striped">
+				<table class="table table-class border-secondary table-hover table-sm ">
 					<thead>
 						<tr class="text-center">
-							<th scope="col" class="col-1">[보낸이]</th>
-							<th scope="col" class="col-7">[메시지]</th>
-							<th scope="col" class="col-2">[전송일시]</th>
-							<th scope="col" class="col-1">[읽음]</th>
+							<th scope="col" class="col-1"><i class="bi bi-person me-1"></i>[보낸이]</th>
+							<th scope="col" class="col-6"><i class="bi bi-chat-square-quote me-1"></i>[메시지]</th>
+							<th scope="col" class="col-2"><i class="bi bi-clock me-1"></i>[전송일시]</th>
+							<th scope="col" class="col-2"><i class="bi bi-check-square me-1"></i>[읽음]</th>
+							<th scope="col" class="col-1"><i class="bi bi-trash me-1"></i>[삭제]</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -74,19 +74,26 @@
 										</c:choose>
 										
 										<td class="message-read-status">
-    <c:choose>
-        <c:when test="${message.read_yn eq 'y'}">
-            <i class="bi bi-check-circle-fill"></i>
-        </c:when>
-        <c:when test="${message.read_yn eq 'n'}">
-            <i class="bi bi-circle"></i>
-        </c:when>
-        <c:otherwise>
-            <!-- Handle other cases if necessary -->
-            ${message.read_yn}
-        </c:otherwise>
-    </c:choose>
-</td>
+										    <c:choose>
+										        <c:when test="${message.read_yn eq 'y'}">
+										            <i class="bi bi-envelope-open-heart"></i>
+										        </c:when>
+										        <c:when test="${message.read_yn eq 'n'}">
+										            <i class="bi bi-envelope-fill"></i>
+										        </c:when>
+										        <c:otherwise>
+										            <!-- Handle other cases if necessary -->
+										            ${message.read_yn}
+										        </c:otherwise>
+										    </c:choose>
+										</td>
+										
+										<td>
+									        <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteMessage(${message.idx})">
+									            삭제
+									        </button>
+									    </td>
+									    </tr>
 							</c:if>
 						</c:forEach>
 						 </c:if>
@@ -168,85 +175,123 @@
 	
 	
 	
-	<script>
-	    // 메시지 클릭 이벤트
-	    $(document).ready(function () {
-	        $('.message-content-btn').on('click', function () {
-	            // 선택한 메시지의 idx 값을 가져옴
-	            var messageIdx = $(this).data('idx');
-	            var readStatus = $(this).data('read-status');
-	
-	            // read_yn 값이 'y'인 경우 처리를 중단
-	            if (readStatus === 'y') {
-	                console.log('이미 읽은 메시지입니다.');
-	                return;
-	            }
-	
-	            // 서버로 해당 메시지의 idx를 전송
-	            updateMessageRead(messageIdx);
-	
-	            // 모달 창에 메시지 내용을 표시
-	            var messageContent = $(this).data('content');
-	            $('#fullMessageContent').text(messageContent);
-	
-	            // 기존 클릭 이벤트 중지
-	            return false;
-	        });
-	        // 모달 닫기 이벤트
-	        $('#messageModal').on('hidden.bs.modal', function () {
-	            // 페이지 리로드
-	            window.location.reload();
-	        });
-	    });
-	
-	    // 메시지 읽음 처리 함수
-	    function updateMessageRead(messageIdx) {
-	        console.log('전송하는 메시지 인덱스:', messageIdx);
-	
-	        $.ajax({
-	            type: 'GET',
-	            url: '/updateMessageRead',
-	            data: { idx: messageIdx },
-	            success: function (response) {
-	                console.log('서버 응답:', response);
-	
-	                if (response === 'success') {
-	                    // 서버에서 성공적으로 처리되었을 때의 동작
-	                    console.log('메시지 읽음 처리 성공');
-	                } else {
-	                    // 서버에서 에러가 발생했을 때의 동작
-	                    console.error('메시지 읽음 처리 실패');
-	                }
-	            },
-	            error: function () {
-	                // AJAX 요청 실패 시의 동작
-	                console.error('AJAX 요청 실패');
-	            }
-	        });
-	    }
-	    
-	</script>
-	<!-- 메세지 보내기 -->
-	<script>
-	    $(document).ready(function() {
-	        $(".btn-chat").click(function() {
-	            var to_id = $(this).data("value");
-	            var from_id = '${sessionScope.id}';
-	
-	            if (from_id == null || from_id === '') {
-	                alert('로그인이 필요합니다');
-	            } else {
-	                var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id;
-	                window.open(url, '_blank', 'width=500,height=500');
-	            }
-	        });
-	    });
-	</script>
+		<script>
+		    // 메시지 클릭 이벤트
+		    $(document).ready(function () {
+		        $('.message-content-btn').on('click', function () {
+		            // 선택한 메시지의 idx 값을 가져옴
+		            var messageIdx = $(this).data('idx');
+		            var readStatus = $(this).data('read-status');
+		
+		            // read_yn 값이 'y'인 경우 처리를 중단
+		            if (readStatus === 'y') {
+		                console.log('이미 읽은 메시지입니다.');
+		                return;
+		            }
+		
+		            // 서버로 해당 메시지의 idx를 전송
+		            updateMessageRead(messageIdx);
+		
+		            // 모달 창에 메시지 내용을 표시
+		            var messageContent = $(this).data('content');
+		            $('#fullMessageContent').text(messageContent);
+		
+		            // 기존 클릭 이벤트 중지
+		            return false;
+		        });
+		        // 모달 닫기 이벤트
+		        $('#messageModal').on('hidden.bs.modal', function () {
+		            // 페이지 리로드
+		            window.location.reload();
+		        });
+		    });
+		
+		    // 메시지 읽음 처리 함수
+		    function updateMessageRead(messageIdx) {
+		        console.log('전송하는 메시지 인덱스:', messageIdx);
+		
+		        $.ajax({
+		            type: 'GET',
+		            url: '/updateMessageRead',
+		            data: { idx: messageIdx },
+		            success: function (response) {
+		                console.log('서버 응답:', response);
+		
+		                if (response === 'success') {
+		                    // 서버에서 성공적으로 처리되었을 때의 동작
+		                    console.log('메시지 읽음 처리 성공');
+		                } else {
+		                    // 서버에서 에러가 발생했을 때의 동작
+		                    console.error('메시지 읽음 처리 실패');
+		                }
+		            },
+		            error: function () {
+		                // AJAX 요청 실패 시의 동작
+		                console.error('AJAX 요청 실패');
+		            }
+		        });
+		    }
+		    
+		</script>
+		
+		<!-- 메세지 보내기 -->
+		<script>
+		    $(document).ready(function() {
+		        $(".btn-chat").click(function() {
+		            var to_id = $(this).data("value");
+		            var from_id = '${sessionScope.id}';
+		
+		            if (from_id == null || from_id === '') {
+		                alert('로그인이 필요합니다');
+		            } else {
+		                var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id;
+		                window.open(url, '_blank', 'width=500,height=500');
+		            }
+		        });
+		    });
+		</script>
+		
+		<!-- 메시지 삭제 -->
+		<script>
+		    function deleteMessage(messageIdx) {
+		        // Display a confirmation dialog
+		        var confirmDelete = confirm('정말 삭제하시겠습니까?');
+		
+		        if (confirmDelete) {
+		            console.log('삭제하는 메시지 인덱스:', messageIdx);
+		
+		            // AJAX를 사용하여 서버로 삭제 요청 전송
+		            $.ajax({
+		                type: 'POST',
+		                url: '/deleteShowToId',
+		                data: { idx: messageIdx },
+		                success: function (response) {
+		                    console.log('서버 응답:', response);
+		
+		                    if (response === 'success') {
+		                        // 서버에서 성공적으로 처리되었을 때의 동작
+		                        alert('메시지가 삭제되었습니다');
+		
+		                        // 페이지 리로드
+		                        location.reload();
+		                    } else {
+		                        // 서버에서 에러가 발생했을 때의 동작
+		                        console.error('메시지 삭제 실패하였습니다');
+		                    }
+		                },
+		                error: function () {
+		                    // AJAX 요청 실패 시의 동작
+		                    console.error('AJAX 요청 실패');
+		                }
+		            });
+		        }
+		    };
+		</script>
 
 
 
 
 	
 	
-</body>
+	</body>
 </html>

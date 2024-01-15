@@ -40,6 +40,12 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
+	public int deleteShowToId(Map map) {
+		return  messageDao.deleteShowToId(map);
+	}
+	
+	@Override
 	public List<Map> selectMessageList2(Map map) {
 		return  messageDao.selectMessageList2(map);
 	}
@@ -50,9 +56,15 @@ public class MessageServiceImpl implements MessageService {
 		return  messageDao.selectMessageListCnt2(map);
 		
 	}
-
+	
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
+	public int deleteShowFromId(Map map) {
+		return  messageDao.deleteShowFromId(map);
+	}
 
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })
 	public int updateMessageRead(Map map) {
 		return  messageDao.updateMessageRead(map);
 

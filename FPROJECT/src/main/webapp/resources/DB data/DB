@@ -121,29 +121,28 @@ CREATE TABLE `member_info` (
   PRIMARY KEY (`seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 
------------------트리거 meber테이블 회원 삭제 시 message 테이블 del_yn업데이트
+-----------------트리거 member테이블 회원 삭제 시 message 테이블 show_yn값 업데이트
 DELIMITER //
 
-CREATE TRIGGER update_message_del_yn
+CREATE TRIGGER update_message_show_flags
 AFTER UPDATE ON member_info
 FOR EACH ROW
 BEGIN
-    DECLARE recordCount INT;
+    IF NEW.member_del = 'y' AND OLD.member_del != NEW.member_del THEN
+        -- Update show_from_id to 'n' for messages with matching from_id
+        UPDATE message
+        SET show_from_id = 'n'
+        WHERE from_id = NEW.member_id AND show_from_id = 'y';
 
-    IF NEW.member_del = 'n' AND OLD.member_del != NEW.member_del THEN
-        SELECT COUNT(*) INTO recordCount
-        FROM message
-        WHERE (from_id = NEW.member_id OR to_id = NEW.member_id) AND del_yn = 'n';
-
-        IF recordCount > 0 THEN
-            UPDATE message
-            SET del_yn = 'y'
-            WHERE (from_id = NEW.member_id OR to_id = NEW.member_id) AND del_yn = 'n';
-        END IF;
+        -- Update show_to_id to 'n' for messages with matching to_id
+        UPDATE message
+        SET show_to_id = 'n'
+        WHERE to_id = NEW.member_id AND show_to_id = 'y';
     END IF;
 END //
 
 DELIMITER ;
+
 
 
 
@@ -154,12 +153,12 @@ CREATE TABLE `message` (
   `to_id` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `del_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
-  `read_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
-  `show_from_id` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
-  `show_to_id` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `del_yn` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `read_yn` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `show_from_id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
+  `show_to_id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
   PRIMARY KEY (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 
 
 

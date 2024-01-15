@@ -43,8 +43,8 @@ public class MessageController {
 	 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error"); } }
 	 */
 	 @PostMapping("/sendMessageProcess")
-    @ResponseBody
-    public ResponseEntity<String> sendMessageProcess(@RequestBody Map<String, String> data) {
+	 @ResponseBody
+	 public ResponseEntity<String> sendMessageProcess(@RequestBody Map<String, String> data) {
         int result = messageService.sendMessage(data);
 
         if (result > 0) {
@@ -52,11 +52,11 @@ public class MessageController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"error\"}");
         }
-    }
+	 }
 	
-	
-	@GetMapping("/messageList")
-	public String messageList(@RequestParam Map<String, Object> map, Model model, HttpSession session) {
+	 //받은 메시지함
+	 @GetMapping("/messageList")
+	 public String messageList(@RequestParam Map<String, Object> map, Model model, HttpSession session) {
 	    String member_id = (String) session.getAttribute("id");
 	    map.put("member_id", member_id);
 
@@ -83,8 +83,22 @@ public class MessageController {
 	    model.addAttribute("currentPage", page);
 
 	    return "/member/message/messageList";
-	}
+	 }
 	
+	// 받은 메시지함 메시지 삭제
+	@PostMapping("/deleteShowToId")
+	@ResponseBody
+	public ResponseEntity<String> deleteShowToId(@RequestParam Map<String, String> map) {
+	    int result = messageService.deleteShowToId(map);
+	
+	    if (result > 0) {
+	        return new ResponseEntity<>("success", HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("failure", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	 
+	// 보낸 메시지함
 	@GetMapping("/messageList2")
 	public String messageList2(@RequestParam Map<String, Object> map, Model model, HttpSession session) {
 	    String member_id = (String) session.getAttribute("id");
@@ -115,6 +129,20 @@ public class MessageController {
 	    return "/member/message/messageList2";
 	}
 	
+	// 보낸 메세지함 메시지 삭제
+	@PostMapping("/deleteShowFromId")
+	@ResponseBody
+	public ResponseEntity<String> deleteShowFromId(@RequestParam Map<String, String> map) {
+	    int result = messageService.deleteShowFromId(map);
+	
+	    if (result > 0) {
+	        return new ResponseEntity<>("success", HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("failure", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	
+	//메시지 읽음 처리
 	@GetMapping("/updateMessageRead")
 	public ResponseEntity<String> updateMessageRead(@RequestParam Map map) {
 	    int result = messageService.updateMessageRead(map);

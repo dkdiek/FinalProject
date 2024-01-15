@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</insert>
 	
-	<!-- 메세지 가져오기1 -->
+	<!-- 메세지 가져오기1 받은메시지함-->
 	<select id="selectMessageList" resultType="map" parameterType="map">
 		SELECT
 		    idx,
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    show_to_id
 	
 		FROM message
-		WHERE del_yn = "N"
+		WHERE show_to_id = "Y"
 	    AND to_id = #{member_id}
 		ORDER BY create_date DESC
 		<if test="limit != null">
@@ -43,15 +43,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </if>
 	</select>
 	
-	<!-- 메세지 페이징 가져오기1 -->
+	<!-- 메세지 페이징 가져오기1 받은메시지함-->
 	<select id="selectMessageListCnt" resultType="int">
 	 	    SELECT COUNT(*)
 		    FROM message
-		    WHERE del_yn = "N"
+		    WHERE show_to_id = "Y"
 		    AND to_id = #{member_id}
 	</select>
 	
-	<!-- 메세지 가져오기2 -->
+	<!-- 받은 메세지함 삭제 -->
+	<update id="deleteShowToId" parameterType="map">
+		update message
+		set show_to_id = "N"
+		WHERE idx = #{idx}
+	</update>
+	
+	<!-- 메세지 가져오기2 보낸메시지함-->
 	<select id="selectMessageList2" resultType="map" parameterType="map">
 		SELECT
 		    idx,
@@ -65,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    show_to_id
 	
 		FROM message
-		WHERE del_yn = "N"
+		WHERE show_from_id = "Y"
 	    AND from_id = #{member_id}
 		ORDER BY create_date DESC
 		<if test="limit != null">
@@ -76,13 +83,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </if>
 	</select>
 	
-	<!-- 메세지 페이징 가져오기2 -->
+	<!-- 메세지 페이징 가져오기2 보낸메시지함-->
 	<select id="selectMessageListCnt2" resultType="int">
 	 	    SELECT COUNT(*)
 		    FROM message
-		    WHERE del_yn = "N"
+		    WHERE show_from_id  = "Y"
 		    AND from_id = #{member_id}
 	</select>
+	
+	<!-- 보낸 메세지함 삭제 -->
+	<update id="deleteShowFromId" parameterType="map">
+		update message
+		set show_from_id = "N"
+		WHERE idx = #{idx}
+	</update>
 	
 	<!-- 읽음 업데이트 -->
 	<update id="updateMessageRead" parameterType="map">

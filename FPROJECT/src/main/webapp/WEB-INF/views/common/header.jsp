@@ -402,7 +402,7 @@ btnMsg.addEventListener('click', function() {
 			    		
 						console.log(naverLogin.user); 
 			    		
-			           
+					} 
 				});
 			});
 			

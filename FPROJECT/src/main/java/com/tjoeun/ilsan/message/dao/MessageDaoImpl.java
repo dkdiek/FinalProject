@@ -38,6 +38,12 @@ public class MessageDaoImpl implements MessageDao{
 	}
 	
 	@Override
+	public int deleteShowToId(Map map) {
+		MessageMapper mapper = sqlSession.getMapper(MessageMapper.class);
+		return mapper.deleteShowToId(map) ;
+	}
+	
+	@Override
 	public List<Map> selectMessageList2(Map map) {
 		MessageMapper mapper = sqlSession.getMapper(MessageMapper.class);
 		return mapper.selectMessageList2(map) ;
@@ -49,7 +55,12 @@ public class MessageDaoImpl implements MessageDao{
 		MessageMapper mapper = sqlSession.getMapper(MessageMapper.class);
 		return mapper.selectMessageListCnt2(map) ;
 	}
-
+	
+	@Override
+	public int deleteShowFromId(Map map) {
+		MessageMapper mapper = sqlSession.getMapper(MessageMapper.class);
+		return mapper.deleteShowFromId(map) ;
+	}
 
 	@Override
 	public int updateMessageRead(Map map) {
