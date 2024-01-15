@@ -1,10 +1,13 @@
 package com.tjoeun.ilsan.member.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,8 +35,8 @@ public class MemberController {
 	@Autowired
 	EmailService emailService;
 
-	// 로그인
-	// ------------------------------------------------------------------------------------------
+	
+	// 로그인 ------------------------------------------------------------------------------------------
 	@PostMapping("/login")
 	@ResponseBody
 	public ResponseEntity<String> login(@RequestParam String id, @RequestParam String password,
@@ -43,6 +44,7 @@ public class MemberController {
 		boolean loginResult = memberService.checkLogin(id, password);
 
 		if (loginResult) {
+			session.setAttribute("loginType", "Home");
 			session.setAttribute("id", id);
 			String redirectUrl = (returnUrl != null && !returnUrl.isEmpty()) ? returnUrl : "/";
 			String checkLoginSession = (String) session.getAttribute("id");
@@ -54,22 +56,74 @@ public class MemberController {
 		}
 	}
 
-	// 로그아웃
-	// ------------------------------------------------------------------------------------------
+	
+	// 로그아웃 ------------------------------------------------------------------------------------------
 	@GetMapping("/logout")
-	public String logout(HttpSession session, @RequestParam(name = "returnUrl", required = false) String returnUrl) {
+	public String logout(HttpSession session, @RequestParam(name = "returnUrl", required = false) String returnUrl, HttpServletRequest req, HttpServletResponse res) {
 		// 세션에서 사용자 정보 제거
 		if (session.getAttribute("id") != null) {
 			session.removeAttribute("id");
+		}
+		if (session.getAttribute("loginType") != null) {
+			session.removeAttribute("loginType");
 		}
 		// 세션을 무효화
 		session.invalidate();
 		// returnUrl이 제공된 경우 해당 페이지로 리다이렉트, 그렇지 않은 경우 기본 리다이렉트 설정
 		return "redirect:" + (returnUrl != null ? returnUrl : "/");
 	}
+	
+	//카카오 로그인 ------------------------------------------------------------------------------------------
+	@PostMapping("/kakaoLogin")
+	@ResponseBody
+	public Map<String, Object> kakaoLogin(@RequestBody Map map, HttpSession session, Model model) {
+	    Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
+		//클라이언트에서 보낸 email을 member_id로 설정
+	    String member_id = (String) ((Map<String, Object>) responseMap.get("kakao_account")).get("email");
+	    // member_id에 위에 값을 put
+	    map.put("member_id", member_id);
+	    // 위에 담은 map을 db에 존재하는지 조회
+	    Map checkSocialMember = memberService.checkSocialMember(map);
 
-	// 회원가입
-	// ------------------------------------------------------------------------------------------
+	    // 존재하면
+	    if (checkSocialMember != null) {
+	        // 세션에 아이디를 담는다 (로그인처리)
+	    	session.setAttribute("loginType", "Kakao");
+	        session.setAttribute("id", member_id);
+	        return Collections.singletonMap("message", "success");
+	    } else {
+	    	Map joinMap = new HashMap();
+	        model.addAttribute("member_info", map);
+	        // 클라이언트로 member_id를 함께 응답
+	        Map<String, Object> joinKakaoMap = new HashMap<>();
+	        joinKakaoMap.put("message", "redirect");
+	        joinKakaoMap.put("member_id", member_id);
+	        return joinKakaoMap;
+	    }
+    
+	}
+	
+	//카카오 최초 회원 정보 추가 입력 ------------------------------------------------------------------------------------------
+	
+	 @GetMapping("/joinKakaoMember") public String joinKakaoMember(Model model){
+	 model.addAttribute("errorMessage","올바른 접근이 아닙니다");
+	 return "/common/errorPage";
+	 }
+	 
+	@PostMapping("/joinKakaoMember")
+	public String joinKakaoMember(@RequestParam Map map, Model model){
+		
+		String member_id = (String)map.get("member_id");
+		Map result = new HashMap();
+		result.put("member_id",member_id);
+		model.addAttribute("result",map);
+		return "/member/join/joinKakaoMember";
+		
+	}
+
+	
+	
+	// 회원가입------------------------------------------------------------------------------------------
 
 	// 네이버 로그인 http://localhost/naverLogin
 	// azdDptdhj5zpBKzKMGuq

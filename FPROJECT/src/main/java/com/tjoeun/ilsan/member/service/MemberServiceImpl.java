@@ -33,6 +33,11 @@ public class MemberServiceImpl implements MemberService {
 	        return false;
 	    }
 	}
+	
+	@Override
+	public Map checkSocialMember(Map map) {
+        return memberDao.checkSocialMember(map);
+	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { Exception.class })

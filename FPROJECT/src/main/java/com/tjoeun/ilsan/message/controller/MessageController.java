@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tjoeun.ilsan.message.service.MessageService;
 
@@ -31,16 +33,26 @@ public class MessageController {
 		return "member/message/sendMessage";
 	}
 	
-	@PostMapping("/sendMessageProcess")
-	public ResponseEntity<String> sendMessageProcess(@RequestParam Map<String, String> map) {
-	    int result = messageService.sendMessage(map);
+	/*
+	 * @PostMapping("/sendMessageProcess")
+	 * 
+	 * @ResponseBody public ResponseEntity<String> sendMessageProcess(@RequestParam
+	 * Map map) { int result = messageService.sendMessage(map);
+	 * 
+	 * if (result > 0) { return ResponseEntity.ok("success"); } else { return
+	 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error"); } }
+	 */
+	 @PostMapping("/sendMessageProcess")
+    @ResponseBody
+    public ResponseEntity<String> sendMessageProcess(@RequestBody Map<String, String> data) {
+        int result = messageService.sendMessage(data);
 
-	    if (result > 0) {
-	        return ResponseEntity.ok("success");
-	    } else {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
-	    }
-	}
+        if (result > 0) {
+            return ResponseEntity.ok("{\"message\": \"success\"}");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"error\"}");
+        }
+    }
 	
 	
 	@GetMapping("/messageList")

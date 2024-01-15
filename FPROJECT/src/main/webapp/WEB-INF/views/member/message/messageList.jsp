@@ -37,16 +37,20 @@
 						</tr>
 					</thead>
 					<tbody>
+						
 						<!-- Add logic to fetch and display received messages here -->
 						<!-- Use ${result} to iterate through the received messages -->
+						<c:if test="${not empty result}">
+						
 						<c:forEach var="message" items="${result}">
 							<c:if
 								test="${message.to_id.trim().toLowerCase() eq sessionScope.id.trim().toLowerCase()}">
 								<tr class="text-center">
-									<td><a href="/sendMessage?to_id=${sessionScope.id}&from_id=${message.from_id}" target="_blank" onclick="openWindowWithSize(500, 500);">
-
-											${message.from_id.trim().toLowerCase() eq sessionScope.id.trim().toLowerCase() ? '나' : message.from_id}
-									</a></td>
+									<td>
+										<a href="#" class="btn-chat" data-value="${message.from_id.trim().toLowerCase() eq sessionScope.id.trim().toLowerCase() ? '나' : message.from_id}">
+										    ${message.from_id.trim().toLowerCase() eq sessionScope.id.trim().toLowerCase() ? '나' : message.from_id}
+										</a>
+									</td>
 									<td class="text-center">
 										<button type="button" class="btn btn-link message-content-btn"
 									        data-bs-toggle="modal" data-bs-target="#messageModal"
@@ -85,6 +89,7 @@
 </td>
 							</c:if>
 						</c:forEach>
+						 </c:if>
 					</tbody>
 				</table>
 			</div>
@@ -94,6 +99,7 @@
 				    <div class="col">
 				        <nav aria-label="Page navigation">
 				            <ul class="pagination justify-content-center">
+				            <c:if test="${not empty result}">
 				                <c:forEach begin="0" end="${totalPages-1}" varStatus="i">
 				                    <c:set var="pageLink" value="?page=${i.index+1}" />
 				
@@ -123,6 +129,7 @@
 				                        <a class="page-link" href="${pageLink}">${i.index + 1}</a>
 				                    </li>
 				                </c:forEach>
+				               </c:if>
 				            </ul>
 				        </nav>
 				    </div>
@@ -161,76 +168,82 @@
 	
 	
 	
-<script>
-    // 메시지 클릭 이벤트
-    $(document).ready(function () {
-        $('.message-content-btn').on('click', function () {
-            // 선택한 메시지의 idx 값을 가져옴
-            var messageIdx = $(this).data('idx');
-            var readStatus = $(this).data('read-status');
+	<script>
+	    // 메시지 클릭 이벤트
+	    $(document).ready(function () {
+	        $('.message-content-btn').on('click', function () {
+	            // 선택한 메시지의 idx 값을 가져옴
+	            var messageIdx = $(this).data('idx');
+	            var readStatus = $(this).data('read-status');
+	
+	            // read_yn 값이 'y'인 경우 처리를 중단
+	            if (readStatus === 'y') {
+	                console.log('이미 읽은 메시지입니다.');
+	                return;
+	            }
+	
+	            // 서버로 해당 메시지의 idx를 전송
+	            updateMessageRead(messageIdx);
+	
+	            // 모달 창에 메시지 내용을 표시
+	            var messageContent = $(this).data('content');
+	            $('#fullMessageContent').text(messageContent);
+	
+	            // 기존 클릭 이벤트 중지
+	            return false;
+	        });
+	        // 모달 닫기 이벤트
+	        $('#messageModal').on('hidden.bs.modal', function () {
+	            // 페이지 리로드
+	            window.location.reload();
+	        });
+	    });
+	
+	    // 메시지 읽음 처리 함수
+	    function updateMessageRead(messageIdx) {
+	        console.log('전송하는 메시지 인덱스:', messageIdx);
+	
+	        $.ajax({
+	            type: 'GET',
+	            url: '/updateMessageRead',
+	            data: { idx: messageIdx },
+	            success: function (response) {
+	                console.log('서버 응답:', response);
+	
+	                if (response === 'success') {
+	                    // 서버에서 성공적으로 처리되었을 때의 동작
+	                    console.log('메시지 읽음 처리 성공');
+	                } else {
+	                    // 서버에서 에러가 발생했을 때의 동작
+	                    console.error('메시지 읽음 처리 실패');
+	                }
+	            },
+	            error: function () {
+	                // AJAX 요청 실패 시의 동작
+	                console.error('AJAX 요청 실패');
+	            }
+	        });
+	    }
+	    
+	</script>
+	<!-- 메세지 보내기 -->
+	<script>
+	    $(document).ready(function() {
+	        $(".btn-chat").click(function() {
+	            var to_id = $(this).data("value");
+	            var from_id = '${sessionScope.id}';
+	
+	            if (from_id == null || from_id === '') {
+	                alert('로그인이 필요합니다');
+	            } else {
+	                var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id;
+	                window.open(url, '_blank', 'width=500,height=500');
+	            }
+	        });
+	    });
+	</script>
 
-            // read_yn 값이 'y'인 경우 처리를 중단
-            if (readStatus === 'y') {
-                console.log('이미 읽은 메시지입니다.');
-                return;
-            }
 
-            // 서버로 해당 메시지의 idx를 전송
-            updateMessageRead(messageIdx);
-
-            // 모달 창에 메시지 내용을 표시
-            var messageContent = $(this).data('content');
-            $('#fullMessageContent').text(messageContent);
-
-            // 기존 클릭 이벤트 중지
-            return false;
-        });
-        // 모달 닫기 이벤트
-        $('#messageModal').on('hidden.bs.modal', function () {
-            // 페이지 리로드
-            window.location.reload();
-        });
-    });
-
-    // 메시지 읽음 처리 함수
-    function updateMessageRead(messageIdx) {
-        console.log('전송하는 메시지 인덱스:', messageIdx);
-
-        $.ajax({
-            type: 'GET',
-            url: '/updateMessageRead',
-            data: { idx: messageIdx },
-            success: function (response) {
-                console.log('서버 응답:', response);
-
-                if (response === 'success') {
-                    // 서버에서 성공적으로 처리되었을 때의 동작
-                    console.log('메시지 읽음 처리 성공');
-                } else {
-                    // 서버에서 에러가 발생했을 때의 동작
-                    console.error('메시지 읽음 처리 실패');
-                }
-            },
-            error: function () {
-                // AJAX 요청 실패 시의 동작
-                console.error('AJAX 요청 실패');
-            }
-        });
-    }
-
-    // 새 창 크기 조절 함수
-    function openWindowWithSize(width, height) {
-        // 새 창의 위치를 화면 중앙으로 설정하고 크기를 조절
-        var left = (window.innerWidth - width) / 2;
-        var top = (window.innerHeight - height) / 2;
-
-        // 창 열기
-        window.open(this.href, '_blank', 'width=' + width + ', height=' + height + ', left=' + left + ', top=' + top);
-
-        // 기존 클릭 이벤트 중지
-        return false;
-    }
-</script>
 
 
 	

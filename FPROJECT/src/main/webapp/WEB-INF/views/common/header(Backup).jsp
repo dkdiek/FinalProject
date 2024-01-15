@@ -46,20 +46,9 @@
 							<li><a class="dropdown-item rounded-2" href="<c:url value='/updateMemberInfo'/>">회원 정보 변경</a></li>
 							<li><a class="dropdown-item rounded-2" href="<c:url value='/withdrawal'/>">회원 탈퇴</a></li>
 							<li><hr class="dropdown-divider"></li>
-							
-							<c:set var="loginType" value="${sessionScope.loginType}" />
-							<!-- 카카오 로그아웃 -->
-							<c:if test="${loginType eq 'Kakao'}">
-								<li>
-									<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtnK">카카오 로그아웃</a>
-								</li>
-							</c:if>
-							<!-- 일반 로그아웃 -->
-							<c:if test="${loginType eq 'Home'}">
-								<li>
-									<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtn">로그아웃</a>
-								</li>
-							</c:if>
+							<li>
+								<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtn">로그아웃</a>
+							</li>
 						</ul>
 					</div>
 				</c:if>
@@ -128,15 +117,13 @@
 				<hr class="my-4">
 				<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
 				<div id="snsLoginBtnDiv" style="text-align: center">
-					<!-- 네이버 로그인 -->
-					<a id="naverIdLogin_loginButton" href="javascript:void(0)">
-						<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34">
-						    <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
-						</button>
-					</a>
-					<!-- 카카오 로그인 -->
-					<button class="w-60 btn btn-outline-secondary rounded-3" style="background-color: #f9e000" onclick="javascript:kakaoLogin()">
-						<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 90%">
+					<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34" onclick="location.href='/naverLogin'">
+					    <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
+					</button>
+					<button class="w-60 btn btn-outline-secondary rounded-3"
+						type="submit" style="background-color: #f9e000">
+						<img src="<c:url value='/cdn/images/common/btnKakao.png'/>"
+							style="max-width: 90%">
 					</button>
 				</div>
 
@@ -217,6 +204,7 @@
             dataType: "json",
             success: function (data) {
                 // 서버 응답 처리
+                console.log(data);
 
                 if (data.message === "success") {
                     // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
@@ -245,11 +233,11 @@
 <!-- 로그아웃 -->
 <script>
   $(document).ready(function () {
-    // 일반멤버
+    // 로그아웃 버튼 클릭 이벤트 리스너 등록
     $("#logoutBtn").on("click", function () {
       // 현재 페이지 URL 가져오기
       var pageUrl = window.location.href;
-      
+
       // 로그아웃 요청
       $.ajax({
         url: "/logout",
@@ -265,29 +253,6 @@
         }
       });
     });
-    //카카오멤버
-    $("#logoutBtnK").on("click", function () {
-        // 현재 페이지 URL 가져오기
-        var returnUrl = window.location.href;
-        
-        // 로그아웃 요청
-        $.ajax({
-          url: "/logout",
-          type: "GET",
-          data: { returnUrl: returnUrl }, // 페이지 URL 전달
-          success: function () {
-            // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
-              window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
-          },
-          error: function (error) {
-            console.error("에러:", error);
-            alert("로그아웃에 실패했습니다.");
-          }
-        });
-      });
-    
-    
-    
   });
 </script>
 
@@ -312,118 +277,6 @@ btnMsg.addEventListener('click', function() {
     
 </script>
 
-<!-- 카카오 로그인 -->
-		<script type="text/javascript">
-		    Kakao.init('ce5959441a26bb6ca04de7134c4cc8e3');
-		    function kakaoLogin() {
-		        Kakao.Auth.login({
-		            success: function (response) {
-		                Kakao.API.request({
-		                    url: '/v2/user/me',
-		                    //로그인성공
-		                    success: function (response) {
-		                        $.ajax({
-		    			            type: "POST"
-		    			            , url: "/kakaoLogin"
-		    			            , dataType: "json"
-		    	                    , contentType: "application/json"  // 추가된 부분
-		    			            , data: JSON.stringify({ response: response })
-		    			            , success: function(data) {
-		    			                // 서버로부터의 응답을 처리
-		    			                if (data.message === "success") {
-			    			                alert('카카오 계정 로그인 되었습니다')  
-			    			                location.reload();
-		    			                } else {
-		    			                if (data.message === "redirect") {
-			    			                alert('새로마켓 이용을 위해 최초 1회 추가 정보 입력이 진행됩니다') 
-			    			                /* window.location.href = '/joinKakaoMember?member_id=' + data.member_id; */
-			    			            	 // 폼 엘리먼트를 동적으로 생성
-			    			                var form = document.createElement("form");
-			    			                form.method = "post";
-			    			                form.action = "/joinKakaoMember";
-		
-			    			                // hidden input 엘리먼트를 생성하고 값을 설정
-			    			                var memberIdInput = document.createElement("input");
-			    			                memberIdInput.type = "hidden";
-			    			                memberIdInput.name = "member_id";
-			    			                memberIdInput.value = data.member_id;
-		
-			    			                // 폼에 hidden input을 추가
-			    			                form.appendChild(memberIdInput);
-		
-			    			                // body에 폼을 추가하고 전송
-			    			                document.body.appendChild(form);
-			    			                form.submit();
-		    			                } else {
-		    			                    alert("회원 정보를 찾을 수 없습니다");
-		    			                }
-		    			            }
-		    			            },
-		    			            error: function() {
-		    			                // AJAX 요청 실패 시 처리 로직 추가
-		    			                alert("서버에 장애가 발생하였습니다");
-		    			            }
-		    			        });
-		                        
-		                    },
-		                    //로그인실패 
-		                    fail: function (error) {
-		                        alert(JSON.stringify(error))
-		                    }
-		                })
-		            },
-		            //로그인 에러
-		            fail: function (error) {
-		                alert(JSON.stringify(error))
-		            },
-		        })
-		    }
-		</script>
-		
-		
-		<!-- 네이버 로그인 -->
-		<script>
-
-			var naverLogin = new naver.LoginWithNaverId(
-					{
-						clientId: "azdDptdhj5zpBKzKMGuq", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
-						callbackUrl: "http://localhost/naverLogin", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
-						isPopup: true,
-						callbackHandle: true
-					}
-				);	
-			
-			naverLogin.init();
-			
-			window.addEventListener('load', function () {
-				naverLogin.getLoginStatus(function (status) {
-					if (status) {
-						var email = naverLogin.user.getEmail(); // 필수로 설정할것을 받아와 아래처럼 조건문을 줍니다.
-			    		
-						console.log(naverLogin.user); 
-			    		
-			           
-				});
-			});
-			
-			
-			var testPopUp;
-			function openPopUp() {
-			    testPopUp= window.open("https://nid.naver.com/nidlogin.logout", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1,height=1");
-			}
-			function closePopUp(){
-			    testPopUp.close();
-			}
-			
-			function naverLogout() {
-				openPopUp();
-				setTimeout(function() {
-					closePopUp();
-					}, 1000);
-				
-				
-			}
-		</script>
 
 
 

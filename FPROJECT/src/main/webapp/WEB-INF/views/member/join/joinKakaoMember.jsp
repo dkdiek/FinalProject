@@ -17,23 +17,22 @@
 			<p style="max-width:200px" class="text-center mx-auto">
 		        <img class="img-fluid" src="<c:url value='/cdn/images/common/LogoKor.png'/>">
 	        </p>	
-			<h2 class="py-4 text-center">회원 가입</h2>
+			<h2 class="py-4 text-center">소셜 로그인 추가 정보 제출 (필수)</h2>
 	
 			<form id="frmJoin" method="POST" action="<c:url value='/joinProcess'/>">
 				<div class="mb-3">
-					<label for="id" class="form-label">아이디</label> <input type="text"
-						id="id" name="member_id" class="form-control" placeholder="아이디" readonly>
+					<label for="id" class="form-label">아이디 (변경 불가)</label> 
+					<input type="text" id="id" name="member_id" class="form-control" value="${result.member_id }" readonly>
 				</div>
 				<div class="mb-3">
-					<label for="pw" class="form-label">비밀번호</label> <input
-						type="password" id="pw" name="member_pw" class="form-control"
-						placeholder="비밀번호 (최대 12글자)" maxlength="12">
+					<label for="pw" class="form-label">홈페이지 비밀번호</label> 
+					<input type="password" id="pw" name="member_pw" class="form-control" maxlength="12" placeholder="비밀번호 (최대 12글자)" required>
 				</div>
-				<div class="mb-3">
-					<label for="pw2" class="form-label">비밀번호 확인</label> <input
-						type="password" id="pw2" name="member_pw2" class="form-control"
-						placeholder="비밀번호 확인 (최대 12글자)" maxlength="12">
+				<div>
+					<label for="pw2" class="form-label">홈페이지 비밀번호 확인</label>
+					<input type="password" id="pw2" name="member_pw2" class="form-control" maxlength="12" placeholder="비밀번호 확인 (최대 12글자)" required>
 				</div>
+				<h5 class="fs-6 mb-3 text-danger">*해당 비밀번호는 추후 회원 정보 변경과 탈퇴에 사용됩니다</h5>
 				<div class="mb-3">
 					<label for="name" class="form-label">이름</label> <input type="text"
 						id="name" name="member_name" class="form-control" placeholder="이름">
@@ -64,9 +63,14 @@
 						type="text" id="addr3" name="member_addr3" class="form-control"
 						placeholder="상세 주소">
 				</div>
-	
+				
+				<div class="form-check mt-2">
+					<input id="agreeCheckbox" type="checkbox" class="form-check-input border border-primary" name="checkbox" required>
+					<h6 class="form-check-label text-danger fs-6">회원 탈퇴 시, 새로마켓 홈페이지 탈퇴가 추가로 필요합니다 (필수 체크)</h6>
+				</div>
 				<div class="py-5 d-flex align-items-center justify-content-center">
-					<button type="button" id="btnConfirm" class="btn btn-primary">회원 가입</button>
+				
+					<button type="button" id="btnConfirm" class="btn btn-primary">정보 제출</button>
 					<a href="/" id="btnCancel" class="btn btn-secondary ms-1">취소</a>
 				</div>
 			</form>
@@ -183,122 +187,58 @@
 		</script>
 		
 		<!-- 폼 체크  -->
-		<script>
-		    function checkForm() {
-		        var id = $("#id").val();
-		        var pw = $("#pw").val();
-		        var pw2 = $("#pw2").val();
-		        var name = $("#name").val();
-		        var phone = $("#phone").val();
-		        var email = $("#email").val();
-		        var addr2 = $("#addr2").val();
-		        var addr3 = $("#addr3").val();
+<script>
+    function checkForm() {
+        var id = $("#id").val();
+        var pw = $("#pw").val();
+        var pw2 = $("#pw2").val();
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var email = $("#email").val();
+        var addr2 = $("#addr2").val();
+        var addr3 = $("#addr3").val();
+        var agreeCheckbox = $("#agreeCheckbox");
+
+        // 필드 순서대로 확인
+        if (id === "") {
+            showAlert("아이디를 입력해 주세요.", "id");
+        } else if (pw === "") {
+            showAlert("비밀번호를 입력해 주세요.", "pw");
+        } else if (pw2 === "") {
+            showAlert("비밀번호 확인을 입력해 주세요.", "pw2");
+        } else if (pw !== pw2) {
+            showAlert("비밀번호와 비밀번호 확인이 일치하지 않습니다.", "pw");
+        } else if (name === "") {
+            showAlert("이름을 입력해 주세요.", "name");
+        } else if (phone === "") {
+            showAlert("전화번호를 입력해 주세요.", "phone");
+        } else if (email === "") {
+            showAlert("이메일을 입력해 주세요.", "email");
+        } else if (addr2 === "") {
+            showAlert("주소를 입력해 주세요.", "addr2");
+        } else if (addr3 === "") {
+            showAlert("상세주소를 입력해 주세요.", "addr3");
+        } else if (!agreeCheckbox.prop("checked")) {
+            showAlert("회원 탈퇴 시, 새로마켓 홈페이지 탈퇴가 추가로 필요합니다. (필수 체크)", "agreeCheckbox");
+        } else {
+            // 모든 필드가 채워져 있을 경우에는 폼 제출
+            document.getElementById('frmJoin').submit();
+        }
+    }
+
+    function showAlert(message, fieldId) {
+        alert(message);
+        $("#" + fieldId).css("border", "3px solid orange");
+        $("#" + fieldId).focus();
+    }
+
+    function resetBorders() {
+        // 모든 필드의 보더 초기화
+        $("#id, #pw, #pw2, #name, #phone, #email, #addr2, #addr3, #agreeCheckbox").css("border", "");
+    }
+</script>
+
 		
-		        // 필드 순서대로 확인
-		        if (id === "") {
-		            showAlert("아이디를 입력해 주세요.", "id");
-		        } else if (pw === "") {
-		            showAlert("비밀번호를 입력해 주세요.", "pw");
-		        } else if (pw2 === "") {
-		            showAlert("비밀번호 확인을 입력해 주세요.", "pw2");
-		        } else if (pw !== pw2) {
-		            showAlert("비밀번호와 비밀번호 확인이 일치하지 않습니다.", "pw");
-		        } else if (name === "") {
-		            showAlert("이름을 입력해 주세요.", "name");
-		        } else if (phone === "") {
-		            showAlert("전화번호를 입력해 주세요.", "phone");
-		        } else if (email === "") {
-		            showAlert("이메일을 입력해 주세요.", "email");
-		        } else if (addr2 === "") {
-		            showAlert("주소를 입력해 주세요.", "addr2");
-		        } else if (addr3 === "") {
-		            showAlert("상세주소를 입력해 주세요.", "addr3");
-		        } else {
-		            // 모든 필드가 채워져 있을 경우에는 폼 제출
-		            document.getElementById('frmJoin').submit();
-		        }
-		    }
 		
-		    function showAlert(message, fieldId) {
-		        alert(message);
-		        $("#" + fieldId).css("border", "3px solid orange");
-		        $("#" + fieldId).focus();
-		    }
-		
-		    function resetBorders() {
-		        // 모든 필드의 보더 초기화
-		        $("#id, #pw, #pw2, #name, #phone, #email, #addr2, #addr3").css("border", "");
-		    }
-		</script>
-		
-		<!-- id중복체크  -->
-		<script>
-			$(document).ready(function () {
-			    var checkedId; // 중복 확인을 통과한 ID 값을 저장하는 변수
-			
-			    // Handle click event on the ID input
-			    $('#id').on('click', function () {
-			        // Show the modal
-			        $('#idModal').show();
-			    });
-			
-			    // Handle click event on the '중복 확인' button
-			    $('#checkIdBtn').on('click', function () {
-			        // Get the entered ID
-			        var enteredId = $('#modalId').val();
-			
-			        // Check if the entered ID is empty
-			        if (!enteredId) {
-			            $('#message').text("ID 입력은 필수입니다");
-			            $('#idAvailability').text("");
-			            $('#useIdBtn').prop('disabled', true);
-			            return;
-			        }
-			
-			        // Perform AJAX request to check ID availability in the database
-			        $.ajax({
-			            url: '/checkDuplication',
-			            method: 'POST',
-			            dataType: "json",
-			            data: { member_id: enteredId },
-			            success: function (response) {
-			                if (response.message === '사용 불가') {
-			                    // 중복이 있을 때의 처리
-			                    $('#idAvailability').text("이미 존재하는 아이디입니다");
-			                    $('#useIdBtn').prop('disabled', true);
-			                } else if (response.message === '사용 가능') {
-			                    // 중복이 없을 때의 처리
-			                    checkedId = enteredId; // 중복 확인을 통과한 ID 값을 저장
-			                    $('#idAvailability').text("사용 가능한 아이디입니다");
-			                    $('#useIdBtn').prop('disabled', false);
-			                }
-			                // Clear the message
-			                $('#message').text("");
-			            },
-			            error: function () {
-			                // Handle error
-			            }
-			        });
-			    });
-			
-			    // Handle click event on the 'ID 사용하기' button
-			    $('#useIdBtn').on('click', function () {
-			        // Set the ID value in the main form with the checked ID
-			        $('#id').val(checkedId);
-			
-			        // Close the modal
-			        $('#idModal').hide();
-			
-			        // Clear the message
-			        $('#idAvailability').text("");
-			    });
-			
-			    // Handle click event on the '닫기' button
-			    $('#closeModalBtn').on('click', function () {
-			        // Close the modal
-			        $('#idModal').hide();
-			    });
-			});
-		</script>
 	</body>
 </html>

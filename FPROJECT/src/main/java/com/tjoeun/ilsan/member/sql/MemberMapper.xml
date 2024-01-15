@@ -16,6 +16,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	and member_del = 'n'
 	</select>
 	
+	<!-- 소셜 회원 가입여부 확인 -->
+	<select id="checkSocialMember" resultType="map" parameterType="map">
+		 SELECT 
+	        seq,
+	        member_id,
+	        member_pw,
+	        member_name,
+	        member_phone,
+	        member_email,
+	        member_addr1,
+	        member_addr2,
+	        member_addr3,
+	        member_place,
+	        member_del,
+	        member_join_date,
+	        latitude,
+	        longitude
+	    FROM member_info
+	    WHERE member_id = #{member_id}
+	</select>
+	
 	<!-- 회원가입 -->
 	<insert id="joinMembership" parameterType="map">
 		insert into member_info(

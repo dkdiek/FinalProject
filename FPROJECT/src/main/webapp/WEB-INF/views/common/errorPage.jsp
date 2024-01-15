@@ -26,9 +26,18 @@
 			        <p class="col-lg-8 mx-auto fs-5 text-muted">
 			            ${errorMessage}
 			        </p>
+				<div class="text-center">
+				    <input type="button" class="btn btn-primary" value="홈 화면 이동" onclick="moveToHome()">
+				</div>
 			    </div>
 			</div>
         <!-- footer -->
         <%@ include file="../common/footer.jsp" %>
+        
+        <script>
+		    function moveToHome() {
+		        window.location.href = "/";
+		    }
+		</script>
     </body>
 </html>

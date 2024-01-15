@@ -19,6 +19,12 @@ public class MemberDaoImpl implements MemberDao{
 		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
 		return mapper.checkLogin(params);
 	}
+	
+	@Override
+	public Map checkSocialMember(Map params) {
+		MemberMapper mapper = sqlSession.getMapper(MemberMapper.class);
+		return mapper.checkSocialMember(params);
+	}
 
 	@Override
 	public int joinMembership(Map map) {

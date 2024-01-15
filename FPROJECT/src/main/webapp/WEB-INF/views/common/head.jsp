@@ -22,6 +22,8 @@
 	<link rel="stylesheet" href="<c:url value='/cdn/css/common/sidebars.css'/>">
 	<!-- 네이버 로그인api -->
 	<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+	<!-- 카카오 로그인api -->
+	<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<!-- peer js -->
 	<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 	<!-- metadata -->
