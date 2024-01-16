@@ -129,11 +129,13 @@
 				<h2 class="fs-5 fw-bold mb-3">간편 로그인</h2>
 				<div id="snsLoginBtnDiv" style="text-align: center">
 					<!-- 네이버 로그인 -->
-					<a id="naverIdLogin_loginButton" href="javascript:void(0)">
-						<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34">
-						    <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
-						</button>
-					</a>
+					<div class="social-login" id="naver_id_login">
+						<a href="#no" title="네이버ID로 로그인" class="naver-login" id="naverLogin">
+							<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34">
+						   	 <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
+							</button>
+						</a>
+					</div>
 					<!-- 카카오 로그인 -->
 					<button class="w-60 btn btn-outline-secondary rounded-3" style="background-color: #f9e000" onclick="javascript:kakaoLogin()">
 						<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 90%">
@@ -196,123 +198,123 @@
   </div>
  </div>
 
-<!-- 로그인 스크립트 -->
-<script>
-    // 버튼 클릭 이벤트 리스너 등록
-    $("#btnLogin").on("click", function () {
-        // 로그인 폼 데이터 가져오기
-        var formData = $("#loginForm").serialize();
-
-        // 현재 페이지 URL 가져오기
-        var currentUrl = window.location.href;
-
-        // 로그인 폼 데이터에 현재 페이지 URL 추가
-        formData += "&returnUrl=" + encodeURIComponent(currentUrl);
-
-        // 서버에 AJAX 요청
-        $.ajax({
-            url: "/login",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function (data) {
-                // 서버 응답 처리
-
-                if (data.message === "success") {
-                    // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
-                    if (data.returnUrl) {
-                        // 리다이렉트 URL이 있으면 해당 URL로 이동
-                        window.location.href = data.returnUrl;
-                    } else {
-                        // 리다이렉트 URL이 없으면 기본 페이지로 이동
-                        window.location.href = "/";
-                    }
-                } else {
-                    // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
-                    console.error("로그인 실패:", data.message);
-                    alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
-                }
-            },
-            error: function (error) {
-                console.error("에러:", error);
-                alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
-            }
-        });
-    });
-</script>
-
-
-<!-- 로그아웃 -->
-<script>
-  $(document).ready(function () {
-    // 일반멤버
-    $("#logoutBtn").on("click", function () {
-      // 현재 페이지 URL 가져오기
-      var pageUrl = window.location.href;
-      
-      // 로그아웃 요청
-      $.ajax({
-        url: "/logout",
-        type: "GET",
-        data: { pageUrl: pageUrl }, // 페이지 URL 전달
-        success: function () {
-          // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
-          window.location.reload(); // 현재 페이지 새로고침
-        },
-        error: function (error) {
-          console.error("에러:", error);
-          alert("로그아웃에 실패했습니다.");
-        }
-      });
-    });
-    //카카오멤버
-    $("#logoutBtnK").on("click", function () {
-        // 현재 페이지 URL 가져오기
-        var returnUrl = window.location.href;
-        
-        // 로그아웃 요청
-        $.ajax({
-          url: "/logout",
-          type: "GET",
-          data: { returnUrl: returnUrl }, // 페이지 URL 전달
-          success: function () {
-            // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
-              window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
-          },
-          error: function (error) {
-            console.error("에러:", error);
-            alert("로그아웃에 실패했습니다.");
-          }
-        });
-      });
-    
-    
-    
-  });
-</script>
-
-<!-- 검색창 폼 섭밋 -->
-<script>
-	function handleSearch(event) {
-	    if (event.key === 'Enter') {
-	        submitSearchForm();
-	    }
-	}
+	<!-- 로그인 스크립트 -->
+	<script>
+	    // 버튼 클릭 이벤트 리스너 등록
+	    $("#btnLogin").on("click", function () {
+	        // 로그인 폼 데이터 가져오기
+	        var formData = $("#loginForm").serialize();
 	
-	function submitSearchForm() {
-	    document.getElementById("searchForm").submit();
-	}
-</script>
+	        // 현재 페이지 URL 가져오기
+	        var currentUrl = window.location.href;
+	
+	        // 로그인 폼 데이터에 현재 페이지 URL 추가
+	        formData += "&returnUrl=" + encodeURIComponent(currentUrl);
+	
+	        // 서버에 AJAX 요청
+	        $.ajax({
+	            url: "/login",
+	            type: "POST",
+	            data: formData,
+	            dataType: "json",
+	            success: function (data) {
+	                // 서버 응답 처리
+	
+	                if (data.message === "success") {
+	                    // 로그인 성공 시 리다이렉트 또는 다른 동작 수행
+	                    if (data.returnUrl) {
+	                        // 리다이렉트 URL이 있으면 해당 URL로 이동
+	                        window.location.href = data.returnUrl;
+	                    } else {
+	                        // 리다이렉트 URL이 없으면 기본 페이지로 이동
+	                        window.location.href = "/";
+	                    }
+	                } else {
+	                    // 로그인 실패 시 에러 메시지 출력 또는 다른 동작 수행
+	                    console.error("로그인 실패:", data.message);
+	                    alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
+	                }
+	            },
+	            error: function (error) {
+	                console.error("에러:", error);
+	                alert("로그인에 실패했습니다. 회원 정보를 확인하세요.");
+	            }
+	        });
+	    });
+	</script>
+	
+	
+	<!-- 로그아웃 -->
+	<script>
+	  $(document).ready(function () {
+	    // 일반멤버
+	    $("#logoutBtn").on("click", function () {
+	      // 현재 페이지 URL 가져오기
+	      var pageUrl = window.location.href;
+	      
+	      // 로그아웃 요청
+	      $.ajax({
+	        url: "/logout",
+	        type: "GET",
+	        data: { pageUrl: pageUrl }, // 페이지 URL 전달
+	        success: function () {
+	          // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
+	          window.location.reload(); // 현재 페이지 새로고침
+	        },
+	        error: function (error) {
+	          console.error("에러:", error);
+	          alert("로그아웃에 실패했습니다.");
+	        }
+	      });
+	    });
+	    //카카오멤버
+	    $("#logoutBtnK").on("click", function () {
+	        // 현재 페이지 URL 가져오기
+	        var returnUrl = window.location.href;
+	        
+	        // 로그아웃 요청
+	        $.ajax({
+	          url: "/logout",
+	          type: "GET",
+	          data: { returnUrl: returnUrl }, // 페이지 URL 전달
+	          success: function () {
+	            // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
+	              window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
+	          },
+	          error: function (error) {
+	            console.error("에러:", error);
+	            alert("로그아웃에 실패했습니다.");
+	          }
+	        });
+	      });
+	    
+	    
+	    
+	  });
+	</script>
+	
+	<!-- 검색창 폼 섭밋 -->
+	<script>
+		function handleSearch(event) {
+		    if (event.key === 'Enter') {
+		        submitSearchForm();
+		    }
+		}
+		
+		function submitSearchForm() {
+		    document.getElementById("searchForm").submit();
+		}
+	</script>
+	
+	<!-- 메세지버튼 -->
+	<script>
+	
+	btnMsg.addEventListener('click', function() {
+	    window.location.href = '/messageList'})
+	    
+	</script>
 
-<!-- 메세지버튼 -->
-<script>
-
-btnMsg.addEventListener('click', function() {
-    window.location.href = '/messageList'})
-    
-</script>
-
-<!-- 카카오 로그인 -->
+	<!-- 카카오 로그인!!!!!!!!!!!!!!!!!!!!!! 팝업으로 안나오게수정!!!!!!!!!!!!!!!!!!!!!!! -->
 		<script type="text/javascript">
 		    Kakao.init('ce5959441a26bb6ca04de7134c4cc8e3');
 		    function kakaoLogin() {
@@ -379,51 +381,15 @@ btnMsg.addEventListener('click', function() {
 		        })
 		    }
 		</script>
-		
-		
-		<!-- 네이버 로그인 -->
+		<!-- 네이버로그인 버튼수정필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 		<script>
-
-			var naverLogin = new naver.LoginWithNaverId(
-					{
-						clientId: "azdDptdhj5zpBKzKMGuq", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
-						callbackUrl: "http://localhost/naverLogin", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
-						isPopup: true,
-						callbackHandle: true
-					}
-				);	
-			
-			naverLogin.init();
-			
-			window.addEventListener('load', function () {
-				naverLogin.getLoginStatus(function (status) {
-					if (status) {
-						var email = naverLogin.user.getEmail(); // 필수로 설정할것을 받아와 아래처럼 조건문을 줍니다.
-			    		
-						console.log(naverLogin.user); 
-			    		
-					} 
-				});
-			});
-			
-			
-			var testPopUp;
-			function openPopUp() {
-			    testPopUp= window.open("https://nid.naver.com/nidlogin.logout", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1,height=1");
-			}
-			function closePopUp(){
-			    testPopUp.close();
-			}
-			
-			function naverLogout() {
-				openPopUp();
-				setTimeout(function() {
-					closePopUp();
-					}, 1000);
-				
-				
-			}
+			var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq", "http://localhost/naverCallback");
+		  	var state = naver_id_login.getUniqState();
+		  	<!--naver_id_login.setButton("white", 2,40);-->
+		  	naver_id_login.setDomain("http://localhost");
+		  	naver_id_login.setState(state);
+		  	naver_id_login.init_naver_id_login();
 		</script>
-
-
-
+		
+		
+		

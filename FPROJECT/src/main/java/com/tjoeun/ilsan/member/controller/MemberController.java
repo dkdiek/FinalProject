@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tjoeun.ilsan.board.service.BoardService;
 import com.tjoeun.ilsan.mail.EmailService;
 import com.tjoeun.ilsan.member.service.MemberService;
@@ -86,7 +87,7 @@ public class MemberController {
 	    Map checkSocialMember = memberService.checkSocialMember(map);
 
 	    // 존재하면
-	    if (checkSocialMember != null) {
+	    if (checkSocialMember != null || !checkSocialMember.isEmpty()) {
 	        // 세션에 아이디를 담는다 (로그인처리)
 	    	session.setAttribute("loginType", "Kakao");
 	        session.setAttribute("id", member_id);
@@ -120,7 +121,94 @@ public class MemberController {
 		return "/member/join/joinKakaoMember";
 		
 	}
+	
+	
+	@GetMapping("/naverCallback")
+	public String naverCallback(HttpServletRequest req) {
+		
+		System.out.println(req.getRequestURI());
+		return "/member/join/naverCallback";
+	}
+	
+	
+	//네이버 로그인 ------------------------------------------------------------------------------------------
+		
+	@PostMapping("/naverLogin")
+	@ResponseBody
+	public ResponseEntity<String> naverLogin(@RequestBody Map<String, String> requestBody, HttpSession session) {
+		
+		// 클라이언트에서 토큰 값 및 이전 페이지 URL 가져오기
+	    String access_token = requestBody.get("token");
+		// 클라이언트에서 추출한 회원 정보 가져오기
+		String member_id = requestBody.get("email");
+	    String name = requestBody.get("name");
 
+
+	        // 추출한 회원 email로 회원가입 여부 확인
+	        Map<String, Object> checkJoinMap = new HashMap<>();
+	        checkJoinMap.put("member_id", member_id);
+	        Map<String, Object> checkJoinResult = memberService.checkDuplication(checkJoinMap);
+
+	        // 클라이언트에 응답할 정보를 설정
+	        Map<String, Object> responseMap = new HashMap<>();
+
+	        // db에 저장된 정보가 없으면 추가 가입
+	        if (checkJoinResult == null || checkJoinResult.isEmpty()) {
+	        	// 클라이언트로 응답
+	            responseMap.put("result", "new_member");
+	            
+	        } else {
+	            // db에 저장된 정보가 있으면 세션에 정보를 추가하여 로그인 처리
+	            session.setAttribute("loginType", "Naver");
+	            session.setAttribute("id", member_id);
+	            session.setAttribute("token", access_token);
+	            
+	            responseMap.put("result", "existing_member");
+	        }
+	        
+	        // Convert the response map to JSON
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        try {
+	            String jsonResponse = objectMapper.writeValueAsString(responseMap);
+	            // Return the JSON response to the client
+	            return ResponseEntity.ok(jsonResponse);
+	        } catch (JsonProcessingException e) {
+	            e.printStackTrace();
+	            // Handle the exception if needed
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"result\": \"error\"}");
+	        }
+	}
+
+	/*
+	 * // 네이버에 토큰 값으로 회원 정보 가져오기 private String getUserInfoFromNaver(String
+	 * access_token) { String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
+	 * String apiUrl = userInfoUrl + "?access_token=" + access_token;
+	 * 
+	 * return new RestTemplate().getForObject(apiUrl, String.class); }
+	 */
+	
+		
+	//네이버 최초 회원 정보 추가 입력 ------------------------------------------------------------------------------------------
+	
+	 @GetMapping("/joinNaverMember") public String joinNaverMember(Model model){
+	 model.addAttribute("errorMessage","올바른 접근이 아닙니다");
+	 return "/common/errorPage";
+	 }
+	 
+	@PostMapping("/joinNaverMember")
+	public String joinNaverMember(@RequestParam Map map, Model model){
+		
+		String member_id = (String)map.get("member_id");
+		Map result = new HashMap();
+		result.put("member_id",member_id);
+		model.addAttribute("result",map);
+		return "/member/join/joinNaverMember";
+		
+	}
+		
+		
+
+	
 	
 	
 	// 회원가입------------------------------------------------------------------------------------------
@@ -449,5 +537,6 @@ public class MemberController {
 
 		return "member/personal/likeList";
 	}
-
+	
 }
+	

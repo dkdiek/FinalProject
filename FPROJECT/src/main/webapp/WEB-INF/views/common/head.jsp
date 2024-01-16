@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="<c:url value='/cdn/css/common/sidebars.css'/>">
 	<!-- 네이버 로그인api -->
 	<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 	<!-- 카카오 로그인api -->
 	<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<!-- peer js -->

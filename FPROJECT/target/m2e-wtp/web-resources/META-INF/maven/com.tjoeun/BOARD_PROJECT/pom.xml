@@ -240,6 +240,13 @@
   			<version>${org.springframework-version}</version>
 		</dependency>
 		
+		<!-- 잭슨 -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.10.5</version> <!-- Spring 3.x와 호환되는 버전 -->
+		</dependency>
+		
 	</dependencies>
 
 	<build>

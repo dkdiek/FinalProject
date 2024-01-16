@@ -14,11 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tjoeun.ilsan.member.service.MemberService;
 
+import oracle.jdbc.proxy.annotation.Pre;
+
 @Component
 public class SendMessageInterceptor implements HandlerInterceptor {
+	
 	@Autowired
 	MemberService memberService;
 	
+	// 메시지 보내기 url에 받는 상대 아이디가 존재하지 않으면 에러 페이지로 이동 시킴
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
