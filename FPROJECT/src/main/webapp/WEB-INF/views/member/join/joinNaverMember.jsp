@@ -34,8 +34,8 @@
 				</div>
 				<h5 class="fs-6 mb-3 text-danger">*해당 비밀번호는 추후 회원 정보 변경과 탈퇴에 사용됩니다</h5>
 				<div class="mb-3">
-					<label for="name" class="form-label">이름</label> <input type="text"
-						id="name" name="member_name" class="form-control" placeholder="이름">
+					<label for="name" class="form-label">이름 (변경 불가)</label> <input type="text"
+						id="name" name="member_name" class="form-control" value="${result.name }" readonly>
 				</div>
 				<div class="mb-3">
 					<label for="phone" class="form-label">전화번호</label> <input

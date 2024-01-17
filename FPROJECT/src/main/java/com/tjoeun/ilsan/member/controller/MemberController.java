@@ -1,5 +1,6 @@
 package com.tjoeun.ilsan.member.controller;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -10,17 +11,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tjoeun.ilsan.board.service.BoardService;
 import com.tjoeun.ilsan.mail.EmailService;
@@ -68,12 +75,17 @@ public class MemberController {
 		if (session.getAttribute("loginType") != null) {
 			session.removeAttribute("loginType");
 		}
+		/*
+		 * if (session.getAttribute("token") != null) {
+		 * session.removeAttribute("token"); }
+		 */
 		// 세션을 무효화
 		session.invalidate();
+		System.out.println(returnUrl);
 		// returnUrl이 제공된 경우 해당 페이지로 리다이렉트, 그렇지 않은 경우 기본 리다이렉트 설정
 		return "redirect:" + (returnUrl != null ? returnUrl : "/");
 	}
-	
+
 	//카카오 로그인 ------------------------------------------------------------------------------------------
 	@PostMapping("/kakaoLogin")
 	@ResponseBody
@@ -87,7 +99,7 @@ public class MemberController {
 	    Map checkSocialMember = memberService.checkSocialMember(map);
 
 	    // 존재하면
-	    if (checkSocialMember != null || !checkSocialMember.isEmpty()) {
+	    if (checkSocialMember != null) {
 	        // 세션에 아이디를 담는다 (로그인처리)
 	    	session.setAttribute("loginType", "Kakao");
 	        session.setAttribute("id", member_id);
@@ -105,11 +117,9 @@ public class MemberController {
 	}
 	
 	//카카오 최초 회원 정보 추가 입력 ------------------------------------------------------------------------------------------
-	
-	 @GetMapping("/joinKakaoMember") public String joinKakaoMember(Model model){
-	 model.addAttribute("errorMessage","올바른 접근이 아닙니다");
-	 return "/common/errorPage";
-	 }
+	@GetMapping("/joinKakaoMember") public String joinKakaoMember(Model model){
+	return "/Home"; }
+	 
 	 
 	@PostMapping("/joinKakaoMember")
 	public String joinKakaoMember(@RequestParam Map map, Model model){
@@ -123,6 +133,7 @@ public class MemberController {
 	}
 	
 	
+	// 네이버 로그인 후 callBack페이지---------------------------------------------
 	@GetMapping("/naverCallback")
 	public String naverCallback(HttpServletRequest req) {
 		
@@ -132,60 +143,84 @@ public class MemberController {
 	
 	
 	//네이버 로그인 ------------------------------------------------------------------------------------------
-		
+	
+	 @GetMapping("/naverLogin") public String naverLogin(Model model){
+		 return "/Home";
+		 }
+	 
 	@PostMapping("/naverLogin")
-	@ResponseBody
-	public ResponseEntity<String> naverLogin(@RequestBody Map<String, String> requestBody, HttpSession session) {
+	public String naverLogin(@RequestParam Map map, HttpSession session, Model model) {
 		
-		// 클라이언트에서 토큰 값 및 이전 페이지 URL 가져오기
-	    String access_token = requestBody.get("token");
-		// 클라이언트에서 추출한 회원 정보 가져오기
-		String member_id = requestBody.get("email");
-	    String name = requestBody.get("name");
+		// 클라이언트에서 토큰, 이메일, 이름 받기
+	    String access_token = (String) map.get("token");
+	    
+	    //토큰으로 네이버에서 정보 받기
+	    Map<String, String> userInfoMap = getUserInfoFromNaver(access_token);
+	    String member_id = userInfoMap.get("email");
+	    String name = userInfoMap.get("name");
+	    
+	    Map resultMap = new HashMap();
+	    resultMap.put("member_id",member_id);
+	    resultMap.put("name",name);
 
 
-	        // 추출한 회원 email로 회원가입 여부 확인
-	        Map<String, Object> checkJoinMap = new HashMap<>();
-	        checkJoinMap.put("member_id", member_id);
-	        Map<String, Object> checkJoinResult = memberService.checkDuplication(checkJoinMap);
+        // 추출한 회원 email로 회원가입 여부 확인
+        Map<String, Object> checkJoinMap = new HashMap<>();
+        checkJoinMap.put("member_id", member_id);
+        Map<String, Object> checkJoinResult = memberService.checkDuplication(checkJoinMap);
 
-	        // 클라이언트에 응답할 정보를 설정
-	        Map<String, Object> responseMap = new HashMap<>();
-
-	        // db에 저장된 정보가 없으면 추가 가입
-	        if (checkJoinResult == null || checkJoinResult.isEmpty()) {
-	        	// 클라이언트로 응답
-	            responseMap.put("result", "new_member");
-	            
-	        } else {
-	            // db에 저장된 정보가 있으면 세션에 정보를 추가하여 로그인 처리
-	            session.setAttribute("loginType", "Naver");
-	            session.setAttribute("id", member_id);
-	            session.setAttribute("token", access_token);
-	            
-	            responseMap.put("result", "existing_member");
-	        }
+        // db에 저장된 정보가 없으면 추가 가입
+        if (checkJoinResult == null || checkJoinResult.isEmpty()) {
+        	model.addAttribute("result",resultMap);
+        	return "/member/join/joinNaverMember";
+            
+        } else {
+            // db에 저장된 정보가 있으면 세션에 정보를 추가하여 로그인 처리
+            session.setAttribute("loginType", "Naver");
+            session.setAttribute("id", member_id);
+			/* session.setAttribute("token", access_token); */
+        	return "/home";
+        }
 	        
-	        // Convert the response map to JSON
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        try {
-	            String jsonResponse = objectMapper.writeValueAsString(responseMap);
-	            // Return the JSON response to the client
-	            return ResponseEntity.ok(jsonResponse);
-	        } catch (JsonProcessingException e) {
-	            e.printStackTrace();
-	            // Handle the exception if needed
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"result\": \"error\"}");
-	        }
 	}
 
-	/*
-	 * // 네이버에 토큰 값으로 회원 정보 가져오기 private String getUserInfoFromNaver(String
-	 * access_token) { String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
-	 * String apiUrl = userInfoUrl + "?access_token=" + access_token;
-	 * 
-	 * return new RestTemplate().getForObject(apiUrl, String.class); }
-	 */
+	// 네이버에 토큰 값으로 회원 정보 가져오기
+	private Map<String, String> getUserInfoFromNaver(String access_token) {
+	    String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    headers.set("Authorization", "Bearer " + access_token);
+
+	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+	    // 네이버 API 호출
+	    RestTemplate restTemplate = new RestTemplate();
+	    String userInfoJson = restTemplate.postForObject(userInfoUrl, new HttpEntity<>(params, headers), String.class);
+
+	    // JSON 문자열 파싱
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    try {
+	        // JSON을 Map으로 변환
+	        Map<String, Object> userInfoMap = objectMapper.readValue(userInfoJson, new TypeReference<Map<String, Object>>() {});
+
+	        // 필요한 정보 추출
+	        String email = (String) ((Map<String, Object>) userInfoMap.get("response")).get("email");
+	        String name = (String) ((Map<String, Object>) userInfoMap.get("response")).get("name");
+
+	        // 추출한 정보를 Map에 담아 리턴
+	        Map<String, String> result = new HashMap<>();
+	        result.put("email", email);
+	        result.put("name", name);
+
+	        return result;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        // 예외 처리
+	        return null;
+	    }
+	}
+
 	
 		
 	//네이버 최초 회원 정보 추가 입력 ------------------------------------------------------------------------------------------
@@ -198,10 +233,6 @@ public class MemberController {
 	@PostMapping("/joinNaverMember")
 	public String joinNaverMember(@RequestParam Map map, Model model){
 		
-		String member_id = (String)map.get("member_id");
-		Map result = new HashMap();
-		result.put("member_id",member_id);
-		model.addAttribute("result",map);
 		return "/member/join/joinNaverMember";
 		
 	}

@@ -111,7 +111,7 @@
                     <!-- 쪽지 내용 입력 폼 -->
                     <div class="mb-5">
                         <label for="content" class="form-label">내용:</label>
-                        <textarea class="form-control" id="content" name="content" rows="7" required></textarea>
+                        <textarea class="form-control" id="content" name="content" rows="7" required>${fn:escapeXml(description)}</textarea>
                     </div>
                     <input type="hidden" id="to_id" name="to_id" value="${info.to_id}">
                     <input type="hidden" id="from_id" name="from_id" value="${info.from_id}">

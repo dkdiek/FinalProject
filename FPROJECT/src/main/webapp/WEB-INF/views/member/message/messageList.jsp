@@ -29,11 +29,11 @@
 				<table class="table table-class border-secondary table-hover table-sm ">
 					<thead>
 						<tr class="text-center">
-							<th scope="col" class="col-1"><i class="bi bi-person me-1"></i>[보낸이]</th>
-							<th scope="col" class="col-6"><i class="bi bi-chat-square-quote me-1"></i>[메시지]</th>
-							<th scope="col" class="col-2"><i class="bi bi-clock me-1"></i>[전송일시]</th>
-							<th scope="col" class="col-2"><i class="bi bi-check-square me-1"></i>[읽음]</th>
-							<th scope="col" class="col-1"><i class="bi bi-trash me-1"></i>[삭제]</th>
+							<th scope="col"><i class="bi bi-person me-1"></i><Br>[보낸이]</th>
+							<th scope="col"><i class="bi bi-chat-square-quote me-1"><Br></i>[메시지]</th>
+							<th scope="col"><i class="bi bi-clock me-1"></i><Br>[전송일시]</th>
+							<th scope="col"><i class="bi bi-check-square me-1"></i><Br>[읽음]</th>
+							<th scope="col"><i class="bi bi-trash me-1"></i><Br>[삭제]</th>
 						</tr>
 					</thead>
 					<tbody>

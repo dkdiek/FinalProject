@@ -9,8 +9,7 @@
 		<div class="container">
 			<!-- 로고 -->
 			<div class="col-2">
-				<a href="<c:url value='/'/>"> <img
-					src="<c:url value='/cdn/images/common/LogoEng.png'/>"
+				<a href="<c:url value='/'/>"> <img src="<c:url value='/cdn/images/common/LogoEng.png'/>"
 					style="max-width: 100%;">
 				</a>
 			</div>
@@ -51,7 +50,13 @@
 							<!-- 카카오 로그아웃 -->
 							<c:if test="${loginType eq 'Kakao'}">
 								<li>
-									<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtnK">카카오 로그아웃</a>
+									<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtnK">로그아웃</a>
+								</li>
+							</c:if>
+							<!-- 네이버 로그아웃 -->
+							<c:if test="${loginType eq 'Naver'}">
+								<li>
+									<a class="dropdown-item rounded-2" href="javascript:void(0);" id="logoutBtnN">로그아웃</a>
 								</li>
 							</c:if>
 							<!-- 일반 로그아웃 -->
@@ -131,14 +136,14 @@
 					<!-- 네이버 로그인 -->
 					<div class="social-login" id="naver_id_login">
 						<a href="#no" title="네이버ID로 로그인" class="naver-login" id="naverLogin">
-							<button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34">
-						   	 <img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
-							</button>
 						</a>
 					</div>
+					<%-- <button class="w-60 mb-2 btn btn-outline-secondary rounded-3" type="button" style="background-color: #06be34" id="customNaverButton">
+				   		<img src="<c:url value='/cdn/images/common/btnNaver.png'/>" style="max-width: 90%">
+					</button> --%>
 					<!-- 카카오 로그인 -->
-					<button class="w-60 btn btn-outline-secondary rounded-3" style="background-color: #f9e000" onclick="javascript:kakaoLogin()">
-						<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="max-width: 90%">
+					<button class="w-60 btn" onclick="javascript:kakaoLogin()">
+						<img src="<c:url value='/cdn/images/common/btnKakao.png'/>" style="width: 185px; height:40">
 					</button>
 				</div>
 
@@ -278,8 +283,34 @@
 	          type: "GET",
 	          data: { returnUrl: returnUrl }, // 페이지 URL 전달
 	          success: function () {
-	            // 로그아웃 성공 시 리다이렉트 또는 다른 동작 수행
-	              window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
+        	      location.href = returnUrl; // 페이지 새로고침
+             	 window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
+       	      },
+	          error: function (error) {
+	            console.error("에러:", error);
+	            alert("로그아웃에 실패했습니다.");
+	          }
+	        });
+	      });
+	    //네이버멤버
+	    $("#logoutBtnN").on("click", function () {
+	        // 현재 페이지 URL 가져오기
+	        var returnUrl = window.location.href;
+	        
+	        // 로그아웃 요청
+	        $.ajax({
+	          url: "/logout",
+	          type: "GET",
+	          data: { returnUrl: returnUrl }, // 페이지 URL 전달
+	          success: function () {
+        	      location.href = returnUrl; // 페이지 새로고침
+        	      
+        	      var userConfirmed = confirm("네이버 계정도 로그아웃 하시겠습니까?");
+        	      
+        	      if (userConfirmed) {
+		        	  var newWindow = window.open("https://nid.naver.com/nidlogin.logout", "_blank");
+        	    	} 
+	        	  
 	          },
 	          error: function (error) {
 	            console.error("에러:", error);
@@ -287,7 +318,6 @@
 	          }
 	        });
 	      });
-	    
 	    
 	    
 	  });
@@ -333,12 +363,10 @@
 		    			            , success: function(data) {
 		    			                // 서버로부터의 응답을 처리
 		    			                if (data.message === "success") {
-			    			                alert('카카오 계정 로그인 되었습니다')  
 			    			                location.reload();
 		    			                } else {
 		    			                if (data.message === "redirect") {
 			    			                alert('새로마켓 이용을 위해 최초 1회 추가 정보 입력이 진행됩니다') 
-			    			                /* window.location.href = '/joinKakaoMember?member_id=' + data.member_id; */
 			    			            	 // 폼 엘리먼트를 동적으로 생성
 			    			                var form = document.createElement("form");
 			    			                form.method = "post";
@@ -385,7 +413,7 @@
 		<script>
 			var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq", "http://localhost/naverCallback");
 		  	var state = naver_id_login.getUniqState();
-		  	<!--naver_id_login.setButton("white", 2,40);-->
+		  	naver_id_login.setButton("green", 4 ,40);
 		  	naver_id_login.setDomain("http://localhost");
 		  	naver_id_login.setState(state);
 		  	naver_id_login.init_naver_id_login();

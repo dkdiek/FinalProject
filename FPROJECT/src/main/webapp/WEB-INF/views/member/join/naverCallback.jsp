@@ -7,96 +7,65 @@
 <html lang="en" data-bs-theme="auto">
 	<!-- head -->
 	<%@ include file="../../common/head.jsp" %>
-	
-	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 	<!-- body -->
 	<body>
+		
+			<%--네이버 로그인 후 정보 받아서 컨트롤러로 넘기는 브릿지 페이지 
+				<form id="naverLoginFrm" method="post" action="<c:url value='/naverLogin'/>">
+				<input type="text" name="member_id" id="member_id" value="1">
+				<input type="text" name="name" id="name" value="1">
+				<input type="text" name="token" id="token" value="1">
+			</form> --%>
+	
 			<script type="text/javascript">
 				var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq",	"http://localhost/naverCallback");
-				// 접근 토큰 값 출력
+				var email = naver_id_login.getProfileData('email');
+				var name = naver_id_login.getProfileData('name')
 				var access_token = naver_id_login.oauthParams.access_token;
-				alert(access_token)
-		
-				// 네이버 사용자 프로필 조회
-				naver_id_login.get_naver_userprofile("naverSignInCallback()");
-				// 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+				
 				function naverSignInCallback() {
-					var email = naver_id_login.getProfileData('email');
-					var name = naver_id_login.getProfileData('name');
-		
-					alert(email)
+					email = naver_id_login.getProfileData('email');
+					name = naver_id_login.getProfileData('name');
+					access_token = naver_id_login.oauthParams.access_token;
+				
+				}
+					/* alert(email)
 					alert(name)
-		
-					// 서버로 보내서 회원 확인 및 로그인 처리하고 응답받기
-					
-							$.ajax({
-								type : "POST",
-								url : "/naverLogin",
-								contentType : "application/json; charset=utf-8",
-								data : JSON.stringify({
-									email : email,
-									name : name,
-									token : access_token
-								})/* ,
-								success : function(responseResult) {
-									// Handle the server response as needed
-									if (responseResult.result == "existing_member") {
-										// Redirect or perform other actions on success
-										alert('회원 정보 전송 성공');
-										window.location.href = "/";
-									} else if (responseResult.result == "new_member") {
-										// 회원이 아니면 회원 가입페이지로 보낸다
-										alert('회원 가입이 필요합니다');
+					alert(access_token) */
+				
+				naver_id_login.get_naver_userprofile("naverSignInCallback()");
+				
+				
+				// 폼 데이터 설정
+			    var formData = {
+			        member_id: email,
+			        name: name,
+			        token: access_token
+			    };
 
-												 $.ajax({
-													type : "POST",
-													url : "/joinNaverMember",
-													contentType : "application/json; charset=utf-8",
-													data : JSON.stringify({
-														member_id : email,
-														name : name
-													}),
-													success : function(joinResponse) {
-														// Additional logic after joining
-														alert('회원 가입 성공');
-														window.location.href = "/";
-													},
-													error : function(joinError) {
-														console.error("회원 가입 에러:",
-																joinError);
-														window.location.href = "/errorPage?errorMessage="
-																+ encodeURIComponent("에러가 발생했습니다");
-													}
-												});
-									}
-								},
-								error : function(error) {
-									console.error("에러:", error);
-									window.location.href = "/errorPage?errorMessage="
-											+ encodeURIComponent("에러가 발생했습니다");
-								} */
-							})
-							.done(function(responseResult) {
-							    // Handle the server response as needed
-							    if (responseResult.result == "existing_member") {
-							        // 기존 회원의 경우
-							        alert('기존 회원입니다.');
-							        // 다른 동작 수행...
-							    } else if (responseResult.result == "new_member") {
-							        // 신규 회원의 경우
-							        alert('신규 회원입니다.');
-							        // 다른 동작 수행...
-							    }
-							})
-							.fail(function(error) {
-							    console.error("에러:", error);
-							    window.location.href = "/errorPage?errorMessage=" + encodeURIComponent("에러가 발생했습니다");
-							});
-		
-				}	
+			    // 동적으로 폼 생성
+			    var form = document.createElement('form');
+			    form.method = 'POST';
+			    form.action = "<c:url value='/naverLogin'/>";
+
+			    // 폼 데이터를 폼에 추가
+			    for (var key in formData) {
+			        if (formData.hasOwnProperty(key)) {
+			            var inputField = document.createElement('input');
+			            inputField.type = 'hidden';
+			            inputField.name = key;
+			            inputField.value = formData[key];
+			            form.appendChild(inputField);
+			        }
+			    }
+
+			    // 폼을 body에 추가하고 서버로 전송
+			    document.body.appendChild(form);
+			    form.submit();
+				
 			</script>
-</body>	
-
-		
-		
+			
+	
+			
+	</body>	
 </html>

@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			, latitude
 			, longitude
 		FROM board
-		WHERE 1+1
+		WHERE 1=1
 		AND	del_yn = 'n'
 		<if test="seq != null">
        		AND seq = #{seq}
@@ -258,7 +258,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 좋아요 취소 -->
     <delete id="cancelLike" parameterType="map">
         DELETE FROM interest
-        WHERE 1+1
+        WHERE 1=1
         <if test="seq != null">
 	        AND seq = #{seq}
         </if>
@@ -285,7 +285,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="deleteBoard" parameterType="map">
         UPDATE board
         SET del_yn = 'y'
-        WHERE 1+1
+        WHERE 1=1
         <if test="seq != null">
         	AND seq = #{seq}
        	</if>

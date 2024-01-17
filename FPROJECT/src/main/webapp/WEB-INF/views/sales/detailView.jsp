@@ -145,7 +145,7 @@
 					<div class="text-center">
 						<span class="badge rounded-pill text-bg-secondary fs-6 mt-3 fw-medium"> <i class="bi bi-card-checklist me-2"></i>상세설명 </span>
 					</div>
-					<div class="offset-1 mt-2">
+					<div class="offset-1 mt-2 col-xs-12">
 						<p class="fs-6 mt-3" style="white-space: pre-line">${boardDetail.content}</p>
 					</div>
 					<hr class="mt-5">
