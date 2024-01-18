@@ -37,8 +37,8 @@
 										<div class="card shadow-sm">
 											<div class="card-img-top"
 												style="width: 100%; height: 300px; overflow: hidden;">
-												<a href="http://localhost/detail?seq=${board.seq}"
-													class="img-link"> <img
+												            <a href="<c:url value='/detail?seq=${board.seq}'/>" class="img-link">
+													 <img
 													src="<c:url value='/cdn/upload/${board.img1}'/>"
 													class="img-fluid" alt="Image"
 													style="width: 100%; height: 100%; object-fit: cover;">
@@ -112,8 +112,8 @@
 										<div class="card shadow-sm">
 											<div class="card-img-top"
 												style="width: 100%; height: 300px; overflow: hidden;">
-												<a href="http://localhost/detail?seq=${board2.seq}"
-													class="img-link"> <img
+												            <a href="<c:url value='/detail?seq=${board2.seq}'/>" class="img-link">
+													 <img
 													src="<c:url value='/cdn/upload/${board2.img1}'/>"
 													class="img-fluid" alt="Image"
 													style="width: 100%; height: 100%; object-fit: cover;">
@@ -226,8 +226,8 @@
 			        if (from_id == null || from_id === '') {
 			            alert('로그인이 필요합니다');
 			        } else {
-			        	var url = '/sendMessage?to_id=' + to_id + '&from_id=' + from_id
-			            window.open(url, '_blank',  'width=500,height=500');
+			            var url = '<c:url value="/sendMessage"/>' + '?to_id=' + to_id + '&from_id=' + from_id;
+			            window.open(url, '_blank', 'width=500,height=500');
 			        }
 			    });
 			});

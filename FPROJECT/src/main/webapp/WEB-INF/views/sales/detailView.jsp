@@ -303,6 +303,7 @@
 				            , data: { seq: seq }
 				            , success: function(response) {
 				                if (response.message === "success") {
+				                	alert('게시물이 삭제되었습니다')
 				                    window.location.href = document.referrer;
 									//이전페이지로 리다이렉트 시켜 새로고침
 				                } else if (response.message === "not_found") {

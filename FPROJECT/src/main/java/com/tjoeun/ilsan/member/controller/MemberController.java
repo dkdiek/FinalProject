@@ -145,7 +145,7 @@ public class MemberController {
 	//네이버 로그인 ------------------------------------------------------------------------------------------
 	
 	 @GetMapping("/naverLogin") public String naverLogin(Model model){
-		 return "/Home";
+		 return "/home";
 		 }
 	 
 	@PostMapping("/naverLogin")
@@ -179,7 +179,7 @@ public class MemberController {
             session.setAttribute("loginType", "Naver");
             session.setAttribute("id", member_id);
 			/* session.setAttribute("token", access_token); */
-        	return "/home";
+        	return "redirect:/";
         }
 	        
 	}

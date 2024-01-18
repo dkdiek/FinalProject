@@ -97,25 +97,7 @@
 	        });
 	    </script>
 	
-		<!-- 이용 약관 스크롤 체크 -->
-		<script>
-	        function checkAgreement(agreementTxt, agreeCheckbox) {
-	            agreeCheckbox.addEventListener('click', function (event) {
-	                if (agreementTxt.scrollTop !== (agreementTxt.scrollHeight - agreementTxt.clientHeight)) {
-	                    event.preventDefault();
-	                    alert('약관 및 안내를 다 읽고 동의해 주세요.');
-	                }
-	            });
-	        }
-	
-	        var agreementTxt1 = document.getElementById('agreement1-txt');
-	        var agreeCheckbox1 = document.getElementById('agreeCheckbox1');
-	        checkAgreement(agreementTxt1, agreeCheckbox1);
-	
-	        var agreementTxt2 = document.getElementById('agreement2-txt');
-	        var agreeCheckbox2 = document.getElementById('agreeCheckbox2');
-	        checkAgreement(agreementTxt2, agreeCheckbox2);
-	    </script>
+		
 	
 		<!-- 이용 약관 모두 체크 확인 -->
 		<script>

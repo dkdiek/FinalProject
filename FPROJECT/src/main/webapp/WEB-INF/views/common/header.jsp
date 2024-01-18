@@ -191,7 +191,13 @@
 
 		<c:forEach var="category" items="${categoryList}">
 		    <li>
-		        <a href="http://localhost/search?title=&distance_from=&distance_to=&soldout_yn=&category=${category}" class="nav-link link-body-emphasis">
+<a href="<c:url value='/search'>
+    <c:param name='title' value=''/>
+    <c:param name='distance_from' value=''/>
+    <c:param name='distance_to' value=''/>
+    <c:param name='soldout_yn' value=''/>
+    <c:param name='category' value='${category}'/>
+</c:url>" class="nav-link link-body-emphasis">
 		            <svg class="bi pe-none me-2" width="16" height="16"></svg>
 		            ${category}
 		        </a>

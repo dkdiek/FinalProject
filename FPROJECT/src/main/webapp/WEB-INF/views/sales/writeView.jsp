@@ -19,7 +19,7 @@
 		<!-- header -->
 		<%@ include file="../common/header.jsp" %>
 			<div class="container mt-3">
-			    <form action="/writeProcess" method="post" enctype="multipart/form-data">
+			    <form action="<c:url value='/writeProcess'/>" method="post" enctype="multipart/form-data">
 
 				    <!-- 이미지 업로드 폼 -->
 			        <div class="custom-file mb-3">

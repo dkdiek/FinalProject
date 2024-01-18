@@ -275,6 +275,13 @@
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
+					<!-- 인코딩추가 -->
+					<encoding>UTF-8</encoding>
+					<!-- MAP 제네릭 무시 INSTALL -->
+					<compilerArgs>
+	                    <arg>-Xlint:unchecked</arg>
+	                </compilerArgs>
+	                
 				</configuration>
 			</plugin>
 			<plugin>
