@@ -1,3 +1,6 @@
+[Portfolio]<BR>
+[Portfolio.pdf](https://github.com/dkdiek/STARBUCKS_MVC/files/13986279/Portfolio.pdf)<BR>
+
 [조건 검색]
 ![search](https://github.com/dkdiek/fproject_sts3/assets/144099638/3f6f5dae-a0ee-44de-8479-6cd1cc9e886f)
 
