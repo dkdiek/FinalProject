@@ -290,7 +290,7 @@
 	          data: { returnUrl: returnUrl }, // 페이지 URL 전달
 	          success: function () {
         	      location.href = returnUrl; // 페이지 새로고침
-             	 window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://localhost/logout";
+             	 window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=ce5959441a26bb6ca04de7134c4cc8e3&logout_redirect_uri=http://3.34.20.9/logout";
        	      },
 	          error: function (error) {
 	            console.error("에러:", error);
@@ -309,13 +309,14 @@
 	          type: "GET",
 	          data: { returnUrl: returnUrl }, // 페이지 URL 전달
 	          success: function () {
-        	      location.href = returnUrl; // 페이지 새로고침
         	      
         	      var userConfirmed = confirm("네이버 계정도 로그아웃 하시겠습니까?");
         	      
         	      if (userConfirmed) {
-		        	  var newWindow = window.open("https://nid.naver.com/nidlogin.logout", "_blank");
+		        	  var newWindow = window.open("https://nid.naver.com/nidlogin.logout", "_blank", "width=500,height=500");
         	    	} 
+        	      
+        	      location.href = returnUrl; // 페이지 새로고침
 	        	  
 	          },
 	          error: function (error) {
@@ -417,10 +418,10 @@
 		</script>
 		<!-- 네이버로그인 버튼수정필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 		<script>
-			var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq", "http://localhost/naverCallback");
+			var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq", "http://3.34.20.9/naverCallback");
 		  	var state = naver_id_login.getUniqState();
 		  	naver_id_login.setButton("green", 4 ,40);
-		  	naver_id_login.setDomain("http://localhost");
+		  	naver_id_login.setDomain("http://3.34.20.9");
 		  	naver_id_login.setState(state);
 		  	naver_id_login.init_naver_id_login();
 		</script>

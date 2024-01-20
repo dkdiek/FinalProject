@@ -18,7 +18,7 @@
 			</form> --%>
 	
 			<script type="text/javascript">
-				var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq",	"http://localhost/naverCallback");
+				var naver_id_login = new naver_id_login("azdDptdhj5zpBKzKMGuq",	"http://3.34.20.9/naverCallback");
 				var email = naver_id_login.getProfileData('email');
 				var name = naver_id_login.getProfileData('name')
 				var access_token = naver_id_login.oauthParams.access_token;

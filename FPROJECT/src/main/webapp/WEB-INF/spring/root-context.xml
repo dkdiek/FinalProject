@@ -33,8 +33,8 @@
 	<bean id="dataSourceSpied"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/saero_market" />
-		<property name="username" value="root" />
+		<property name="url" value="jdbc:mysql://3.34.20.9:3306/saero_market" />
+		<property name="username" value="mysqluser" />
 		<property name="password" value="1234" />
 	</bean>
 	

@@ -15,7 +15,7 @@
 	    	var buyer_id = "${infoMap.buyer_id}";
 	    	 console.log("Seller ID:", seller_id);
     	    console.log("Buyer ID:", buyer_id);
-			var ws = new WebSocket("ws://192.168.111.1/chatView");
+			var ws = new WebSocket("ws://3.34.20.9//chatView");
 
 			ws.onopen = function(){
 			};
